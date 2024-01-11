@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"board_no","healer_nickname","reportList"})
+@ToString(exclude = {"post_no","healer_nickname","reportList"})
 public class Comment extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +22,8 @@ public class Comment extends BaseEntity{
     private String comment_content;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "board_no")
-    private Board board_no;
+    @JoinColumn(name = "post_no")
+    private Post post_no;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "healer_nickname")

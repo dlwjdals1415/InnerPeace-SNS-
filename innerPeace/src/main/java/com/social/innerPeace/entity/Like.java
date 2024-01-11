@@ -9,16 +9,17 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"post_no"})
-public class Tag {
+@ToString(exclude = {"post_no","healer_no"})
+public class Like extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tag_no;
+    private Long like_id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_no")
     private Post post_no;
 
-    @Column(length = 20,nullable = false)
-    private String tag_content;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "healer_no")
+    private Healer healer_no;
 }

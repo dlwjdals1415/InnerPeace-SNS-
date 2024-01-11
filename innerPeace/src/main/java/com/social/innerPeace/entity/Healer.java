@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"followerList","followingList","boardList"})
+@ToString(exclude = {"followerList","followingList","postList"})
 public class Healer extends BaseEntity{
     @Id
     @Column(length = 20)
@@ -58,6 +58,10 @@ public class Healer extends BaseEntity{
     private List<Follow> followingList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "board_writer",cascade = CascadeType.ALL)
-    private List<Board> boardList = new ArrayList<>();
+    @OneToMany(mappedBy = "post_writer",cascade = CascadeType.ALL)
+    private List<Post> postList = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "healer_no",cascade = CascadeType.ALL)
+    private List<Like> likeList = new ArrayList<>();
 }

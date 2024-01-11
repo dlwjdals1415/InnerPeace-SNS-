@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"reporter","report_board","report_comment"})
+@ToString(exclude = {"reporter","report_post","report_comment"})
 public class Report extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +20,8 @@ public class Report extends BaseEntity{
     private Healer reporter;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "board_no")
-    private Board report_board;
+    @JoinColumn(name = "post_no")
+    private Post report_post;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "comment_no")

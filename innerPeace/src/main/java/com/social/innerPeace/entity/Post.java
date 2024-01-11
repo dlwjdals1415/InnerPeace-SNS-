@@ -12,19 +12,19 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"board_writer","commentList","reportList"})
-public class Board extends BaseEntity{
+@ToString(exclude = {"post_writer","commentList","reportList"})
+public class Post extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long board_no;
+    private Long post_no;
 
     @Column(length = 50,nullable = false)
-    private String board_title;
+    private String post_title;
 
     @Column(length = 1500,nullable = false)
-    private String board_content;
+    private String post_content;
 
-    private String board_image;
+    private String post_image;
 
     private int map_point_x;
 
@@ -32,17 +32,21 @@ public class Board extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "healer_nickname")
-    private Healer board_writer;
+    private Healer post_writer;
 
     @Builder.Default
-    @OneToMany(mappedBy = "board_no",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post_no",cascade = CascadeType.ALL)
     private List<Comment> commentList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "report_board",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "report_post",cascade = CascadeType.ALL)
     private List<Report> reportList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "board_no",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post_no",cascade = CascadeType.ALL)
     private List<Tag> tagList = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "post_no",cascade = CascadeType.ALL)
+    private List<Like> likeList = new ArrayList<>();
 }
