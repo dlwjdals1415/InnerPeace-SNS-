@@ -1,6 +1,5 @@
 package com.social.innerPeace.entity;
 
-import com.social.innerPeace.healer.service.HealerService;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -47,24 +46,16 @@ public class Healer extends BaseEntity{
 
     private LocalDateTime healer_bitrh;
 
-    @Column(length = 100)
+    @Column(length = 400)
     private String healer_statusmessage;
 
     @Builder.Default
-    @OneToMany(mappedBy = "healer_id",cascade = CascadeType.ALL)
-    private List<Follower> followerList = new ArrayList<>();
+    @OneToMany(mappedBy = "follower",cascade = CascadeType.ALL)
+    private List<Follow> followerList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "follower_id",cascade = CascadeType.ALL)
-    private List<Follower> followeredList = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "healer_id",cascade = CascadeType.ALL)
-    private List<Following> followingList = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "following_id",cascade = CascadeType.ALL)
-    private List<Following> followingedList = new ArrayList<>();
+    @OneToMany(mappedBy = "following",cascade = CascadeType.ALL)
+    private List<Follow> followingList = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "board_writer",cascade = CascadeType.ALL)

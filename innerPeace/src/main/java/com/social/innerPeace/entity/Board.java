@@ -30,7 +30,7 @@ public class Board extends BaseEntity{
 
     private int map_point_y;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "healer_nickname")
     private Healer board_writer;
 

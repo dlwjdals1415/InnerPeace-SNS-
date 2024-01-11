@@ -26,6 +26,6 @@ public class Inquiry extends BaseEntity{
     private Healer inquiry_writer;
 
     @Builder.Default
-    @OneToOne(mappedBy = "answer_no",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "inquiry_no",cascade = CascadeType.ALL)
     private Answer answer = new Answer();
 }

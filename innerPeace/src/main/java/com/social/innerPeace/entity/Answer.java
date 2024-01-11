@@ -12,11 +12,14 @@ import lombok.*;
 @ToString(exclude = {"answer_no","answer_writer"})
 public class Answer extends BaseEntity{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long answer_no;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "inquiry_no")
-    private Inquiry answer_no;
+    private Inquiry inquiry_no;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_no")
     private Admin answer_writer;
 
