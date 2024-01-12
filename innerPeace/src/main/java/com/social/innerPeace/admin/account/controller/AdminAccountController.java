@@ -1,4 +1,4 @@
-package com.social.innerPeace.admin.login.controller;
+package com.social.innerPeace.admin.account.controller;
 
-public class AdminLoginController {
+public class AdminAccountController {
 }

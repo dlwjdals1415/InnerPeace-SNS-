@@ -1,4 +1,4 @@
-package com.social.innerPeace.healer.userPage.controller;
+package com.social.innerPeace.user.userPage.controller;
 
 public class HealerUserPageController {
 }
