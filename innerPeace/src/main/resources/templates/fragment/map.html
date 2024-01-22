@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<section class="map-section" th:fragment="map-section">
+  <span class="title">지도중심기준 행정동 주소정보</span>
+  <span id="centerAddr"></span>
+  <div class="map" id="map"></div>
+  <p><em>지도를 클릭하여 위치를 지정하고 확인버튼을 눌러주세요</em></p>
+  <div id="clickLatlng"></div>
+  <div class="buttons">
+    <button class="button" type="button" id="map-cancel">취소</button>
+    <button class="button" type="button" id="map-confirm">확인</button>
+  </div>
+</section>
+</body>
+</html>

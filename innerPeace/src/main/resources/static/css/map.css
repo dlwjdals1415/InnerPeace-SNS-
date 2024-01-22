@@ -1,0 +1,36 @@
+.map-section {
+  width: 100%;
+  height: 100%;
+  background-color: #f4f4f4;
+  position: fixed;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.map {
+  width: 50%;
+  height: 50%;
+}
+
+.buttons {
+  width: 50%;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.map-section .button {
+  width: 30%;
+  height: 30px;
+  border-radius: 10px;
+  background-color: #3f8b41;
+  border: none;
+}
+
+.map-section .button:hover {
+  background-color: #006400;
+}

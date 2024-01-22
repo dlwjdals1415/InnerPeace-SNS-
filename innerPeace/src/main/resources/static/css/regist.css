@@ -1,0 +1,100 @@
+main {
+  background-color: rgb(248, 218, 181);
+  flex-grow: 5;
+  display: flex;
+  max-width: 1000px;
+  flex-direction: column;
+  justify-content: center;
+  /* 가로 방향 중앙 정렬 */
+  align-items: center;
+  /* 세로 방향 중앙 정렬 */
+}
+
+.regist-section {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  height: auto;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+.regist-header {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 200%;
+}
+
+.regist-form {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.regist-form form {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.regist-form .regist-input {
+  width: 80%;
+  height: 15%;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.regist-checkbox-area {
+  width: 80%;
+  height: 10%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.registButton {
+  width: 80%;
+  height: 50px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 1px solid #3f8b41;
+  padding: 10px;
+  font-size: 18px;
+  background-color: #3f8b41
+}
+
+.registButton:hover {
+  background-color: #006400;
+}
+
+.regist-footer {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 100%;
+  gap: 10px;
+}
+
+.errorrow{
+  font-size: 15px;
+  color: red;
+}
