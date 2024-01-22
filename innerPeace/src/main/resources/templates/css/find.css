@@ -1,0 +1,69 @@
+main {
+  background-color: rgb(248, 218, 181);
+  flex-grow: 5;
+  display: flex;
+  max-width: 1000px;
+  flex-direction: column;
+  justify-content: center;
+  /* 가로 방향 중앙 정렬 */
+  align-items: center;
+  /* 세로 방향 중앙 정렬 */
+}
+
+.find-section {
+  background-color: #f4f4f4;
+  width: 50%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* 가로 방향 중앙 정렬 */
+  align-items: center;
+  /* 세로 방향 중앙 정렬 */
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.bold-text {
+  font-weight: bold;
+}
+
+.info {
+  margin: 20px 20px;
+}
+
+.findForm {
+  width: 80%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* 가로 방향 중앙 정렬 */
+  align-items: center;
+  /* 세로 방향 중앙 정렬 */
+}
+
+.findForm .find_input {
+  width: 100%;
+  height: 35px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.findForm .findButton {
+  margin-top: 20px;
+  width: 100%;
+  height: 35px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 1px solid #3f8b41;
+  font-size: 18px;
+  background-color: #3f8b41
+}
+
+.findForm .findButton:hover {
+  background-color: #006400;
+}
+

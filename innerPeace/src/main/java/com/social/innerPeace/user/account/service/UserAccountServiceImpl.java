@@ -32,4 +32,9 @@ public class UserAccountServiceImpl implements UserAccountService{
         healer = healerRepository.save(healer);
         return healer.getHealer_email();
     }
+
+    @Override
+    public SignupDTO login(SignupDTO dto) {
+        return null;
+    }
 }

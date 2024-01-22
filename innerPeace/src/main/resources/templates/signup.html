@@ -5,9 +5,9 @@
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <title>로그인</title>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <link rel='stylesheet' type='text/css' media='screen' href='../static/css/base.css'>
-  <link rel='stylesheet' type='text/css' media='screen' href='../static/css/sidebar.css'>
-  <link rel='stylesheet' type='text/css' media='screen' href='../static/css/regist.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='css/base.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='css/sidebar.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='css/regist.css'>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 </head>
 <body>
@@ -26,24 +26,24 @@
       <section class="regist-section">
         <article class="regist-header">
           <h1>
-            <a class="regist_logo" th:href="board/post/list">I n n e r P e a c e</a>
+            <a class="regist_logo" th:href="@{board/post/list}">I n n e r P e a c e</a>
           </h1>
         </article>
         <article class="regist-form">
-          <form th:action="@{/user/signup}" method="post">
-            <input class="regist-input" type="text" name="healer_email" id="healer_email" placeholder="이메일" required>
+          <form th:action="@{/user/account/signup}" method="post">
+            <input class="regist-input" type="text" name="email" id="healer_email" placeholder="이메일" required>
             <div class="errorrow" id="idError"></div>
-            <input class="regist-input" type="password" name="healer_pw" id="healer_pw" placeholder="비밀번호" required>
+            <input class="regist-input" type="password" name="password" id="healer_pw" placeholder="비밀번호" required>
             <div class="errorrow" id="pwError"></div>
             <input class="regist-input" type="password" name="password_confirm" id="password_confirm"
               placeholder="비밀번호 확인" required>
             <div class="errorrow" id="pwConfirmError"></div>
-            <input class="regist-input" type="text" name="healer_name" id="healer_name" placeholder="이름" required>
+            <input class="regist-input" type="text" name="name" id="healer_name" placeholder="이름" required>
             <div class="errorrow" id="nameError"></div>
-            <input class="regist-input" type="text" name="healer_phone" id="healer_phone" placeholder="전화번호" required>
+            <input class="regist-input" type="text" name="phone" id="healer_phone" placeholder="전화번호" required>
             <div class="errorrow" id="phoneError"></div>
             <div class = "birthinfo">생년월일</div> 
-            <input class="regist-input" type="date" name="healer_birth" id="healer_birth" required>
+            <input class="regist-input" type="date" name="birth" id="healer_birth" required>
             <div class="errorrow" id="birthError"></div>
             <article class="regist-checkbox-area">
               <input id="checkbox_all" name="checkbox_all" type="checkbox">
@@ -70,7 +70,7 @@
         </article>
         <article class="regist-footer">
           <span>이미 아이디가 있으신가요?</span>
-          <a th:href="/user/signin">로그인</a>
+          <a th:href="@{/user/account/signin}">로그인</a>
         </article>
       </section>
     </main>
@@ -79,6 +79,6 @@
     </footer>
   </section>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="../static/js/regist.js"></script>
+  <script src="js/regist.js"></script>
 </body>
 </html>

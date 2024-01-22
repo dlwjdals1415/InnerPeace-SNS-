@@ -47,5 +47,5 @@ public class Post extends BaseEntity{
 
     @Builder.Default
     @OneToMany(mappedBy = "post_no",cascade = CascadeType.ALL)
-    private List<Like> likeList = new ArrayList<>();
+    private List<Post_Like> postLikeList = new ArrayList<>();
 }

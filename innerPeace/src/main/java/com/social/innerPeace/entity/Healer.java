@@ -46,6 +46,8 @@ public class Healer extends BaseEntity{
     @Column(length = 400)
     private String healer_statusmessage;
 
+    private boolean ad_agree;
+
     @Builder.Default
     @OneToMany(mappedBy = "follower",cascade = CascadeType.ALL)
     private List<Follow> followerList = new ArrayList<>();
@@ -60,5 +62,5 @@ public class Healer extends BaseEntity{
 
     @Builder.Default
     @OneToMany(mappedBy = "healer_no",cascade = CascadeType.ALL)
-    private List<Like> likeList = new ArrayList<>();
+    private List<Post_Like> postLikeList = new ArrayList<>();
 }

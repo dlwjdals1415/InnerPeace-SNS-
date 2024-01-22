@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class SignupDTO {
     private String email;
     private String password;
+    private String password_confirm;
     private String name;
     private String phone;
     private LocalDateTime birth;
