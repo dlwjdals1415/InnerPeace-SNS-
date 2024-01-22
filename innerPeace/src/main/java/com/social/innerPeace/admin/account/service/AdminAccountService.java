@@ -1,4 +1,4 @@
-package com.social.innerPeace.admin.login.service;
+package com.social.innerPeace.admin.account.service;
 
-public interface AdminLoginService {
+public interface AdminAccountService {
 }

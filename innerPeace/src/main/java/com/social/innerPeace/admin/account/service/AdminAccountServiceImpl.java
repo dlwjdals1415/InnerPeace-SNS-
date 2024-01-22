@@ -1,4 +1,7 @@
-package com.social.innerPeace.admin.login.service;
+package com.social.innerPeace.admin.account.service;
 
-public class AdminLoginServiceImpl {
+import org.springframework.stereotype.Service;
+
+@Service
+public class AdminAccountServiceImpl {
 }

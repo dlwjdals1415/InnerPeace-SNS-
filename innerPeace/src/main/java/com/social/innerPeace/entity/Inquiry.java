@@ -22,10 +22,10 @@ public class Inquiry extends BaseEntity{
     private String inquiry_content;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "healer_id")
+    @JoinColumn(name = "healer_email")
     private Healer inquiry_writer;
 
-    @Builder.Default
-    @OneToOne(mappedBy = "inquiry_no",cascade = CascadeType.ALL)
-    private Answer answer = new Answer();
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "answer_no",referencedColumnName = "answer_no")
+    private Answer answer;
 }

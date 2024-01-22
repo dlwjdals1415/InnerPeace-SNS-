@@ -26,9 +26,12 @@ public class Post extends BaseEntity{
 
     private String post_image;
 
-    private int map_point_x;
+    private int map_point_lat;
 
-    private int map_point_y;
+    private int map_point_lng;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<String> tags;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "healer_nickname")
@@ -41,10 +44,6 @@ public class Post extends BaseEntity{
     @Builder.Default
     @OneToMany(mappedBy = "report_post",cascade = CascadeType.ALL)
     private List<Report> reportList = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "post_no",cascade = CascadeType.ALL)
-    private List<Tag> tagList = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "post_no",cascade = CascadeType.ALL)

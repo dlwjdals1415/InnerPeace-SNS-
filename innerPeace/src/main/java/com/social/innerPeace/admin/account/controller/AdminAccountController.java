@@ -1,4 +1,7 @@
-package com.social.innerPeace.admin.login.controller;
+package com.social.innerPeace.admin.account.controller;
 
-public class AdminLoginController {
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class AdminAccountController {
 }

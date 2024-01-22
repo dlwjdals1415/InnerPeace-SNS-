@@ -15,9 +15,9 @@ public class Answer extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answer_no;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "inquiry_no")
-    private Inquiry inquiry_no;
+    @Builder.Default
+    @OneToOne(mappedBy = "answer")
+    private Inquiry inquiry_no = new Inquiry();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_no")

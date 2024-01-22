@@ -1,4 +1,4 @@
-package com.social.innerPeace.healer.customerService.service;
+package com.social.innerPeace.user.customerService.service;
 
 public interface HealerCustomerServiceService {
 }

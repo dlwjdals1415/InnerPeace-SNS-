@@ -1,4 +1,4 @@
-package com.social.innerPeace.user.login.controller;
+package com.social.innerPeace.user.account.controller;
 
-public class UserLoginController {
+public class UserAccountController {
 }
