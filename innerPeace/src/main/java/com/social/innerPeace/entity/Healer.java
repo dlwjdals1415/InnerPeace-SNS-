@@ -16,17 +16,13 @@ import java.util.List;
 @ToString(exclude = {"followerList","followingList","postList"})
 public class Healer extends BaseEntity{
     @Id
-    @Column(length = 20)
-    private String healer_id;
+    private String healer_email;
 
     @Column(length = 30,nullable = false)
     private String healer_pw;
 
     @Column(length = 50,nullable = false)
     private String healer_name;
-
-    @Column(length = 100,nullable = false)
-    private String healer_email;
 
     @Column(length = 20,nullable = false)
     private String healer_phone;
@@ -35,7 +31,8 @@ public class Healer extends BaseEntity{
     @Builder.Default
     private boolean healer_status = true;
 
-    @Column(length = 50)
+    private String haeler_profile_image;
+
     private String healer_randomcode;
 
     @Column(length = 30, nullable = false)
