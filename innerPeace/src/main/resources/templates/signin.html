@@ -5,9 +5,9 @@
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <title>로그인</title>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <link rel='stylesheet' type='text/css' media='screen' href='../static/css/sidebar.css'>
-  <link rel='stylesheet' type='text/css' media='screen' href='../static/css/base.css'>
-  <link rel='stylesheet' type='text/css' media='screen' href='../static/css/login.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='css/sidebar.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='css/base.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='css/login.css'>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 </head>
 <body>
@@ -24,10 +24,10 @@
       <section class="login-section">
         <article class="login-header">
           <h1>
-            <a class="login_logo" th:href="/">INNER-PEACE</a>
+            <a class="login_logo" th:href="@{/}">INNER-PEACE</a>
           </h1>
         </article>
-        <form th:action="@{/user/signin}" method="post">
+        <form th:action="@{/user/account/signin}" method="post">
         <article class="login-form">
             <input class="form-input" type="text" name="healer_id" id="healer_id" placeholder="아이디" required>
             <input class="form-input" type="password" name="healer_pw" id="healer_pw" placeholder="비밀번호" required>
@@ -41,13 +41,13 @@
           </div>
 
           <div class="find_info">
-            <a th:href="@{user/find}">아이디/비밀번호 찾기</a>
+            <a th:href="@{/user/find}">아이디/비밀번호 찾기</a>
           </div>
         </article>
         </form>
         <article class="regist">
           <span>INNER-PEACE가 처음이신가요?</span>
-          <a th:href="@{user/account/signup}">회원가입</a>
+          <a th:href="@{/user/account/signup}">회원가입</a>
         </article>
       </section>
     </main>

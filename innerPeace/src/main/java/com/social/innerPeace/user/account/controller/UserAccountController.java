@@ -42,19 +42,19 @@ public class UserAccountController {
         return "redirect:/singin";
     }
 
-    @GetMapping("/singin")
+    @GetMapping("/signin")
     public String login(){
         log.info("login");
-        return "singin";
+        return "signin";
     }
 
-    @PostMapping("/singin")
+    @PostMapping("/signin")
     public String doLogin(SignupDTO dto, RedirectAttributes redirectAttributes, HttpServletRequest request){
         log.info("doLogin dto:" + dto);
         SignupDTO memberDTO = userAccountService.login(dto);
         if(memberDTO==null){
             redirectAttributes.addFlashAttribute("msg","로그인을 하지 못했습니다.");
-            return "redirect:/singin";
+            return "redirect:/signin";
         }
 
         HttpSession httpSession = request.getSession();

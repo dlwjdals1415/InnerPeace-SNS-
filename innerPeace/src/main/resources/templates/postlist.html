@@ -5,11 +5,11 @@
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <title>Page Title</title>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <link rel='stylesheet' type='text/css' media='screen' href='../static/css/base.css'>
-  <link rel='stylesheet' type='text/css' media='screen' href='../static/css/write.css'>
-  <link rel='stylesheet' type='text/css' media='screen' href='../static/css/sidebar.css'>
-  <link rel='stylesheet' type='text/css' media='screen' href='../static/css/postlist.css'>
-  <link rel='stylesheet' type='text/css' media='screen' href='../static/css/map.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='css/base.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='css/write.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='css/sidebar.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='css/postlist.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='css/map.css'>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 </head>
 
@@ -18,7 +18,7 @@
   <input type="checkbox" class="checkbox" id="search">
   <input type="checkbox" class="checkbox" id="more">
 
-  <section class="write-container" th:replace="write :: write">
+  <section class="write-container" th:replace="fragment/write::write">
   </section>
   <section class="sidebar" th:if="${#session.getAttribute('loginedHealer') != null}" th:replace="fragment/sidebar::healer_sidebar"></section>
   <section class="sidebar" th:unless="${#session.getAttribute('loginedHealer') != null or #session.getAttribute('loginedAdmin') != null}" th:replace="fragment/sidebar::user_sidebar"></section>
@@ -48,8 +48,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
   <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9cf7f221de3543e0bd1ed40d14a3a704&libraries=services"></script>
-  <script src="../static/js/map.js"></script>
-  <script src="../static/js/write.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/write.js"></script>
 </body>
 
 </html>
