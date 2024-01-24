@@ -3,6 +3,7 @@ package com.social.innerPeace.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class Healer extends BaseEntity{
     @Column(length = 1)
     private String healer_gender;
 
-    private LocalDateTime healer_bitrh;
+    private LocalDate healer_bitrh;
 
     @Column(length = 400)
     private String healer_statusmessage;
