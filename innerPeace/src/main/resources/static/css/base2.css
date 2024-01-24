@@ -1,0 +1,80 @@
+a {
+  color: black;
+  /* 링크의 색상을 검은색으로 설정 */
+  text-decoration: none;
+  /* 밑줄 제거 */
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  position: relative;
+  /* body를 container와 write-container의 위치를 결정하는 기준점으로 설정 */
+}
+
+.container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  background-color: #f4f4f4;
+  display: flex;
+  flex-direction: row;
+  z-index: 1;
+}
+
+header {
+  background-color: bisque;
+  flex-grow: 1.5;
+  display: flex;
+}
+
+footer {
+  background-color: brown;
+  flex-grow: 2;
+}
+
+form {
+  width: auto;
+  /* 너비를 자동으로 설정 */
+  height: auto;
+  /* 높이를 자동으로 설정 */
+  margin: 0;
+  /* 마진을 0으로 설정 */
+  padding: 0;
+  /* 패딩을 0으로 설정 */
+}
+
+#create:checked~.write-container {
+  z-index: 4;
+  opacity: 1;
+}
+
+#search:checked~.searchbar {
+  left: 10%;
+}
+
+#confirm:checked~.post_write {
+  display: block;
+  opacity: 1;
+}
+
+#more:checked~.menubar {
+  left: 0%;
+}
+
+.checkbox {
+  display: none;
+}
+
+.errorrow{
+  font-size: 15px;
+  color: red;
+}
