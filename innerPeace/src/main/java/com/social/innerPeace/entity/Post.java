@@ -26,9 +26,9 @@ public class Post extends BaseEntity{
 
     private String post_image;
 
-    private int map_point_lat;
+    private float map_point_lat;
 
-    private int map_point_lng;
+    private float map_point_lng;
 
     @ElementCollection(fetch = FetchType.LAZY)
     private List<String> tags;

@@ -1,0 +1,12 @@
+main {
+  background-color: rgb(248, 218, 181);
+  flex-grow: 7;
+  display: flex;
+  max-width: 1100px;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* 가로 방향 중앙 정렬 */
+  align-items: flex-start;
+  /* 세로 방향 중앙 정렬 */
+}
+

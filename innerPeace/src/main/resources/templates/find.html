@@ -14,11 +14,11 @@
     <input type="checkbox" class="checkbox" id="create">
     <input type="checkbox" class="checkbox" id="search">
     <input type="checkbox" class="checkbox" id="more">
-    <section class="sidebar" th:replace="fragment/sidebar::user_sidebar">
+    <section class="sidebar" th:replace="~{fragment/sidebar::user_sidebar}">
     </section>
-    <article class="searchbar" th:replace="fragment/searchbar::searchbar">
+    <article class="searchbar" th:replace="~{fragment/searchbar :: searchbar}">
     </article>
-    <article class="menubar" th:replace="fragment/menu::user_menu">
+    <article class="menubar" th:replace="~{fragment/menu :: user_menu}">
     </article>
     <section class="container">
         <header>

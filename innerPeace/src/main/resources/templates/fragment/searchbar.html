@@ -6,9 +6,9 @@
 </head>
 <body>
 <article class="searchbar" th:fragment="searchbar">
-  <form th:action="@{/board/post/search}" method="post">
+  <form th:action="@{/board/post/search}" method="get">
     <article class="searchinput">
-      <input type="text" name="search" id="search_post" placeholder="검색">
+      <input type="text" name="searchkey" id="search_post" placeholder="검색">
       <input type="submit" value="검색">
     </article>
   </form>
