@@ -39,7 +39,7 @@ public class UserAccountController {
                 redirectAttributes.addFlashAttribute("msg", "회원가입이 완료되었습니다.");
             }
         }
-        return "redirect:/singin";
+        return "signin";
     }
 
     @GetMapping("/signin")
@@ -48,17 +48,4 @@ public class UserAccountController {
         return "signin";
     }
 
-    @PostMapping("/signin")
-    public String doLogin(SignupDTO dto, RedirectAttributes redirectAttributes, HttpServletRequest request){
-        log.info("doLogin dto:" + dto);
-        SignupDTO memberDTO = userAccountService.login(dto);
-        if(memberDTO==null){
-            redirectAttributes.addFlashAttribute("msg","로그인을 하지 못했습니다.");
-            return "redirect:/signin";
-        }
-
-        HttpSession httpSession = request.getSession();
-        httpSession.setAttribute("member", memberDTO);
-        return "redirect:/list";
-    }
 }

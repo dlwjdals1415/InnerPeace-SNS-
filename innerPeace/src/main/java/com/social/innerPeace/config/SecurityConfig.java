@@ -30,7 +30,7 @@ public class SecurityConfig{
        http.csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable).authorizeHttpRequests(request -> request
                .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                .requestMatchers("/**").permitAll()
-               .anyRequest().anonymous());
+               .anyRequest().authenticated());
        return http.build();
     }
 

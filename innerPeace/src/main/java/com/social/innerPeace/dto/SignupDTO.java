@@ -17,6 +17,6 @@ public class SignupDTO {
     private String password_confirm;
     private String name;
     private String phone;
-    private LocalDateTime birth;
+    private String birth;
 
 }
