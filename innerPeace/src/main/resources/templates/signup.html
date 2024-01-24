@@ -32,19 +32,13 @@
         <article class="regist-form">
           <form th:action="@{/user/account/signup}" method="post">
             <input class="regist-input" type="text" name="email" id="healer_email" placeholder="이메일" required>
-            <div class="errorrow" id="idError"></div>
             <input class="regist-input" type="password" name="password" id="healer_pw" placeholder="비밀번호" required>
-            <div class="errorrow" id="pwError"></div>
             <input class="regist-input" type="password" name="password_confirm" id="password_confirm"
               placeholder="비밀번호 확인" required>
-            <div class="errorrow" id="pwConfirmError"></div>
             <input class="regist-input" type="text" name="name" id="healer_name" placeholder="이름" required>
-            <div class="errorrow" id="nameError"></div>
             <input class="regist-input" type="text" name="phone" id="healer_phone" placeholder="전화번호" required>
-            <div class="errorrow" id="phoneError"></div>
             <div class = "birthinfo">생년월일</div> 
             <input class="regist-input" type="date" name="birth" id="healer_birth" required>
-            <div class="errorrow" id="birthError"></div>
             <article class="regist-checkbox-area">
               <input id="checkbox_all" name="checkbox_all" type="checkbox">
               <label for="checkbox_all">이용약관, 개인정보 수집 및 이용, 광고성 정보 수신(선택)에 모두 동의합니다.</label>

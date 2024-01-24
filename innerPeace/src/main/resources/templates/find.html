@@ -5,9 +5,9 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>로그인</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='../static/css/base.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='../static/css/sidebar.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='../static/css/find.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/base.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/sidebar.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/find.css'>
 </head>
 
 <body>
@@ -27,7 +27,7 @@
             <section class="find-section">
                 <span class="bold-text">로그인에 문제가 있나요?</span>
                 <span class="info">이메일 주소를 입력하시면 계정에 다시 엑세스할 수 있는 링크를 보내드립니다.</span>
-                <form class="findForm" th:action="user/find/pwForm" method="post">
+                <form class="findForm" th:action="@{/user/find/pwForm}" method="post">
                     <input class="find_input" type="text" name="healer_id" id="healer_id" placeholder="이메일" />
                     <div class="errorrow" id="IdError"></div>
                     <input class="findButton" type="submit" value="로그인 링크 보내기">

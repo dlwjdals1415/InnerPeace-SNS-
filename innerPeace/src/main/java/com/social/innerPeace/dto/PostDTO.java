@@ -21,6 +21,7 @@ public class PostDTO {
     private float map_point_lat;
     private float map_point_lng;
     private List<String> tags;
+    private String healer_id;
     private String post_writer;
     private String follow;
     private int likes;

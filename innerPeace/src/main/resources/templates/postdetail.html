@@ -48,6 +48,10 @@
             flex-direction: column;
         }
 
+        main .post_content_section .hover:hover{
+            color: lightgray;
+        }
+
         main .post_content_section .post_writer {
             background-color: darkslateblue;
             width: 100%;
@@ -116,7 +120,7 @@
         }
 
         main .post_content_section .post_content .post_content_main .post_content_writer_profile .profile_img {
-            width: 30px ;
+            width: 30px;
             height: auto;
         }
 
@@ -129,10 +133,9 @@
             flex-direction: column;
         }
 
-        main .post_content_section .post_content .post_content_main .post_content_main_content .tags{
+        main .post_content_section .post_content .post_content_main .post_content_main_content .tags {
             display: flex;
-            flex-direction: row;
-            gap: 20px;
+            gap: 10px;
         }
 
         main .post_content_section .post_content .post_content_main .post_content_main_content .regday {
@@ -282,7 +285,9 @@
                 <section class="post_writer">
                     <article class="post_writer_left">
                         <img class="post_writer_profile" th:src="${dto.profileImg}" alt="profile">
-                        <span class="post_writer_nickname" th:text="${dto.post_writer}">닉네임</span>
+                        <a th:href="@{/user/userpage/{healer_id}(healer_id=${dto.healer_id})}">
+                            <span class="post_writer_nickname hover" th:text="${dto.post_writer}">닉네임</span>
+                        </a>
                         <button class="post_writer_follow">
                             <span id="follow_button" th:text="${dto.follow}">팔로우</span>
                         </button>
@@ -298,9 +303,18 @@
                                 <img class="profile_img" th:src="${dto.profileImg}" alt="프로필">
                             </article>
                             <article class="post_content_main_content">
-                                <span th:text="${dto.post_writer} + '   ' + ${dto.post_content}"></span>
-                                <span class="tags" th:each="item, status : ${dto.tags}">
-                                    <a th:href="@{/board/post/search(searchkey=${item})}"><span th:text="${item}"></span></a>
+                                <span>
+                                    <a th:href="@{/user/userpage/{healer_id}(healer_id=${dto.healer_id})}">
+                                        <span class="hover" th:text="${dto.post_writer}"></span>
+                                    </a>
+                                    <span th:text="'  ' + ${dto.post_content}"></span>
+                                </span>
+                                <span class="tags">
+                                    <span th:each="item, status : ${dto.tags}">
+                                        <a th:href="@{/board/post/search(searchkey=${item})}">
+                                            <span class="hover" th:text="${item}"></span>
+                                        </a>
+                                    </span>
                                 </span>
                                 <span class="regday" th:text="${dto.post_regday}"></span>
                             </article>
@@ -312,10 +326,16 @@
                                 <img class="profile_img" th:src="${item.profileImg}" alt="프로필">
                             </article>
                             <article class="comment_content">
-                                <span th:text="${item.healer_nickname + '  ' + item.comment_content}"></span>
+                                <span>
+                                    <a th:href="@{/user/userpage/{healer_id}(healer_id=${item.healer_id})}">
+                                        <span class="hover" th:text="${item.healer_nickname}"></span>
+                                    </a>
+                                    <span th:text="'  ' + ${item.comment_content}"></span>
+                                </span>
                                 <article class="comment_footer">
                                     <span class="regday" th:text="${item.comment_regday}"></span>
-                                    <button class="comment_menu" type="button" th:onclick="comment_menu(${item.comment_no})">
+                                    <button class="comment_menu" type="button"
+                                            th:onclick="comment_menu(${item.comment_no})">
                                         ···
                                     </button>
                                 </article>
@@ -368,10 +388,13 @@
                     // 성공적으로 응답 받았을 때의 처리
                     console.log("서버 응답:", response);
                     // 받은 데이터를 이용하여 추가적인 작업 수행 가능
+                    $("#comment_area").val('');
+
                 },
                 error: function (error) {
                     // 오류 발생 시의 처리
                     console.error("에러 발생:", error);
+                    $("#comment_area").val('');
                 }
             });
         });

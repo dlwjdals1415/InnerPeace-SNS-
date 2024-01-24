@@ -180,25 +180,25 @@ input[type="file"] {
   border-radius: 10px;
 }
 
-.tags {
+.write_content .tags {
   margin-left: 20px;
   width: 91.5%;
   height: 20px;
 }
 
-.tag {
+.write_content .tag {
   display: flex;
   width: 91.5%;
   height: 30px;  /* Flexbox 레이아웃 적용 */
 }
 
-.tag input[type="text"] {
+.write_content .tag input[type="text"] {
   margin-left: 20px;
   flex: 8;
   /* 너비를 8 부분으로 설정 */
 }
 
-.tag button {
+.write_content .tag button {
   flex: 2;
   /* 너비를 2 부분으로 설정 */
 }
