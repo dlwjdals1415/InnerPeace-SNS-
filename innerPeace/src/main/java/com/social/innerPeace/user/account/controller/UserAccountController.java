@@ -1,5 +1,6 @@
 package com.social.innerPeace.user.account.controller;
 
+import com.social.innerPeace.config.auth.Role;
 import com.social.innerPeace.dto.SignupDTO;
 import com.social.innerPeace.repository.HealerRepository;
 import com.social.innerPeace.user.account.service.UserAccountService;
@@ -34,7 +35,7 @@ public class UserAccountController {
             redirectAttributes.addFlashAttribute("msg", "이미 가입한 회원입니다.");
             return "redirect:/signup";
         }else {
-            String email = userAccountService.register(dto);
+            String email = userAccountService.register(dto, Role.ROLE_USER);
             if (email != null && email.isEmpty() == false) {
                 redirectAttributes.addFlashAttribute("msg", "회원가입이 완료되었습니다.");
             }
@@ -47,5 +48,10 @@ public class UserAccountController {
         log.info("login");
         return "signin";
     }
-
+    @GetMapping("/loginError")
+    public String loginError(String msg, RedirectAttributes attributes){
+        log.info("loginError : {}", msg);
+        attributes.addFlashAttribute("msg", msg);
+        return "redirect:/login";
+    }
 }

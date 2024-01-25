@@ -1,7 +1,9 @@
 package com.social.innerPeace.user.account.service;
 
+import com.social.innerPeace.config.auth.Role;
 import com.social.innerPeace.dto.SignupDTO;
 import com.social.innerPeace.entity.Healer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 public interface UserAccountService {
     Object findByEmail(String email);
 
-    String register(SignupDTO dto);
+    String register(SignupDTO dto, Role role);
 
     default Healer dtoToEntity(SignupDTO dto){
         Healer entity = Healer.builder()
@@ -38,5 +40,4 @@ public interface UserAccountService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 날짜 형식에 맞게 수정
         return LocalDate.parse(dateString, formatter);
     }
-
 }

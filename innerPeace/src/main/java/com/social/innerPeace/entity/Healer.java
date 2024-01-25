@@ -1,10 +1,10 @@
 package com.social.innerPeace.entity;
 
+import com.social.innerPeace.config.auth.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class Healer extends BaseEntity{
     @Id
     private String healer_email;
 
-    @Column(length = 30,nullable = false)
+    @Column(length = 200,nullable = false)
     private String healer_pw;
 
     @Column(length = 50,nullable = false)
@@ -48,6 +48,10 @@ public class Healer extends BaseEntity{
     private String healer_statusmessage;
 
     private boolean ad_agree;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
     @Builder.Default
     @OneToMany(mappedBy = "follower",cascade = CascadeType.ALL)
