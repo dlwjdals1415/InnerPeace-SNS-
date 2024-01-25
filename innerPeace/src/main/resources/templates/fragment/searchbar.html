@@ -2,16 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="kr">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Inner Peace</title>
 </head>
 <body>
 <article class="searchbar" th:fragment="searchbar">
-  <form th:action="@{/board/post/search}" method="get">
-    <article class="searchinput">
-      <input type="text" name="searchkey" id="search_post" placeholder="검색">
-      <input type="submit" value="검색">
-    </article>
-  </form>
+    <form th:action="@{/board/post/search}" method="get">
+        <article class="searchinput">
+            <input type="text" name="searchkey" id="search_post" placeholder="검색">
+            <input type="submit" value="검색">
+        </article>
+    </form>
 </article>
 </body>
 </html>

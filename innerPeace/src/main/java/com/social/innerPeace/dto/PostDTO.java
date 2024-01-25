@@ -23,7 +23,7 @@ public class PostDTO {
     private List<String> tags;
     private String healer_id;
     private String post_writer;
-    private String follow;
+    private String followstat;
     private int likes;
     private String likeposition;
     private String profileImg;

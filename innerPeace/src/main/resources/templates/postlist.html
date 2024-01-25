@@ -3,7 +3,7 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
+    <title>Inner Peace</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/base.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/write.css'>
@@ -16,8 +16,9 @@
 <input type="checkbox" class="checkbox" id="create">
 <input type="checkbox" class="checkbox" id="search">
 <input type="checkbox" class="checkbox" id="more">
-<section class="write-container" th:replace="~{fragment/write::write}">
-</section>
+<th:block th:if="${session.loginedHealer != null}">
+    <section class="write-container" th:replace="~{fragment/write::write}"></section>
+</th:block>
 <th:block th:if="${session.loginedHealer != null}">
     <section class="sidebar" th:replace="~{fragment/sidebar::healer_sidebar}"></section>
 </th:block>
@@ -26,8 +27,9 @@
 </th:block>
 <article class="searchbar" th:replace="~{fragment/searchbar::searchbar}">
 </article>
-<section class="map-section" th:replace="~{fragment/map::map-section}">
-</section>
+<th:block th:if="${session.loginedHealer != null}">
+    <section class="map-section" th:replace="~{fragment/map::map-section}"></section>
+</th:block>
 <th:block th:if="${session.loginedHealer != null}">
     <article class="menubar" th:replace="~{fragment/menu::healer_menu}"></article>
 </th:block>
@@ -41,7 +43,7 @@
         <article class="followList">
             <h2>followLIst</h2>
         </article>
-        <article class="post_content">
+        <article class="post_content scrollbarnone">
             <div class="post" th:each="item, status : ${dtoList}">
                 <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
                     <img th:src="${item.post_image}" alt="Post 1" loading="lazy">

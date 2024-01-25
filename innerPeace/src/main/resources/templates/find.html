@@ -3,7 +3,7 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>로그인</title>
+    <title>Inner Peace</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/base.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/sidebar.css'>
@@ -11,35 +11,35 @@
 </head>
 
 <body>
-    <input type="checkbox" class="checkbox" id="create">
-    <input type="checkbox" class="checkbox" id="search">
-    <input type="checkbox" class="checkbox" id="more">
-    <section class="sidebar" th:replace="~{fragment/sidebar::user_sidebar}">
-    </section>
-    <article class="searchbar" th:replace="~{fragment/searchbar :: searchbar}">
-    </article>
-    <article class="menubar" th:replace="~{fragment/menu :: user_menu}">
-    </article>
-    <section class="container">
-        <header>
-        </header>
-        <main>
-            <section class="find-section">
-                <span class="bold-text">로그인에 문제가 있나요?</span>
-                <span class="info">이메일 주소를 입력하시면 계정에 다시 엑세스할 수 있는 링크를 보내드립니다.</span>
-                <form class="findForm" th:action="@{/user/find/pwForm}" method="post">
-                    <input class="find_input" type="text" name="healer_id" id="healer_id" placeholder="이메일" />
-                    <div class="errorrow" id="IdError"></div>
-                    <input class="findButton" type="submit" value="로그인 링크 보내기">
-                </form>
-                <span class="text-with-lines">또는</span>
-                <a class="regist-link" th:href="@{/user/account/signup}">새 계정 만들기</a>
-            </section>
-        </main>
-        <footer>
-            <span>© 2024 INNER-PEACE</span>
-        </footer>
-    </section>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<input type="checkbox" class="checkbox" id="create">
+<input type="checkbox" class="checkbox" id="search">
+<input type="checkbox" class="checkbox" id="more">
+<section class="sidebar" th:replace="~{fragment/sidebar::user_sidebar}">
+</section>
+<article class="searchbar" th:replace="~{fragment/searchbar :: searchbar}">
+</article>
+<article class="menubar" th:replace="~{fragment/menu :: user_menu}">
+</article>
+<section class="container">
+    <header>
+    </header>
+    <main>
+        <section class="find-section">
+            <span class="bold-text">로그인에 문제가 있나요?</span>
+            <span class="info">이메일 주소를 입력하시면 계정에 다시 엑세스할 수 있는 링크를 보내드립니다.</span>
+            <form class="findForm" th:action="@{/user/find/pwForm}" method="post">
+                <input class="find_input" type="text" name="healer_id" id="healer_id" placeholder="이메일"/>
+                <div class="errorrow" id="IdError"></div>
+                <input class="findButton" type="submit" value="로그인 링크 보내기">
+            </form>
+            <span class="text-with-lines">또는</span>
+            <a class="regist-link" th:href="@{/user/account/signup}">새 계정 만들기</a>
+        </section>
+    </main>
+    <footer>
+        <span>© 2024 INNER-PEACE</span>
+    </footer>
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 </html>
