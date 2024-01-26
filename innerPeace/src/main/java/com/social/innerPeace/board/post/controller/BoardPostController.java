@@ -38,8 +38,6 @@ public class BoardPostController {
                     .build();
             dtoList.add(dto);
         });
-
-        session.setAttribute("loginedHealer","loginedHealer");
         model.addAttribute("dtoList",dtoList);
         return "postlist";
     }
