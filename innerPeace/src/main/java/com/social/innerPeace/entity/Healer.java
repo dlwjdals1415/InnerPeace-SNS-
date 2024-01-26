@@ -1,6 +1,6 @@
 package com.social.innerPeace.entity;
 
-import com.social.innerPeace.config.auth.Role;
+import com.social.innerPeace.ip_enum.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,7 +17,8 @@ import java.util.List;
 @ToString(exclude = {"followerList","followingList","postList"})
 public class Healer extends BaseEntity{
     @Id
-    private String healer_email;
+    @Column(name = "healer_email")
+    private String healerEmail;
 
     @Column(length = 200,nullable = false)
     private String healer_pw;

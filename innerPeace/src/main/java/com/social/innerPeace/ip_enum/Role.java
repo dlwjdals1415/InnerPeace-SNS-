@@ -1,4 +1,4 @@
-package com.social.innerPeace.config.auth;
+package com.social.innerPeace.ip_enum;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Role {
-    ROLE_USER("ROLE_USER"),
-    ROLE_ADMIN("ROLE_ADMIN");
+    ROLE_USER("USER"),
+    ROLE_ADMIN("ADMIN");
 
     private String role;
 

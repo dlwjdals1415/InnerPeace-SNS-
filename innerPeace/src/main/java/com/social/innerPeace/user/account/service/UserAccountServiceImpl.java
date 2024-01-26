@@ -1,6 +1,6 @@
 package com.social.innerPeace.user.account.service;
 
-import com.social.innerPeace.config.auth.Role;
+import com.social.innerPeace.ip_enum.Role;
 import com.social.innerPeace.dto.SignupDTO;
 import com.social.innerPeace.entity.Healer;
 import com.social.innerPeace.repository.HealerRepository;
@@ -20,7 +20,20 @@ public class UserAccountServiceImpl implements UserAccountService{
     private HealerRepository healerRepository;
 
     @Override
-    public Object findByEmail(String email) {
+    public String register(SignupDTO dto, Role role) {
+        if(healerRepository.findById(dto.getEmail()).isPresent()){
+            return "duplicated";
+        }
+        Healer healer = dtoToEntity(dto);
+        healer.setHealer_nickname(dto.getEmail());
+        healer.setHealer_pw(passwordEncoder.encode(dto.getPassword()));
+        healer.setRole(role);
+        healer = healerRepository.save(healer);
+        return healer.getHealerEmail();
+    }
+
+    @Override
+    public SignupDTO compareByEmail(String email) {
         Optional<Healer> optionalHealer = healerRepository.findById(email);
         if(optionalHealer.isPresent()){
             Healer healer = optionalHealer.get();
@@ -29,18 +42,4 @@ public class UserAccountServiceImpl implements UserAccountService{
         }
         return null;
     }
-
-    @Override
-    public String register(SignupDTO dto, Role role) {
-        if(healerRepository.findById(dto.getEmail()).isPresent()){
-            return null;
-        }
-        Healer healer = dtoToEntity(dto);
-        healer.setHealer_nickname(dto.getEmail());
-        healer.setHealer_pw(passwordEncoder.encode(dto.getPassword()));
-        healer.setRole(role);
-        healer = healerRepository.save(healer);
-        return healer.getHealer_email();
-    }
-
 }

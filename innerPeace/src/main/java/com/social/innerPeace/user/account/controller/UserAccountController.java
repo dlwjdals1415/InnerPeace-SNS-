@@ -1,17 +1,13 @@
 package com.social.innerPeace.user.account.controller;
 
-import com.social.innerPeace.config.auth.Role;
+import com.social.innerPeace.ip_enum.Role;
 import com.social.innerPeace.dto.SignupDTO;
-import com.social.innerPeace.repository.HealerRepository;
 import com.social.innerPeace.user.account.service.UserAccountService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -31,16 +27,19 @@ public class UserAccountController {
     @PostMapping("/signup")
     public String register(SignupDTO dto, RedirectAttributes redirectAttributes){
         log.info("register dto:" + dto);
-        if(dto.getEmail().equals(userAccountService.findByEmail(dto.getEmail()))) {
+        String email = userAccountService.register(dto, Role.ROLE_USER);
+        if(email.equals("duplicated")){
             redirectAttributes.addFlashAttribute("msg", "이미 가입한 회원입니다.");
-            return "redirect:/signup";
-        }else {
-            String email = userAccountService.register(dto, Role.ROLE_USER);
-            if (email != null && email.isEmpty() == false) {
-                redirectAttributes.addFlashAttribute("msg", "회원가입이 완료되었습니다.");
-            }
+            log.info("이미 가입한 회원입니다.");
+            return "redirect:/user/account/signup";
+        }else if (email != null && email.isEmpty() == false) {
+            redirectAttributes.addFlashAttribute("msg", "회원가입이 완료되었습니다.");
+            return "redirect:/user/account/signin";
+        }else{
+            redirectAttributes.addFlashAttribute("msg", "이미 가입한 회원입니다.");
+            log.info("회원가입을 하지못했습니다.");
+            return "redirect:/user/account/signup";
         }
-        return "signin";
     }
 
     @GetMapping("/signin")
