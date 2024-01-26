@@ -20,7 +20,6 @@ public class Healer extends BaseEntity{
     @Column(name = "healer_email")
     private String healerEmail;
 
-    @Column(length = 200,nullable = false)
     private String healer_pw;
 
     @Column(length = 50,nullable = false)

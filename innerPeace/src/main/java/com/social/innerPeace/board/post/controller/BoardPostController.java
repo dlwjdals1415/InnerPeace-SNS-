@@ -2,6 +2,7 @@ package com.social.innerPeace.board.post.controller;
 
 import com.social.innerPeace.dto.CommentDTO;
 import com.social.innerPeace.dto.PostDTO;
+import com.social.innerPeace.dto.WriteDTO;
 import com.social.innerPeace.entity.Comment;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ public class BoardPostController {
                     .build();
             dtoList.add(dto);
         });
+        session.setAttribute("loginedHealer","asd@gmail.com");
         model.addAttribute("dtoList",dtoList);
         return "postlist";
     }
@@ -79,6 +82,11 @@ public class BoardPostController {
         model.addAttribute("dto",dto);
         model.addAttribute("dtoList",dtoList);
         return "postdetail";
+    }
+
+    @PostMapping("board/post/write")
+    public String postwrite(WriteDTO dto){
+        return "redirect:/board/post/list";
     }
 
 
