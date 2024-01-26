@@ -96,7 +96,6 @@
         }
 
         main .post_content_section .post_writer .post_menu {
-            background-color: #f4f4f4;
             height: auto;
             font-size: 200%;
             border: none;
@@ -306,6 +305,11 @@
         .postmenu-container .postmenucontent .reportButton:hover {
             background-color: #e8e2e2;
         }
+
+        #postmenu:checked~.postmenu-container {
+            z-index: 10;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -315,8 +319,9 @@
 <input type="checkbox" class="checkbox" id="postmenu">
 <section class="postmenu-container">
     <label class="postmenu_label" for="postmenu"></label>
+    <input type="checkbox" class="checkbox" id="report">
     <section class="postmenucontent">
-        <button class="reportButton" type="button" id="post_report" onclick="()">신고</button>
+        <label for="report" class="reportButton">신고</label>
     </section>
 </section>
 <th:block th:if="${session.loginedHealer != null}">
@@ -361,9 +366,7 @@
                         </th:block>
                     </article>
                     <article class="post_writer_right">
-                        <button class="post_menu" type="button" th:onclick="'menu(' + ${dto.post_no} + ')';">
-                            ···
-                        </button>
+                        <label class="post_menu" for="postmenu">···</label>
                     </article>
                 </section>
                 <section class="post_content">
@@ -404,10 +407,6 @@
                                 </span>
                                 <article class="comment_footer">
                                     <span class="regday" th:text="${item.comment_regday}"></span>
-                                    <button class="comment_menu" type="button"
-                                            th:onclick="'menu(' + ${item.comment_no} + ')';">
-                                        ···
-                                    </button>
                                 </article>
                             </article>
                         </section>
