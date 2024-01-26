@@ -5,18 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CommentDTO {
-    private Long comment_no;
-    private String comment_content;
-    private Long Post_no;
+public class HealerPageDTO {
     private String healer_id;
+    private String healer_profile;
     private String healer_nickname;
-    private String profileImg;
-    private LocalDateTime comment_regday;
+    private String followstat;
+    private int postcount;
+    private int healer_follower;
+    private int healer_follow;
+    private String healer_statusmessage;
 }

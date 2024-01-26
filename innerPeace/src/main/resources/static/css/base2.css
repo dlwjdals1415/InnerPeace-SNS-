@@ -36,11 +36,6 @@ header {
   display: flex;
 }
 
-footer {
-  background-color: brown;
-  flex-grow: 2;
-}
-
 form {
   width: auto;
   /* 너비를 자동으로 설정 */
