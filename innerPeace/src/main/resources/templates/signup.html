@@ -1,84 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="kr">
 <head>
-  <meta charset='utf-8'>
-  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-  <title>로그인</title>
-  <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <link rel='stylesheet' type='text/css' media='screen' href='css/base.css'>
-  <link rel='stylesheet' type='text/css' media='screen' href='css/sidebar.css'>
-  <link rel='stylesheet' type='text/css' media='screen' href='css/regist.css'>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Inner Peace</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/base.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/sidebar.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/regist.css'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 </head>
 <body>
-  <input type="checkbox" class="checkbox" id="search">
-  <input type="checkbox" class="checkbox" id="more">
-  <section class="sidebar" th:replace="~{fragment/sidebar::user_sidebar}">
-  </section>
-  <article class="searchbar" th:replace="~{fragment/searchbar :: searchbar}">
-  </article>
-  <article class="menubar" th:replace="~{fragment/menu :: user_menu}">
-  </article>
-  <section class="container">
+<input type="checkbox" class="checkbox" id="search">
+<input type="checkbox" class="checkbox" id="more">
+<section class="sidebar" th:replace="~{fragment/sidebar::user_sidebar}">
+</section>
+<article class="searchbar" th:replace="~{fragment/searchbar :: searchbar}">
+</article>
+<article class="menubar" th:replace="~{fragment/menu :: user_menu}">
+</article>
+<section class="container">
     <header>
     </header>
     <main>
-      <section class="regist-section">
-        <article class="regist-header">
-          <h1>
-            <a class="regist_logo" th:href="@{board/post/list}">I n n e r P e a c e</a>
-          </h1>
-        </article>
-        <article class="regist-form">
-          <form th:action="@{/user/account/signup}" method="post">
-            <input class="regist-input" type="text" name="email" id="healer_email" placeholder="이메일" required>
-            <div class="errorrow" id="idError"></div>
-            <input class="regist-input" type="password" name="password" id="healer_pw" placeholder="비밀번호" required>
-            <div class="errorrow" id="pwError"></div>
-            <input class="regist-input" type="password" name="password_confirm" id="password_confirm"
-              placeholder="비밀번호 확인" required>
-            <div class="errorrow" id="pwConfirmError"></div>
-            <input class="regist-input" type="text" name="name" id="healer_name" placeholder="이름" required>
-            <div class="errorrow" id="nameError"></div>
-            <input class="regist-input" type="text" name="phone" id="healer_phone" placeholder="전화번호" required>
-            <div class="errorrow" id="phoneError"></div>
-            <div class = "birthinfo">생년월일</div> 
-            <input class="regist-input" type="date" name="birth" id="healer_birth" required>
-            <div class="errorrow" id="birthError"></div>
-            <article class="regist-checkbox-area">
-              <input id="checkbox_all" name="checkbox_all" type="checkbox">
-              <label for="checkbox_all">이용약관, 개인정보 수집 및 이용, 광고성 정보 수신(선택)에 모두 동의합니다.</label>
+        <section class="regist-section">
+            <article class="regist-header">
+                <h1>
+                    <a class="regist_logo" th:href="@{board/post/list}">I n n e r P e a c e</a>
+                </h1>
             </article>
-            <article class="regist-checkbox-area">
-              <input id="checkbox_age" name="checkbox_age" type="checkbox" required>
-              <label for="checkbox_age">만 14세 이상입니다 (필수)</label>
+            <article class="regist-form">
+                <form th:action="@{/user/account/signup}" method="post">
+                    <input class="regist-input" type="text" name="email" id="healer_email" placeholder="이메일" required>
+                    <input class="regist-input" type="password" name="password" id="healer_pw" placeholder="비밀번호"
+                           required>
+                    <input class="regist-input" type="password" name="password_confirm" id="password_confirm"
+                           placeholder="비밀번호 확인" required>
+                    <input class="regist-input" type="text" name="name" id="healer_name" placeholder="이름" required>
+                    <input class="regist-input" type="text" name="phone" id="healer_phone" placeholder="전화번호" required>
+                    <div class="birthinfo">생년월일</div>
+                    <input class="regist-input" type="date" name="birth" id="healer_birth" required>
+                    <article class="regist-checkbox-area">
+                        <input id="checkbox_all" name="checkbox_all" type="checkbox">
+                        <label for="checkbox_all">이용약관, 개인정보 수집 및 이용, 광고성 정보 수신(선택)에 모두 동의합니다.</label>
+                    </article>
+                    <article class="regist-checkbox-area">
+                        <input id="checkbox_age" name="checkbox_age" type="checkbox" required>
+                        <label for="checkbox_age">만 14세 이상입니다 (필수)</label>
+                    </article>
+                    <article class="regist-checkbox-area">
+                        <input id="checkbox_terms" name="checkbox_terms" type="checkbox" required>
+                        <label for="checkbox_terms">이용약관 (필수)</label>
+                    </article>
+                    <article class="regist-checkbox-area">
+                        <input id="checkbox_privacy" name="checkbox_privacy" type="checkbox" required>
+                        <label for="checkbox_privacy">개인정보 수집 및 이용 동의 (필수)</label>
+                    </article>
+                    <article class="regist-checkbox-area">
+                        <input id="checkbox_ad_agreement" name="checkbox_ad_agreement" type="checkbox">
+                        <label for="checkbox_ad_agreement">광고성 정보 수신 동의 (선택)</label>
+                    </article>
+                    <input class="registButton" name="submit" type="submit" value="회원가입">
+                </form>
             </article>
-            <article class="regist-checkbox-area">
-              <input id="checkbox_terms" name="checkbox_terms" type="checkbox" required>
-              <label for="checkbox_terms">이용약관 (필수)</label>
+            <article class="regist-footer">
+                <span>이미 아이디가 있으신가요?</span>
+                <a th:href="@{/user/account/signin}">로그인</a>
             </article>
-            <article class="regist-checkbox-area">
-              <input id="checkbox_privacy" name="checkbox_privacy" type="checkbox" required>
-              <label for="checkbox_privacy">개인정보 수집 및 이용 동의 (필수)</label>
-            </article>
-            <article class="regist-checkbox-area">
-              <input id="checkbox_ad_agreement" name="checkbox_ad_agreement" type="checkbox">
-              <label for="checkbox_ad_agreement">광고성 정보 수신 동의 (선택)</label>
-            </article>
-            <input class="registButton" name="submit" type="submit" value="회원가입">
-          </form>
-        </article>
-        <article class="regist-footer">
-          <span>이미 아이디가 있으신가요?</span>
-          <a th:href="@{/user/account/signin}">로그인</a>
-        </article>
-      </section>
+        </section>
     </main>
     <footer>
 
     </footer>
-  </section>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="js/regist.js"></script>
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="js/regist.js"></script>
 </body>
 </html>

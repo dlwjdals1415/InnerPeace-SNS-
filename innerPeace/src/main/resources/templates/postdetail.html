@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="kr">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Inner Peace</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/base2.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/write.css'>
@@ -17,13 +17,15 @@
             height: 100%;
             margin: auto;
             display: flex;
+            gap: 20px;
+            flex-direction: column;
             justify-content: center; /* 수평 가운데 정렬 */
             align-items: center; /* 수직 가운데 정렬 */
         }
 
         main .post_detail_content {
             background-color: darkgreen;
-            width: 90%;
+            width: 80%;
             height: 80%;
             display: flex;
         }
@@ -46,6 +48,10 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+        }
+
+        main .post_content_section .hover:hover {
+            color: lightgray;
         }
 
         main .post_content_section .post_writer {
@@ -90,8 +96,9 @@
         }
 
         main .post_content_section .post_writer .post_menu {
-            margin-right: 5px;
-            height: 100%;
+            height: auto;
+            font-size: 200%;
+            border: none;
         }
 
         main .post_content_section .post_content {
@@ -116,7 +123,7 @@
         }
 
         main .post_content_section .post_content .post_content_main .post_content_writer_profile .profile_img {
-            width: 30px ;
+            width: 30px;
             height: auto;
         }
 
@@ -129,10 +136,9 @@
             flex-direction: column;
         }
 
-        main .post_content_section .post_content .post_content_main .post_content_main_content .tags{
+        main .post_content_section .post_content .post_content_main .post_content_main_content .tags {
             display: flex;
-            flex-direction: row;
-            gap: 20px;
+            gap: 10px;
         }
 
         main .post_content_section .post_content .post_content_main .post_content_main_content .regday {
@@ -244,16 +250,83 @@
             background-color: #006400;
         }
 
+        footer {
+            background-color: #f4f4f4;
+            height: 10%;
+            width: 80%;
+        }
+
+        .postmenu-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .postmenu-container {
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            /* write-container를 flex 컨테이너로 만듭니다 */
+            justify-content: center;
+            /* 메인 축을 따라 아이템을 중앙에 정렬합니다 */
+            align-items: center;
+            /* 교차 축을 따라 아이템을 중앙에 정렬합니다 */
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .postmenu-container .postmenu_label {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .postmenu-container .postmenucontent {
+            width: 10%;
+            height: auto;
+            border-radius: 20px;
+            background-color: #f4f4f4;
+            z-index: 5;
+            display: flex;
+            /* write-container를 flex 컨테이너로 만듭니다 */
+            justify-content: center;
+            /* 메인 축을 따라 아이템을 중앙에 정렬합니다 */
+            align-items: center;
+        }
+
+        .postmenu-container .postmenucontent .reportButton {
+            width: 80%;
+            height: 40px;
+            background-color: #f4f4f4;
+            border: none;
+        }
+
+        .postmenu-container .postmenucontent .reportButton:hover {
+            background-color: #e8e2e2;
+        }
+
+        #postmenu:checked~.postmenu-container {
+            z-index: 10;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
 <input type="checkbox" class="checkbox" id="create">
 <input type="checkbox" class="checkbox" id="search">
 <input type="checkbox" class="checkbox" id="more">
-<input type="checkbox" class="checkbox" id="post_menu">
-
-<section class="write-container" th:replace="~{fragment/write::write}">
+<input type="checkbox" class="checkbox" id="postmenu">
+<section class="postmenu-container">
+    <label class="postmenu_label" for="postmenu"></label>
+    <input type="checkbox" class="checkbox" id="report">
+    <section class="postmenucontent">
+        <label for="report" class="reportButton">신고</label>
+    </section>
 </section>
+<th:block th:if="${session.loginedHealer != null}">
+    <section class="write-container" th:replace="~{fragment/write::write}"></section>
+</th:block>
 <th:block th:if="${session.loginedHealer != null}">
     <section class="sidebar" th:replace="~{fragment/sidebar::healer_sidebar}"></section>
 </th:block>
@@ -262,8 +335,9 @@
 </th:block>
 <article class="searchbar" th:replace="~{fragment/searchbar::searchbar}">
 </article>
-<section class="map-section" th:replace="~{fragment/map::map-section}">
-</section>
+<th:block th:if="${session.loginedHealer != null}">
+    <section class="map-section" th:replace="~{fragment/map::map-section}"></section>
+</th:block>
 <th:block th:if="${session.loginedHealer != null}">
     <article class="menubar" th:replace="~{fragment/menu::healer_menu}"></article>
 </th:block>
@@ -282,13 +356,17 @@
                 <section class="post_writer">
                     <article class="post_writer_left">
                         <img class="post_writer_profile" th:src="${dto.profileImg}" alt="profile">
-                        <span class="post_writer_nickname" th:text="${dto.post_writer}">닉네임</span>
-                        <button class="post_writer_follow">
-                            <span id="follow_button" th:text="${dto.follow}">팔로우</span>
-                        </button>
+                        <a th:href="@{/user/userpage/{healer_id}(healer_id=${dto.healer_id})}">
+                            <span class="post_writer_nickname hover" th:text="${dto.post_writer}">닉네임</span>
+                        </a>
+                        <th:block th:if="session.loginedHealer == null">
+                            <button class="post_writer_follow">
+                                <span id="follow_button" th:text="${dto.followstat}">팔로우</span>
+                            </button>
+                        </th:block>
                     </article>
                     <article class="post_writer_right">
-                        <label class="post_menu" for="post_menu">menu</label>
+                        <label class="post_menu" for="postmenu">···</label>
                     </article>
                 </section>
                 <section class="post_content">
@@ -298,9 +376,18 @@
                                 <img class="profile_img" th:src="${dto.profileImg}" alt="프로필">
                             </article>
                             <article class="post_content_main_content">
-                                <span th:text="${dto.post_writer} + '   ' + ${dto.post_content}"></span>
-                                <span class="tags" th:each="item, status : ${dto.tags}">
-                                    <a th:href="@{/board/post/search(searchkey=${item})}"><span th:text="${item}"></span></a>
+                                <span>
+                                    <a th:href="@{/user/userpage/{healer_id}(healer_id=${dto.healer_id})}">
+                                        <span class="hover" th:text="${dto.post_writer}"></span>
+                                    </a>
+                                    <span th:text="'  ' + ${dto.post_content}"></span>
+                                </span>
+                                <span class="tags">
+                                    <span th:each="item, status : ${dto.tags}">
+                                        <a th:href="@{/board/post/search(searchkey=${item})}">
+                                            <span class="hover" th:text="${item}"></span>
+                                        </a>
+                                    </span>
                                 </span>
                                 <span class="regday" th:text="${dto.post_regday}"></span>
                             </article>
@@ -312,12 +399,14 @@
                                 <img class="profile_img" th:src="${item.profileImg}" alt="프로필">
                             </article>
                             <article class="comment_content">
-                                <span th:text="${item.healer_nickname + '  ' + item.comment_content}"></span>
+                                <span>
+                                    <a th:href="@{/user/userpage/{healer_id}(healer_id=${item.healer_id})}">
+                                        <span class="hover" th:text="${item.healer_nickname}"></span>
+                                    </a>
+                                    <span th:text="'  ' + ${item.comment_content}"></span>
+                                </span>
                                 <article class="comment_footer">
                                     <span class="regday" th:text="${item.comment_regday}"></span>
-                                    <button class="comment_menu" type="button" th:onclick="comment_menu(${item.comment_no})">
-                                        ···
-                                    </button>
                                 </article>
                             </article>
                         </section>
@@ -342,10 +431,9 @@
                 </section>
             </section>
         </section>
+        <footer>
+        </footer>
     </main>
-    <footer>
-
-    </footer>
 </section>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
@@ -358,7 +446,6 @@
         $("#comment_submit").click(function () {
             // comment_area에서 입력된 데이터 가져오기
             let commentData = $("#comment_area").val();
-
             // AJAX를 사용하여 서버로 데이터 전송
             $.ajax({
                 type: "POST",
@@ -368,30 +455,25 @@
                     // 성공적으로 응답 받았을 때의 처리
                     console.log("서버 응답:", response);
                     // 받은 데이터를 이용하여 추가적인 작업 수행 가능
+                    $("#comment_area").val('');
+
                 },
                 error: function (error) {
                     // 오류 발생 시의 처리
                     console.error("에러 발생:", error);
+                    $("#comment_area").val('');
                 }
             });
         });
 
-        function reportComment(commentNo) {
-            // AJAX를 사용하여 서버로 데이터 전송
-            $.ajax({
-                type: "POST",
-                url: "/report", // 적절한 URL로 변경
-                data: {comment_no: commentNo}, // 전송할 데이터
-                success: function (response) {
-                    // 성공적으로 응답 받았을 때의 처리
-                    console.log("서버 응답:", response);
-                    // 받은 데이터를 이용하여 추가적인 작업 수행 가능
-                },
-                error: function (error) {
-                    // 오류 발생 시의 처리
-                    console.error("에러 발생:", error);
-                }
-            });
+        function menu(no) {
+            let postmenuContainer = document.querySelector(".postmenu-container");
+
+            // z-index를 10으로 설정하여 위로 올려놓습니다.
+            postmenuContainer.style.zIndex = 10;
+
+            // opacity를 1로 설정하여 보이게 합니다.
+            postmenuContainer.style.opacity = 1;
         }
     });
 </script>
