@@ -3,7 +3,7 @@ $(document).ready(function () {
 
   // 파일 입력 필드가 변경되었을 때
   $('#file-input').change(function () {
-    // 버튼 상태 변경
+    // Button state change
     $('.fileButton').hide();
     $('.cutButton').show();
 
@@ -13,11 +13,11 @@ $(document).ready(function () {
         cropper.destroy();
       }
 
-      // 이미지 미리보기 설정
+      // Set up image preview
       $('#preview').attr('src', e.target.result).on('load', function () {
-        // 이미지 높이 설정
+        // Set image height
         var uploadHeight = $('.upload').height();
-        $(this).height(uploadHeight * 5 / 7); // 5/7을 곱하는 이유는 h1과 button의 높이 비율 1:1을 고려하기 때문입니다.
+        $(this).height(uploadHeight * 5 / 7);
 
         cropper = new Cropper(document.getElementById('preview'), {
           aspectRatio: 1,
@@ -27,6 +27,9 @@ $(document).ready(function () {
             imageSmoothingQuality: 'high'
           }
         });
+
+        // Assign the entire data URL to the hidden input
+        $('#post_image').val(e.target.result);
       });
     }
 
