@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PosTLListDTO {
+public class PosTListDTO {
     private Long post_no;
     private String post_title;
     private String post_content;

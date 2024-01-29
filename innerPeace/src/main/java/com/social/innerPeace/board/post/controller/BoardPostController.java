@@ -1,7 +1,7 @@
 package com.social.innerPeace.board.post.controller;
 
 import com.social.innerPeace.dto.CommentDTO;
-import com.social.innerPeace.dto.PosTLListDTO;
+import com.social.innerPeace.dto.PosTListDTO;
 import com.social.innerPeace.dto.WriteDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -22,9 +22,9 @@ public class BoardPostController {
     public String postlist(Model model){
         log.info("call postlist");
         List<String> tag = new ArrayList<>(Arrays.asList("한라산","지리산","백두산"));
-        List<PosTLListDTO> dtoList = new ArrayList<>();
+        List<PosTListDTO> dtoList = new ArrayList<>();
         IntStream.rangeClosed(1,20).forEach(i->{
-            PosTLListDTO dto = PosTLListDTO
+            PosTListDTO dto = PosTListDTO
                     .builder()
                     .post_no((long) i)
                     .post_title("post" + i)
@@ -44,7 +44,7 @@ public class BoardPostController {
     @GetMapping("board/post/detail")
     public String postdetail(Model model){
         log.info("call boarddetail");
-        PosTLListDTO dto = PosTLListDTO
+        PosTListDTO dto = PosTListDTO
                 .builder()
                 .post_no(1L)
                 .post_title("post")

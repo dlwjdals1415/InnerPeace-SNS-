@@ -2,7 +2,7 @@ package com.social.innerPeace.user.userPage.controller;
 
 import com.social.innerPeace.dto.FollowDTO;
 import com.social.innerPeace.dto.HealerPageDTO;
-import com.social.innerPeace.dto.PosTLListDTO;
+import com.social.innerPeace.dto.PosTListDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,9 +23,9 @@ public class HealerUserPageController {
     public String userpage(Model model) {
         log.info("userpage call");
         List<String> tag = new ArrayList<>(Arrays.asList("한라산", "지리산", "백두산"));
-        List<PosTLListDTO> dtoList = new ArrayList<>();
+        List<PosTListDTO> dtoList = new ArrayList<>();
         IntStream.rangeClosed(1, 20).forEach(i -> {
-            PosTLListDTO dto = PosTLListDTO
+            PosTListDTO dto = PosTListDTO
                     .builder()
                     .post_no((long) i)
                     .post_title("post" + i)
