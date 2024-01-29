@@ -16,5 +16,5 @@ public class WriteDTO {
     private String post_image;
     private String post_writer;
     private String post_content;
-    private String post_tag;
+    private String post_tags;
 }

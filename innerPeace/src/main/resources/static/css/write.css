@@ -87,7 +87,7 @@ input[type="file"] {
   color: #fff;
 }
 
-.upload .fileButton:hover,
+.upload .fileButton:hover,_no
 .upload .cutButton:hover {
   background-color: #2f2726;
 }
