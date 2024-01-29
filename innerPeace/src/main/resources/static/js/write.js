@@ -27,8 +27,6 @@ $(document).ready(function () {
             imageSmoothingQuality: 'high'
           }
         });
-
-        // Assign the entire data URL to the hidden input
         $('#post_image').val(e.target.result.split(',')[1]);
       });
     }

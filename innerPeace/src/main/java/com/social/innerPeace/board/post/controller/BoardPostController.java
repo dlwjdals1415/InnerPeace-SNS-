@@ -22,7 +22,7 @@ import java.util.stream.IntStream;
 @Slf4j
 public class BoardPostController {
     @GetMapping("board/post/list")
-    public String postlist(Model model,HttpSession session){
+    public String postlist(Model model){
         log.info("call postlist");
         List<String> tag = new ArrayList<>(Arrays.asList("한라산","지리산","백두산"));
         List<PostDTO> dtoList = new ArrayList<>();
@@ -40,7 +40,6 @@ public class BoardPostController {
                     .build();
             dtoList.add(dto);
         });
-        session.setAttribute("loginedHealer","asd@gmail.com");
         model.addAttribute("dtoList",dtoList);
         return "postlist";
     }
