@@ -1,11 +1,8 @@
 package com.social.innerPeace.board.post.controller;
 
 import com.social.innerPeace.dto.CommentDTO;
-import com.social.innerPeace.dto.PostDTO;
+import com.social.innerPeace.dto.PosTLListDTO;
 import com.social.innerPeace.dto.WriteDTO;
-import com.social.innerPeace.entity.Comment;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,9 +22,9 @@ public class BoardPostController {
     public String postlist(Model model){
         log.info("call postlist");
         List<String> tag = new ArrayList<>(Arrays.asList("한라산","지리산","백두산"));
-        List<PostDTO> dtoList = new ArrayList<>();
+        List<PosTLListDTO> dtoList = new ArrayList<>();
         IntStream.rangeClosed(1,20).forEach(i->{
-            PostDTO dto = PostDTO
+            PosTLListDTO dto = PosTLListDTO
                     .builder()
                     .post_no((long) i)
                     .post_title("post" + i)
@@ -47,7 +44,7 @@ public class BoardPostController {
     @GetMapping("board/post/detail")
     public String postdetail(Model model){
         log.info("call boarddetail");
-        PostDTO dto = PostDTO
+        PosTLListDTO dto = PosTLListDTO
                 .builder()
                 .post_no(1L)
                 .post_title("post")
@@ -87,6 +84,5 @@ public class BoardPostController {
     public String postwrite(WriteDTO dto){
         return "redirect:/board/post/list";
     }
-
 
 }

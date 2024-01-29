@@ -1,6 +1,5 @@
 package com.social.innerPeace.dto;
 
-import com.social.innerPeace.entity.Healer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostDTO {
+public class PosTLListDTO {
     private Long post_no;
     private String post_title;
     private String post_content;

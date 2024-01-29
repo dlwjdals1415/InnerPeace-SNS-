@@ -42,15 +42,15 @@
                     <button type="button" id="map-search-btn">검색</button>
                 </div>
                 <div class="map" id="address"></div>
-                <form th:action="@{/board/post/write}" method="post">
+                <form th:action="@{/board/post/write}" method="post" enctype="multipart/form-data">
                     <input type="hidden" id="post_tags_hidden" name="post_tags" value="">
                     <input type="hidden" id="post_content_hidden" name="post_content" value="">
                     <input type="hidden" id="post_writer" name="post_writer"
                            th:value="${session.loginedHealer}">
                     <input type="hidden" id="post_map_lat" name="post_map_lat" value="">
                     <input type="hidden" id="post_map_lng" name="post_map_lng" value="">
+                    <input type="file" id="file-input" name="post_image" accept="image/*">
                     <input type="hidden" id="post_img_hidden" name="post_image_thumbnail" value="">
-                    <input type="hidden" id="post_image" name="post_image" value="">
                     <input type="submit" value="공유하기">
                 </form>
 
