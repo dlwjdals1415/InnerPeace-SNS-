@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,7 +17,7 @@ public class PosTListDTO {
     private Long post_no;
     private String post_title;
     private String post_content;
-    private String post_image;
+    private MultipartFile post_image;
     private float map_point_lat;
     private float map_point_lng;
     private List<String> tags;

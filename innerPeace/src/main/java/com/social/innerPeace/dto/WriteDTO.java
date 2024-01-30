@@ -1,5 +1,6 @@
 package com.social.innerPeace.dto;
 
+import com.social.innerPeace.entity.Healer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,12 +11,15 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class WriteDTO {
+public class WriteDTO{
+    private Long post_no;
     private float post_map_lat;
     private float post_map_lng;
     private String post_image_thumbnail;
-    private MultipartFile post_image;
-    private String post_writer;
+    private String folderPath;
+    private Healer post_writer;
     private String post_content;
     private String post_tags;
+    private MultipartFile post_image;
+
 }
