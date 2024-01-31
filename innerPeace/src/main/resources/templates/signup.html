@@ -7,7 +7,6 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/base.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/sidebar.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='css/regist.css'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 </head>
 <body>
@@ -19,57 +18,57 @@
 </article>
 <article class="menubar" th:replace="~{fragment/menu :: user_menu}">
 </article>
-<section class="container">
-    <header>
+<section class="po_ab w100 h100 bg_f4 row z_i1">
+    <header class="f_g3 bg_f4">
     </header>
-    <main>
-        <section class="regist-section">
-            <article class="regist-header">
+    <main class="f_g5 bg_f4 col_cc main1000">
+        <section class="col w80 hauto bor_rad10 pad20">
+            <article class="w100 h50p col_cc mb20 font_s30">
                 <h1>
-                    <a class="regist_logo" th:href="@{board/post/list}">I n n e r P e a c e</a>
+                    <a th:href="@{board/post/list}">Inner Peace</a>
                 </h1>
             </article>
-            <article class="regist-form">
-                <form th:action="@{/user/account/signup}" method="post">
-                    <input class="regist-input" type="text" name="email" id="healer_email" placeholder="이메일" required>
-                    <input class="regist-input" type="password" name="password" id="healer_pw" placeholder="비밀번호"
+            <article class="w100 hauto col_c0 mb20">
+                <form class="w100 h100 col_c0" th:action="@{/user/account/signup}" method="post">
+                    <input class="w80 h30p mt10 text_input pad10" type="text" name="email" id="healer_email" placeholder="이메일" required>
+                    <input class="w80 h30p mt10 text_input pad10" type="password" name="password" id="healer_pw" placeholder="비밀번호"
                            required>
-                    <input class="regist-input" type="password" name="password_confirm" id="password_confirm"
+                    <input class="w80 h30p mt10 text_input pad10" type="password" name="password_confirm" id="password_confirm"
                            placeholder="비밀번호 확인" required>
-                    <input class="regist-input" type="text" name="name" id="healer_name" placeholder="이름" required>
-                    <input class="regist-input" type="text" name="phone" id="healer_phone" placeholder="전화번호" required>
+                    <input class="w80 h30p mt10 text_input pad10" type="text" name="name" id="healer_name" placeholder="이름" required>
+                    <input class="w80 h30p mt10 text_input pad10" type="text" name="phone" id="healer_phone" placeholder="전화번호" required>
                     <div class="birthinfo">생년월일</div>
-                    <input class="regist-input" type="date" name="birth" id="healer_birth" required>
-                    <article class="regist-checkbox-area">
-                        <input id="checkbox_all" name="checkbox_all" type="checkbox">
+                    <input class="w80 h30p mt10 text_input pad10" type="date" name="birth" id="healer_birth" required>
+                    <article class="w80 h20p row_c0 mb10 mt10">
+                        <input class="checkbox_style" id="checkbox_all" name="checkbox_all" type="checkbox">
                         <label for="checkbox_all">이용약관, 개인정보 수집 및 이용, 광고성 정보 수신(선택)에 모두 동의합니다.</label>
                     </article>
-                    <article class="regist-checkbox-area">
-                        <input id="checkbox_age" name="checkbox_age" type="checkbox" required>
+                    <article class="w80 h20p row_c0 mb10">
+                        <input class="checkbox_style" id="checkbox_age" name="checkbox_age" type="checkbox" required>
                         <label for="checkbox_age">만 14세 이상입니다 (필수)</label>
                     </article>
-                    <article class="regist-checkbox-area">
-                        <input id="checkbox_terms" name="checkbox_terms" type="checkbox" required>
+                    <article class="w80 h20p row_c0 mb10">
+                        <input class="checkbox_style" id="checkbox_terms" name="checkbox_terms" type="checkbox" required>
                         <label for="checkbox_terms">이용약관 (필수)</label>
                     </article>
-                    <article class="regist-checkbox-area">
-                        <input id="checkbox_privacy" name="checkbox_privacy" type="checkbox" required>
+                    <article class="w80 h20p row_c0 mb10">
+                        <input class="checkbox_style" id="checkbox_privacy" name="checkbox_privacy" type="checkbox" required>
                         <label for="checkbox_privacy">개인정보 수집 및 이용 동의 (필수)</label>
                     </article>
-                    <article class="regist-checkbox-area">
-                        <input id="checkbox_ad_agreement" name="checkbox_ad_agreement" type="checkbox">
+                    <article class="w80 h20p row_c0 mb10">
+                        <input class="checkbox_style" id="checkbox_ad_agreement" name="checkbox_ad_agreement" type="checkbox">
                         <label for="checkbox_ad_agreement">광고성 정보 수신 동의 (선택)</label>
                     </article>
-                    <input class="registButton" name="submit" type="submit" value="회원가입">
+                    <input class="green_btn w90 h50p" name="submit" type="submit" value="회원가입">
                 </form>
             </article>
-            <article class="regist-footer">
+            <article class="w100 h20p row_cc gap10 font_s15">
                 <span>이미 아이디가 있으신가요?</span>
                 <a th:href="@{/user/account/signin}">로그인</a>
             </article>
         </section>
     </main>
-    <footer>
+    <footer class="f_g2 bg_f4">
 
     </footer>
 </section>

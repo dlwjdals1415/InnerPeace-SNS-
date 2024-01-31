@@ -1,0 +1,16 @@
+#modify_article {
+    width: 600px;
+    height: 700px;
+    border-radius: 10px;
+}
+
+#modify_article img {
+    width: 500px;
+    height: 500px;
+}
+
+#post_modify {
+    width: 900px;
+    height: 700px;
+    border-radius: 10px;
+}

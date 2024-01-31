@@ -1,55 +1,6 @@
 .searchbar {
-  position: fixed;
-  height: 100%;
-  width: 20%;
   left: -10%;
-  background-color: #f4f4f4;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
   transition: left 0.3s ease, opacity 0.3s ease;
-}
-
-.searchbar form {
-  margin-top: 10px;
-  width: 100%;
-  height: 5%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.searchbar form .searchinput {
-  width: 80%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
-.searchbar form .searchinput input[type="text"] {
-  width: 80%;
-  height: 100%;
-  border: none;
-  border-radius: 5px;
-  border-bottom: 1px solid black;
-  font-size: 20px;
-}
-
-.searchbar form .searchinput input[type="submit"] {
-  width: 20%;
-  height: 100%;
-  border: none;
-  background-color: #f4f4f4;
-  font-size: 20px;
-  font-weight: bold;
-  transition: background-color 0.7s;
-}
-
-.searchbar form .searchinput input[type="submit"]:hover {
-  background-color: #ccc;
 }
 
 .menubar {
@@ -65,25 +16,7 @@
   transition: left 0.3s ease, opacity 0.3s ease;
 }
 
-.sidebar {
-  position: fixed;
-  height: 100%;
-  width: 10%;
-  background-color: #f4f4f4;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-}
-
-.sidebar .sidebar-logo {
-  flex-grow: 0.5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 100px;
-}
-
-.sidebar-logo p {
+.logo {
   width: 80%;
   height: auto;
   font-weight: bold;
@@ -91,62 +24,3 @@
   font-size: 30px;
 }
 
-.sidebar .sidebar-button {
-  flex-grow: 20;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  /* 아이템들이 위에서부터 채워지게 변경 */
-  align-items: center;
-  /* 좌우 중앙 정렬 적용 */
-}
-
-.sidebar article {
-  width: 100%;
-  height: 100px;
-}
-
-.Button {
-  border: none;
-  background-color: #f4f4f4;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  /* Flexbox 레이아웃 적용 */
-  justify-content: center;
-  /* 수평 축을 기준으로 중앙 정렬 */
-  align-items: center;
-  /* 수직 축을 기준으로 중앙 정렬 */
-  margin: auto;
-  font-size: 20px;
-  font-weight: bold;
-  transition: background-color 0.7s;
-}
-
-.Button:hover {
-  background-color: #ccc;
-}
-
-.sidebar .sidebar-more {
-  flex-grow: 0.5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.sidebar-more label {
-  width: 100%;
-}
-
-.sidebar-more button {
-  align-self: flex-end;
-}
-
-.sidebar-option {
-  background-color: cadetblue;
-  flex-grow: 2;
-  min-width: 0;
-}
-
-#search {
-}
