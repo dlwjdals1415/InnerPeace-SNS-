@@ -46,7 +46,7 @@
         <article class="post_contentList scrollbarnone">
             <div class="post" th:each="item, status : ${dtoList}">
                 <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
-                    <img th:src="${item.post_image}" alt="Post 1" loading="lazy">
+                    <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
                 </a>
             </div>
         </article>
