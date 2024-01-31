@@ -4,6 +4,7 @@ import com.social.innerPeace.board.post.component.FileStore;
 import com.social.innerPeace.board.post.service.BoardPostService;
 import com.social.innerPeace.dto.CommentDTO;
 import com.social.innerPeace.dto.PosTListDTO;
+import com.social.innerPeace.dto.PostDTO;
 import com.social.innerPeace.dto.WriteDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

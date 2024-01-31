@@ -17,9 +17,10 @@ public class WriteDTO{
     private float post_map_lng;
     private String post_image_thumbnail;
     private String folderPath;
-    private Healer post_writer;
+    private String post_writer;
     private String post_content;
     private String post_tags;
     private MultipartFile post_image;
+    private String db_post_image;
 
 }

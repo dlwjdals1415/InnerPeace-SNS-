@@ -15,8 +15,7 @@ public interface BoardPostService {
     default Post dtoToEntity(WriteDTO dto){
         Post entity = Post.builder()
                 .tags(Collections.singletonList(dto.getPost_tags()))
-                .post_writer(dto.getPost_writer())
-                .post_image(String.valueOf(dto.getPost_image()))
+                .post_image(dto.getDb_post_image())
                 .post_content(dto.getPost_content())
                 .map_point_lng(dto.getPost_map_lng())
                 .map_point_lat(dto.getPost_map_lat())
