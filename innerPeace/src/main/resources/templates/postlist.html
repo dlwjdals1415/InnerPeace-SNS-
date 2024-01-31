@@ -36,14 +36,14 @@
 <th:block th:unless="${session.loginedHealer != null}">
     <article class="menubar" th:replace="~{fragment/menu::user_menu}"></article>
 </th:block>
-<section class="container">
-    <header>
+<section class="po_ab w100 h100 bg_f4 row z_i1">
+    <header class="f_g3 bg_f4">
     </header>
-    <main>
-        <article class="followList">
+    <main class="f_g5 bg_f4 col_ss main1000">
+        <article class="followList bg_f4 w100">
             <h2>followLIst</h2>
         </article>
-        <article class="post_content scrollbarnone">
+        <article class="post_contentList scrollbarnone">
             <div class="post" th:each="item, status : ${dtoList}">
                 <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
                     <img th:src="${item.post_image}" alt="Post 1" loading="lazy">
@@ -51,8 +51,7 @@
             </div>
         </article>
     </main>
-    <footer>
-
+    <footer class="f_g2 bg_f4">
     </footer>
 </section>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

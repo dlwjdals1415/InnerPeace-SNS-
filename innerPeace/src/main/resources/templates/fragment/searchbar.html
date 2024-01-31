@@ -5,11 +5,11 @@
     <title>Inner Peace</title>
 </head>
 <body>
-<article class="searchbar" th:fragment="searchbar">
-    <form th:action="@{/board/post/search}" method="get">
-        <article class="searchinput">
-            <input type="text" name="searchkey" id="search_post" placeholder="검색">
-            <input type="submit" value="검색">
+<article class="searchbar h100 w20 po_fi bg_e0 z_i2 col" th:fragment="searchbar">
+    <form class="mt10 w100 col_cc h50p" th:action="@{/board/post/search}" method="get">
+        <article class="w80 h100 row_cc">
+            <input class="w80 h100 text_input" type="text" name="searchkey" placeholder="검색">
+            <input class="nomal_btn w20 h100" type="submit" value="검색">
         </article>
     </form>
 </article>

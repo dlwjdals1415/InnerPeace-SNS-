@@ -1,175 +1,21 @@
-.write-container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
-.write-container {
-  background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-  /* write-container를 flex 컨테이너로 만듭니다 */
-  justify-content: center;
-  /* 메인 축을 따라 아이템을 중앙에 정렬합니다 */
-  align-items: center;
-  /* 교차 축을 따라 아이템을 중앙에 정렬합니다 */
-  z-index: 0;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-}
-
-.write-container .create_label {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-}
-
-.write-container article {
-  position: absolute;
-}
-
-.write-container .upload {
-  background-color: #f4f4f4;
-  z-index: 1;
+#upload_article {
   width: 600px;
   height: 700px;
-  display: flex;
-  flex-direction: column;
-  /* write-container를 flex 컨테이너로 만듭니다 */
-  justify-content: center;
-  /* 메인 축을 따라 아이템을 중앙에 정렬합니다 */
-  align-items: center;
-  /* 교차 축을 따라 아이템을 중앙에 정렬합니다 */
   border-radius: 10px;
 }
 
-.upload h1 {
-  height: 50px;
-  position: relative;
-  /* 가상 요소의 위치를 조절하기 위해 필요합니다 */
-}
-
-.upload h1::after {
-  content: "";
-  /* 가상 요소를 생성합니다 */
-  position: absolute;
-  /* 가상 요소의 위치를 조절합니다 */
-  left: -225px;
-  /* 가상 요소를 왼쪽으로 이동합니다 */
-  right: -225px;
-  /* 가상 요소를 오른쪽으로 이동합니다 */
-  bottom: 0;
-  /* 가상 요소를 아래로 이동합니다 */
-  border-bottom: 1px solid black;
-  /* 가상 요소에 1px 두께의 검은색 선을 그립니다 */
-}
-
-.upload img {
+#upload_article img {
   width: 500px;
   height: 500px;
 }
 
-input[type="file"] {
-  display: none;
-  /* input file을 화면에서 숨깁니다 */
-}
-
-.upload .fileButton,
-.upload .cutButton {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  width: 90%;
-  height: 50px;
-  border-radius: 10px;
-  border: none;
-  background-color: #5b4e4e;
-  cursor: pointer;
-  color: #fff;
-}
-
-.upload .fileButton:hover,_no
-.upload .cutButton:hover {
-  background-color: #2f2726;
-}
-
-.upload .cutButton {
-  display: none;
-}
-
-.upload .submitButton {
-  display: none;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  width: 90%;
-  height: 50px;
-  border-radius: 10px;
-  border: none;
-  background-color: #3f8b41;
-  cursor: pointer;
-  color: #fff;
-  justify-content: center;
-  align-items: center;
-}
-
-.upload .submitButton:hover {
-  background-color: #006400;
-}
-
-.post_write {
-  background-color: #f4f4f4;
-  z-index: 2;
+#post_write {
   width: 900px;
   height: 700px;
-  display: flex;
-  flex-direction: column;
   border-radius: 10px;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
 }
 
-.write-header {
-  flex: 0.5;
-  width: 90%;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.write-main {
-  flex: 6.5;
-  width: 95%;
-  height: 650px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-top: 1px solid black;
-  /* 선의 두께, 스타일, 색상 */
-}
-
-.write-main .write_img {
-  flex: 5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.write-main img {
-  margin-left: 10px;
-  max-width: 100%;
-  /* 이미지의 최대 너비를 부모 요소의 너비로 제한 */
-  max-height: 100%;
-}
-
-.write-main .write_content {
-  flex: 3;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.write_content textarea {
+#post_textarea {
   width: 300px !important;
   height: 300px !important;
   margin-left: 20px;
@@ -180,74 +26,13 @@ input[type="file"] {
   border-radius: 10px;
 }
 
-.write_content .tags {
+#modify_post_textarea {
+  width: 300px !important;
+  height: 300px !important;
   margin-left: 20px;
-  width: 91.5%;
-  height: 20px;
-}
-
-.write_content .tag {
-  display: flex;
-  width: 91.5%;
-  height: 30px;  /* Flexbox 레이아웃 적용 */
-}
-
-.write_content .tag input[type="text"] {
-  margin-left: 20px;
-  flex: 8;
-  /* 너비를 8 부분으로 설정 */
-}
-
-.write_content .tag button {
-  flex: 2;
-  /* 너비를 2 부분으로 설정 */
-}
-
-.map-info{
-  margin-left: 20px;
-  width: 91.5%;
-  height: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-}
-
-.add-map {
-  display: flex;
-  width: 91.5%;
-  height: 30px;
-  /* Flexbox 레이아웃 적용 */
-}
-
-.add-map input[type="text"] {
-  margin-left: 20px;
-  flex: 8;
-  /* 너비를 8 부분으로 설정 */
-}
-
-.add-map button {
-  flex: 2;
-  /* 너비를 2 부분으로 설정 */
-}
-
-.write_content input[type="submit"] {
-  width: 100%;
-  height: 50px;
-  margin-left: 10px;
   /* 왼쪽 마진 10px */
-  margin-top: 10px;
-  border-radius: 10px;
   border: none;
-  background-color: #3f8b41;
-  cursor: pointer;
-  color: #fff;
-}
-
-.write_content input[type="submit"]:hover {
-  background-color: #006400;
-}
-
-.post_write {
-  display: none;
+  resize: none;
+  /* textarea의 크기 조절을 금지합니다 */
+  border-radius: 10px;
 }
