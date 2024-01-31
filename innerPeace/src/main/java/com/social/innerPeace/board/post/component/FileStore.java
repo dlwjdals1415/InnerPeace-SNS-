@@ -1,20 +1,12 @@
 package com.social.innerPeace.board.post.component;
 
-import com.social.innerPeace.dto.PostDTO;
+
 import com.social.innerPeace.dto.WriteDTO;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Base64;
-import java.util.List;
 import java.util.UUID;
 
 @Component
