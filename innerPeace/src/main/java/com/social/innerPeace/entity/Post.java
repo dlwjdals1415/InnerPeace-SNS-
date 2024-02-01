@@ -2,6 +2,7 @@ package com.social.innerPeace.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,6 @@ public class Post extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long post_no;
-
-    @Column(length = 50,nullable = false)
-    private String post_title;
 
     @Column(length = 1500,nullable = false)
     private String post_content;
