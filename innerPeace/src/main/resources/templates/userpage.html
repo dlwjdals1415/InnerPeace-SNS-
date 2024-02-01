@@ -41,10 +41,10 @@
 <section class="po_ab w100 h100 bg_f4 row z_i1">
     <header class="f_g1 bg_f4">
     </header>
-    <main class="bg_f4 f_g6 col_cc gap20">
-        <section class="mt20 w70 h70 col bor_rad10 box_sha555">
+    <main class="bg_f4 f_g6 col_cc gap20 scrollbarnone overflow_y">
+        <section class="mt20 w70 h70 col bor_rad10 box_sha555 top">
             <section class="w100 hauto row mh40">
-                <article class="w30 h100 row_sc">
+                <article class="w30 hauto row_sc">
                     <img class="w60 hauto mt10" th:src="${dto.getHealer_profile()}" alt="profile">
                 </article>
                 <section class="ml20 w70 hauto col gap20">
@@ -63,29 +63,31 @@
                         </th:block>
                     </article>
                     <article class="h20 row_c0 gap20">
-                        <span th:text="'개시물 '+ ${dto.postcount}"></span>
+                        <span th:text="'게시물 '+ ${dto.postcount}"></span>
                         <a href=""><span th:text="'팔로워 ' +${dto.healer_follower}"></span></a>
                         <a href=""><span th:text="'팔로우' + ${dto.healer_follow}"></span></a>
                     </article>
-                    <article class="h5 mb20">
+                    <article class="hauto mb20">
                         <span th:text="${dto.healer_nickname}"></span>
                     </article>
-                    <article class="h50">
+                    <article class="hauto">
                         <span th:text="${dto.healer_statusmessage}"></span>
                     </article>
                 </section>
             </section>
-            <article class="mt50 mb50 w100 row_cc bor_tp bor_bt">
-                <span>게시글</span>
-            </article>
-            <section class="post_contentList scrollbarnone">
+        </section>
+        <article class="mt50 mb50 w100 row_cc bor_tp bor_bt">
+            <span>게시글</span>
+        </article>
+        <div class="w60 hauto">
+            <section class="post_contentList">
                 <div class="post" th:each="item, status : ${dtoList}">
                     <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
                         <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
                     </a>
                 </div>
             </section>
-        </section>
+        </div>
         <footer class="bg_f4 h100p w80">
 
         </footer>
