@@ -8,6 +8,7 @@ class InnerPeaceApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }

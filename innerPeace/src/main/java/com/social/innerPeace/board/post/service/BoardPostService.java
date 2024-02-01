@@ -1,16 +1,22 @@
 package com.social.innerPeace.board.post.service;
 
+import com.social.innerPeace.dto.PosTListDTO;
 import com.social.innerPeace.dto.PostDTO;
 import com.social.innerPeace.dto.WriteDTO;
 import com.social.innerPeace.entity.Post;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
+import java.util.List;
 
 public interface BoardPostService {
 
     String write(WriteDTO dto);
 
+    PosTListDTO findImagename(Long post_no);
+
+    List<Post> findAll();
+
+    List<PosTListDTO> findAllPostsWithBase64Thumbnail();
 
     default Post dtoToEntity(WriteDTO dto){
         Post entity = Post.builder()

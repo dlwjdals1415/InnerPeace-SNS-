@@ -13,10 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 public class WriteDTO{
     private Long post_no;
-    private float post_map_lat;
-    private float post_map_lng;
+    private Float post_map_lat;
+    private Float post_map_lng;
     private String post_image_thumbnail;
-    private String folderPath;
     private String post_writer;
     private String post_content;
     private String post_tags;

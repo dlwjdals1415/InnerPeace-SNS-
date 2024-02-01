@@ -42,9 +42,9 @@ public class FileStore {
         String base64ImageString = new String(base64Bytes, "UTF-8");
         base64ImageString = base64ImageString.replace("data:image/png;base64,", "");
         byte[] imageBytes = Base64.getDecoder().decode(base64ImageString);
-        writeDTO.setPost_image_thumbnail(uuid+".png");
+        writeDTO.setPost_image_thumbnail(uuid+".jpg");
 
-        try (FileOutputStream fos = new FileOutputStream(getFullPath2(uuid+".png"))) {
+        try (FileOutputStream fos = new FileOutputStream(getFullPath2(uuid+".jpg"))) {
             fos.write(imageBytes); // 파일에 바이트 배열 쓰기
         }
         return writeDTO;
