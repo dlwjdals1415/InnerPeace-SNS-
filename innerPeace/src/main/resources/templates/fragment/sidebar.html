@@ -8,69 +8,69 @@
 </head>
 
 <body>
-<section class="sidebar" th:fragment="healer_sidebar">
-    <article class="sidebar-logo">
+<section class="sidebar po_fi h100 w10 bg_e0 z_i3 col box_sha555" th:fragment="healer_sidebar">
+    <article class="f_g1 row_cc">
         <a th:href="@{/}">
-            <p>InnerPeace</p>
+            <p class="logo">InnerPeace</p>
         </a>
     </article>
-    <section class="sidebar-button">
-        <article class="home">
+    <section class="f_g15 col_cc">
+        <article class="w100 h100p">
             <a th:href="@{/board/post/list}">
-                <button class="Button" type="button">홈</button>
+                <button class="e0_btn w100 h100 font_s20" type="button">홈</button>
             </a>
         </article>
-        <article class="search">
-            <label for="search" class="Button">
+        <article class="w100 h100p">
+            <label for="search" class="e0_btn w100 h100 font_s20">
                 검색
             </label>
         </article>
-        <article class="message">
+        <article class="w100 h100p">
             <a th:href="@{user/message}">
-                <button class="Button" type="button">메시지</button>
+                <button class="e0_btn w100 h100 font_s20" type="button">메시지</button>
             </a>
         </article>
-        <article class="write">
-            <label for="create" class="Button">
+        <article class="w100 h100p">
+            <label for="create" class="e0_btn w100 h100 font_s20">
                 만들기
             </label>
         </article>
-        <article class="mypage">
-            <a th:href="@{/user/userPage}">
-                <button class="Button" type="button">마이페이지</button>
+        <article class="w100 h100p">
+            <a th:href="@{/user/userpage}">
+                <button class="e0_btn w100 h100 font_s20" type="button">마이페이지</button>
             </a>
         </article>
     </section>
-    <article class="sidebar-more">
-        <label class="Button" for="more">더보기</label>
+    <article class="f_g1 row_cc">
+        <label class="e0_btn w100 h50p font_s20" for="more">더보기</label>
     </article>
 </section>
 
-<section class="sidebar" th:fragment="user_sidebar">
-    <article class="sidebar-logo">
+<section class="sidebar po_fi h100 w10 bg_e0 z_i3 col box_sha555" th:fragment="user_sidebar">
+    <article class="f_g1 row_cc">
         <a th:href="@{/}">
-            <p>InnerPeace</p>
+            <p class="logo">InnerPeace</p>
         </a>
     </article>
-    <section class="sidebar-button">
-        <article class="home">
+    <section class="f_g15 col_cc">
+        <article class="w100 h100p">
             <a th:href="@{/board/post/list}">
-                <button class="Button" type="button">홈</button>
+                <button class="e0_btn w100 h100 font_s20" type="button">홈</button>
             </a>
         </article>
-        <article class="search">
-            <label for="search" class="Button">
+        <article class="w100 h100p">
+            <label for="search" class="e0_btn w100 h100 font_s20">
                 검색
             </label>
         </article>
-        <article class="login">
+        <article class="w100 h100p">
             <a th:href="@{/user/account/signin}">
-                <button class="Button" type="button">로그인</button>
+                <button class="e0_btn w100 h100 font_s20" type="button">로그인</button>
             </a>
         </article>
     </section>
-    <article class="sidebar-more">
-        <label class="Button" for="more">더보기</label>
+    <article class="f_g1 row_cc">
+        <label class="e0_btn w100 h50p font_s20" for="more">더보기</label>
     </article>
 </section>
 </body>

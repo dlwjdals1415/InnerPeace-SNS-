@@ -1,20 +1,18 @@
 package com.social.innerPeace.user.account.service;
 
+import com.social.innerPeace.ip_enum.Role;
 import com.social.innerPeace.dto.SignupDTO;
 import com.social.innerPeace.entity.Healer;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public interface UserAccountService {
-    Object findByEmail(String email);
-
-    String register(SignupDTO dto);
+    String register(SignupDTO dto, Role role);
 
     default Healer dtoToEntity(SignupDTO dto){
         Healer entity = Healer.builder()
-                .healer_email(dto.getEmail())
+                .healerEmail(dto.getEmail())
                 .healer_name(dto.getName())
                 .healer_pw(dto.getPassword())
                 .healer_bitrh(convertStringToLocalDate(dto.getBirth()))
@@ -25,7 +23,7 @@ public interface UserAccountService {
 
     default SignupDTO entityToDto(Healer entity){
         SignupDTO dto = SignupDTO.builder()
-                .email(entity.getHealer_email())
+                .email(entity.getHealerEmail())
                 .name(entity.getHealer_name())
                 .password(entity.getHealer_pw())
                 .birth(entity.getHealer_bitrh().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
@@ -39,4 +37,5 @@ public interface UserAccountService {
         return LocalDate.parse(dateString, formatter);
     }
 
+    SignupDTO compareByEmail(String email);
 }

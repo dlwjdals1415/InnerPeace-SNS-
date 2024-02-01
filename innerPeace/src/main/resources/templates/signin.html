@@ -7,7 +7,6 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/sidebar.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/base.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='css/login.css'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 </head>
 <body>
@@ -17,26 +16,26 @@
 <section class="sidebar" th:replace="~{fragment/sidebar::user_sidebar}"></section>
 <article class="searchbar" th:replace="~{fragment/searchbar :: searchbar}"></article>
 <article class="menubar" th:replace="~{fragment/menu :: user_menu}"></article>
-<section class="container">
-    <header>
+<section class="po_ab w100 h100 bg_f4 row z_i1">
+    <header class="f_g3 bg_f4">
     </header>
-    <main>
-        <section class="login-section">
-            <article class="login-header">
+    <main class="f_g5 bg_f4 col_cc main1000">
+        <section class="bg_f4 w50 hauto col_cc bor_rad10 pad20 box_sha555">
+            <article class="login-header w100 h100p row_cc font_s30">
                 <h1>
-                    <a class="login_logo" th:href="@{/}">INNER-PEACE</a>
+                    <a th:href="@{/}">INNER-PEACE</a>
                 </h1>
             </article>
-            <form th:action="@{/user/account/signin}" method="post">
-                <article class="login-form">
-                    <input class="form-input" type="text" name="healer_id" id="healer_id" placeholder="이메일" required>
-                    <input class="form-input" type="password" name="healer_pw" id="healer_pw" placeholder="비밀번호"
+            <form class="w100 hauto col_cc" th:action="@{/user/account/signin}" method="post">
+                <article class="w100 col_cc hauto">
+                    <input class="text_input w80 h30p mb10 font_s20" type="text" name="healer_id" id="healer_id" placeholder="이메일" required>
+                    <input class="text_input w80 h30p mb10 font_s20" type="password" name="healer_pw" id="healer_pw" placeholder="비밀번호"
                            required>
-                    <input class="form-button" type="submit" value="로그인">
+                    <input class="green_btn w90 h50p" type="submit" value="로그인">
                 </article>
-                <article class="login-footer">
+                <article class="w100 h50p row_cc font_s20 mb10 gap150">
                     <div class="auto-login">
-                        <input class="auto-login-checkbox" id="checkbox_autologin" name="auto-login" type="checkbox">
+                        <input class="checkbox_style" id="checkbox_autologin" name="auto-login" type="checkbox">
                         <label for="checkbox_autologin">자동 로그인</label>
                     </div>
 
@@ -45,13 +44,13 @@
                     </div>
                 </article>
             </form>
-            <article class="regist">
+            <article class="regist w100 h50p row_cc font_s15 gap150 bor_tp">
                 <span>INNER-PEACE가 처음이신가요?</span>
                 <a th:href="@{/user/account/signup}">회원가입</a>
             </article>
         </section>
     </main>
-    <footer>
+    <footer class="f_g2 bg_f4">
 
     </footer>
 </section>

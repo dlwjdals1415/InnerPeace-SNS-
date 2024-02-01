@@ -36,23 +36,34 @@
 <th:block th:unless="${session.loginedHealer != null}">
     <article class="menubar" th:replace="~{fragment/menu::user_menu}"></article>
 </th:block>
-<section class="container">
-    <header>
+<section class="po_ab w100 h100 bg_f4 row z_i1">
+    <header class="f_g3 bg_f4">
     </header>
-    <main>
-        <article class="followList">
+    <main class="f_g5 bg_f4 col_cs main1000 overflow_y scrollbarnone" id="postList">
+        <article class="followList bg_f4 w100">
             <h2>followLIst</h2>
         </article>
-        <article class="post_content scrollbarnone">
+        <input type="hidden" id="last_post_no" th:value="${dtoList.get(dtoList.size() - 1).post_no}">
+        <article class="post_contentList">
             <div class="post" th:each="item, status : ${dtoList}">
                 <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
-                    <img th:src="${item.post_image}" alt="Post 1" loading="lazy">
+                    <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
                 </a>
             </div>
         </article>
+        <article class="col_cc hauto w100 dis_none op" id="loading">
+            <div class="loadingio-spinner-reload-zv6cq6zfifd">
+                <div class="ldio-dg926s5a60v">
+                    <div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </article>
     </main>
-    <footer>
-
+    <footer class="f_g2 bg_f4">
     </footer>
 </section>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -60,6 +71,78 @@
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9cf7f221de3543e0bd1ed40d14a3a704&libraries=services"></script>
 <script src="js/map.js"></script>
 <script src="js/write.js"></script>
+<script th:inline="javascript">
+    var scrollTimeout; // 타이머를 저장할 변수
+
+    $('#postList').scroll(function() {
+        var element = $(this);
+
+        // 이미 설정된 타이머가 있으면 초기화
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+        }
+
+        // 새로운 타이머 설정
+        scrollTimeout = setTimeout(function() {
+            if (element.scrollTop() + element.innerHeight() >= element[0].scrollHeight - 10) {
+                $("#loading").css({"display": "flex", "opacity": "1"});
+                element.scrollTop(element.prop("scrollHeight"));
+                // 20초 지연 후의 로직을 여기에 추가
+                setTimeout(function() {
+                    var post_no = $('#last_post_no').val();
+
+                    $.ajax({
+                        url: '/board/post/list_scroll',
+                        type: 'POST',
+                        data: {
+                            "post_no": post_no
+                        },
+                        success: function(response) {
+                            // 성공적으로 데이터를 받아온 후 할 작업
+                            // 여기에 데이터 처리 로직 추가
+                            response.forEach(function(item) {
+                                // 각 항목에 대해 수행할 작업
+                                // 예를 들어, 받아온 데이터를 이용하여 리스트 아이템을 생성하고 페이지에 추가
+                                var postDetailUrl = '/board/post/detail/' + item.post_no;
+                                // 이미지 태그 생성
+                                var imgTag = $('<img>', {
+                                    "src": item.post_image_thumbnail,
+                                    "alt": "Post " + item.post_no,
+                                    "loading": "lazy",
+                                });
+                                // a 태그 생성 및 href 속성 설정
+                                var aTag = $('<a>', {
+                                    "href": postDetailUrl
+                                }).append(imgTag); // 이미지 태그를 a 태그 안에 넣기
+
+                                // div 태그 생성 및 a 태그 포함
+                                var divTag = $('<div>', {
+                                    "class": "post" // div에 클래스 추가
+                                }).append(aTag); // a 태그를 div 태그 안에 넣기
+
+                                // 생성된 div 태그를 페이지의 특정 요소에 추가
+                                $('.post_contentList').append(divTag);
+                            });
+
+                            // 모든 데이터를 페이지에 추가한 후, post_no 값을 업데이트(다음 요청을 위해)
+                            if(response.length > 0) {
+                                var lastPostNo = response[response.length - 1].post_no;
+                                $('#last_post_no').val(lastPostNo);
+                            }
+                        },
+                        error: function(error) {
+                            // 에러 처리
+                        },
+                        complete: function() {
+                            // 로딩 화면 숨기기
+                            $("#loading").css({"display": "none", "opacity": "0"});
+                        }
+                    });
+                }, 2000); // 20초 지연
+            }
+        }, 1000); // 스크롤 이벤트의 1초 지연
+    });
+</script>
 </body>
 
 </html>

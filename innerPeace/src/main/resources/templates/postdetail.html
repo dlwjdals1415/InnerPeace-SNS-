@@ -4,434 +4,216 @@
     <meta charset="UTF-8">
     <title>Inner Peace</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='css/base2.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/base.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/write.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/modify.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/sidebar.css'>
-    <!--    <link rel='stylesheet' type='text/css' media='screen' href='css/postdetail.css'>-->
+    <link rel='stylesheet' type='text/css' media='screen' href='css/postdetail.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/map.css'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
-    <style>
-        main {
-            background-color: #5b4e4e;
-            flex-grow: 6;
-            height: 100%;
-            margin: auto;
-            display: flex;
-            gap: 20px;
-            flex-direction: column;
-            justify-content: center; /* 수평 가운데 정렬 */
-            align-items: center; /* 수직 가운데 정렬 */
-        }
-
-        main .post_detail_content {
-            background-color: darkgreen;
-            width: 80%;
-            height: 80%;
-            display: flex;
-        }
-
-        main .post_img-section {
-            width: 65%;
-            height: 100%;
-            display: flex;
-            justify-content: center; /* 수평 가운데 정렬 */
-            align-items: center; /* 수직 가운데 정렬 */
-        }
-
-        main .post_img-section .post_img {
-            width: 100%;
-            height: auto;
-        }
-
-        main .post_content_section {
-            width: 35%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        main .post_content_section .hover:hover {
-            color: lightgray;
-        }
-
-        main .post_content_section .post_writer {
-            background-color: darkslateblue;
-            width: 100%;
-            height: 5%;
-            top: 0;
-            display: flex;
-            align-items: center; /* 수직 가운데 정렬 */
-        }
-
-        main .post_content_section .post_writer .post_writer_left {
-            display: flex;
-            align-items: center;
-            width: 85%;
-        }
-
-        main .post_content_section .post_writer .post_writer_right {
-            display: flex;
-            align-items: center;
-            width: 15%;
-        }
-
-        main .post_content_section .post_writer .post_writer_profile {
-            margin-left: 5px;
-            margin-right: 5px;
-            width: 30px;
-            height: auto;
-        }
-
-        main .post_content_section .post_writer .post_writer_nickname {
-            margin-left: 5px;
-            margin-right: 5px;
-            font-size: 70%;
-        }
-
-        main .post_content_section .post_writer .post_writer_follow {
-            margin-left: 5px;
-            margin-right: 5px;
-            height: 70%;
-            border-radius: 20px;
-        }
-
-        main .post_content_section .post_writer .post_menu {
-            height: auto;
-            font-size: 200%;
-            border: none;
-        }
-
-        main .post_content_section .post_content {
-            background-color: #2f2726;
-            width: 100%;
-            height: 75%;
-            overflow-y: auto;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        main .post_content_section .post_content .post_content_main {
-            width: 100%;
-            padding: 10px;
-            display: flex;
-        }
-
-        main .post_content_section .post_content .post_content_main .post_content_writer_profile {
-            width: 5%;
-        }
-
-        main .post_content_section .post_content .post_content_main .post_content_writer_profile .profile_img {
-            width: 30px;
-            height: auto;
-        }
-
-        main .post_content_section .post_content .post_content_main .post_content_main_content {
-            width: 95%;
-            height: auto;
-            margin-left: 20px;
-            margin-right: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        main .post_content_section .post_content .post_content_main .post_content_main_content .tags {
-            display: flex;
-            gap: 10px;
-        }
-
-        main .post_content_section .post_content .post_content_main .post_content_main_content .regday {
-            margin-top: 5px;
-            font-size: 80%;
-        }
-
-        /*----------------------------------------------------------------------------*/
-        main .post_content_section .post_content .comment_main {
-            width: 100%;
-            padding: 10px;
-            display: flex;
-        }
-
-        main .post_content_section .post_content .comment_main .comment_writer_profile {
-            width: 5%;
-        }
-
-        main .post_content_section .post_content .comment_main .comment_writer_profile .profile_img {
-            width: 30px;
-            height: auto;
-        }
-
-        main .post_content_section .post_content .comment_main .comment_content {
-            width: 95%;
-            height: auto;
-            margin-left: 20px;
-            margin-right: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        main .post_content_section .post_content .comment_main .comment_content .comment_footer {
-            margin-top: 5px;
-            font-size: 80%;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        main .post_content_section .post_footer {
-            background-color: brown;
-            width: 100%;
-            height: 20%;
-            bottom: 0;
-
-        }
-
-        main .post_content_section .post_footer .post_info {
-            background-color: limegreen;
-            width: 100%;
-            height: 70%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        main .post_content_section .post_footer .post_info .post_info_buttons {
-            height: 40%;
-            width: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        main .post_content_section .post_footer .post_info .post_info_buttons .like_button {
-            margin-left: 10px;
-            width: 100px;
-            height: 40px;
-            border-radius: 20px;
-        }
-
-        main .post_content_section .post_footer .post_info .post_info_likes {
-            margin-left: 10px;
-            height: 30%;
-            width: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        main .post_content_section .post_footer .post_info .post_info_regday {
-            margin-left: 10px;
-            height: 30%;
-            width: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        main .post_content_section .post_footer .comment_wrtie {
-            background-color: darkviolet;
-            width: 100%;
-            height: 30%;
-            display: flex;
-            align-items: center; /* 수직 가운데 정렬 */
-        }
-
-        main .post_content_section .post_footer .comment_wrtie .comment_area {
-            width: 80% !important;
-            height: 100% !important;
-            resize: none;
-            /* textarea의 크기 조절을 금지합니다 */
-        }
-
-        main .post_content_section .post_footer .comment_wrtie .comment_button {
-            width: 20%;
-            height: 50%;
-            background-color: #3f8b41;
-            border-radius: 10px;
-        }
-
-        main .post_content_section .post_footer .comment_wrtie .comment_button:hover {
-            background-color: #006400;
-        }
-
-        footer {
-            background-color: #f4f4f4;
-            height: 10%;
-            width: 80%;
-        }
-
-        .postmenu-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-
-        .postmenu-container {
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            /* write-container를 flex 컨테이너로 만듭니다 */
-            justify-content: center;
-            /* 메인 축을 따라 아이템을 중앙에 정렬합니다 */
-            align-items: center;
-            /* 교차 축을 따라 아이템을 중앙에 정렬합니다 */
-            z-index: 0;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .postmenu-container .postmenu_label {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        .postmenu-container .postmenucontent {
-            width: 10%;
-            height: auto;
-            border-radius: 20px;
-            background-color: #f4f4f4;
-            z-index: 5;
-            display: flex;
-            /* write-container를 flex 컨테이너로 만듭니다 */
-            justify-content: center;
-            /* 메인 축을 따라 아이템을 중앙에 정렬합니다 */
-            align-items: center;
-        }
-
-        .postmenu-container .postmenucontent .reportButton {
-            width: 80%;
-            height: 40px;
-            background-color: #f4f4f4;
-            border: none;
-        }
-
-        .postmenu-container .postmenucontent .reportButton:hover {
-            background-color: #e8e2e2;
-        }
-
-        #postmenu:checked~.postmenu-container {
-            z-index: 10;
-            opacity: 1;
-        }
-    </style>
 </head>
 <body>
 <input type="checkbox" class="checkbox" id="create">
 <input type="checkbox" class="checkbox" id="search">
 <input type="checkbox" class="checkbox" id="more">
 <input type="checkbox" class="checkbox" id="postmenu">
-<section class="postmenu-container">
-    <label class="postmenu_label" for="postmenu"></label>
+<input type="checkbox" class="checkbox" id="modify">
+<section class="po_ab w100 h100 row_cc op z_i0" id="postmenu-container">
+    <label class="po_ab w100 h100 z_i0 postmenu_label" for="postmenu"></label>
     <input type="checkbox" class="checkbox" id="report">
-    <section class="postmenucontent">
-        <label for="report" class="reportButton">신고</label>
+    <section class="w10 hauto bor_rad20 bg_f4 z_i5 col_cc">
+        <th:block th:if="${session.loginedHealer != null}">
+            <th:block th:if="${dto.healer_id != session.loginedHealer}">
+                <label for="report" class="e0_btn w80 h40p">신고</label>
+            </th:block>
+            <th:block th:unless="${dto.healer_id != session.loginedHealer}">
+                <label for="modify" class="e0_btn w80 h40p">수정</label>
+                <button id="post_delete" type="button" class="e0_btn w80 h40p" th:onclick="del([[${dto.post_no}]])">삭제</button>
+            </th:block>
+        </th:block>
     </section>
 </section>
+<section class="po_ab w100 h100 op row_cc z_i0 bg_008" id="modify-container">
+    <label class="po_ab w100 h100 z_i0" for="modify"></label>
+    <input type="checkbox" class="checkbox" id="modify_confirm">
+    <article class="po_ab bg_f4 z_i1 col_cc" id="modify_article">
+        <h1 class="bor_bt h50p">게시물 수정하기</h1>
+        <img th:src="${dto.post_image}" alt="uploadImg" id="modify_preview">
+        <button class="gray_btn w90 h50p" type="button" id="modify_fileButton" onclick="document.getElementById('modify_file_input').click()">파일 선택</button>
+        <button class="gray_btn w90 h50p dis_none" type="button" id="modify_cutButton">자르기</button>
+        <label class="gray_btn w90 h50p row_cc" for="modify_confirm" id="modify_submitButton"><span>확인</span></label>
+    </article>
+    <article class="po_ab z_i0 bg_f4 col_c0 op" id="post_modify" th:with="tagString=${#strings.listJoin(dto.tags, ' ')}">
+        <div class="f_g1 w90 h50p row_cc bor_bt">
+            <h1>게시물 수정하기</h1>
+        </div>
+        <div class="row_cc w90 f_g13 modify-main">
+            <div class="f_g5 row_cc">
+                <img class="ml10 w100 h100"
+                     th:src="${dto.post_image}"
+                      alt="uploadImg" id="post_img">
+            </div>
+            <div class="col_cc f_g3">
+                <textarea id="modify_post_textarea" required placeholder="내용입력" >[[${dto.post_content}]]</textarea>
+                <section class="row w90 h30p mt10">
+                    <form class="row w100 hauto">
+                        <article class="w80 h100 row_cc">
+                            <input class="w100 h80 text_input" type="text" id="modify_post_tag" readonly th:value="${tagString}">
+                        </article>
+                        <article class="w20 h100 ml10 row_cc">
+                            <input class="nomal_btn w90 hauto" type="button" id="tag_reset" value="지우기">
+                        </article>
+                    </form>
+                </section>
+                <section class="row w90 h30p mt10">
+                    <article class="w80 h100 row_cc">
+                        <input class="w100 h80 text_input" type="text" id="modify_tag" placeholder="태그 입력">
+                    </article>
+                    <article class="w20 h100 ml10 row_cc">
+                        <button class="nomal_btn w90 hauto" type="button" id="modify_tag_btn">추가</button>
+                    </article>
+                </section>
+                <p class="ml20 w90 h10p row_cc">위치추가</p>
+                <section class="row w90 h30p mt10">
+                    <article class="w80 h100 row_cc">
+                        <input class="w100 h80 text_input" type="text" name="map-search" id="map-search"
+                               placeholder="검색할곳">
+                    </article>
+                    <article class="w20 h100 ml10 row_cc">
+                        <button class="nomal_btn w90 hauto" type="button" id="map-search-btn">검색</button>
+                    </article>
+                </section>
+                <div class="map" id="address"></div>
+                <form class="w100 hauto row_cc mt20" th:action="@{/board/post/modify}" method="post"
+                      enctype="multipart/form-data">
+                    <input type="hidden" name="post_no" th:value="${dto.post_no}">
+                    <input type="hidden" id="modify_post_tags_hidden" name="post_tags" th:value="${tagString}">
+                    <input type="hidden" id="modify_post_content_hidden" name="post_content" th:value="${dto.post_content}">
+                    <input type="hidden" name="post_writer" th:value="${session.loginedHealer}">
+                    <input type="hidden" id="post_map_lat" name="post_map_lat" th:value="${dto.map_point_lat}">
+                    <input type="hidden" id="post_map_lng" name="post_map_lng" th:value="${dto.map_point_lng}">
+                    <input class="dis_none" type="file" id="modify_file_input" name="post_image" accept="image/*">
+                    <input type="hidden" id="post_img_hidden" name="post_image_thumbnail" value="">
+                    <input class="green_btn w90 h50p" type="submit" value="수정하기">
+                </form>
+            </div>
+        </div>
+
+    </article>
+</section>
 <th:block th:if="${session.loginedHealer != null}">
-    <section class="write-container" th:replace="~{fragment/write::write}"></section>
+    <section th:replace="~{fragment/write::write}"></section>
 </th:block>
 <th:block th:if="${session.loginedHealer != null}">
-    <section class="sidebar" th:replace="~{fragment/sidebar::healer_sidebar}"></section>
+    <section th:replace="~{fragment/sidebar::healer_sidebar}"></section>
 </th:block>
 <th:block th:unless="${session.loginedHealer != null}">
-    <section class="sidebar" th:replace="~{fragment/sidebar::user_sidebar}"></section>
+    <section th:replace="~{fragment/sidebar::user_sidebar}"></section>
 </th:block>
-<article class="searchbar" th:replace="~{fragment/searchbar::searchbar}">
+<article th:replace="~{fragment/searchbar::searchbar}">
 </article>
 <th:block th:if="${session.loginedHealer != null}">
     <section class="map-section" th:replace="~{fragment/map::map-section}"></section>
 </th:block>
 <th:block th:if="${session.loginedHealer != null}">
-    <article class="menubar" th:replace="~{fragment/menu::healer_menu}"></article>
+    <article th:replace="~{fragment/menu::healer_menu}"></article>
 </th:block>
 <th:block th:unless="${session.loginedHealer != null}">
-    <article class="menubar" th:replace="~{fragment/menu::user_menu}"></article>
+    <article th:replace="~{fragment/menu::user_menu}"></article>
 </th:block>
-<section class="container">
-    <header>
+<section class="po_ab w100 h100 bg_f4 row z_i1">
+    <input type="hidden" id="post_no" th:value="${dto.post_no}"/>
+    <header class="f_g1 bg_f4">
     </header>
-    <main>
-        <section class="post_detail_content">
-            <article class="post_img-section">
-                <img class="post_img" th:src="${dto.post_image}" alt="">
+    <main class="bg_f4 f_g6 col_cc gap20">
+        <section class="w80 h80 row_c0 bor_rad10 box_sha555">
+            <article class="w65 h100 row_cc pad20">
+                <img class="w100 hauto" th:src="${dto.post_image}" alt="">
             </article>
-            <section class="post_content_section">
-                <section class="post_writer">
-                    <article class="post_writer_left">
-                        <img class="post_writer_profile" th:src="${dto.profileImg}" alt="profile">
+            <section class="w30 h90 col">
+                <section class="w100 h5 row_c0">
+                    <article class="row_c0 w90">
+                        <img class="ml10 mr10 w30p hauto" th:src="${dto.profileImg}" alt="profile">
                         <a th:href="@{/user/userpage/{healer_id}(healer_id=${dto.healer_id})}">
-                            <span class="post_writer_nickname hover" th:text="${dto.post_writer}">닉네임</span>
+                            <span class="ml10 mr10 font_s15 hover" th:text="${dto.post_writer}">닉네임</span>
                         </a>
-                        <th:block th:if="session.loginedHealer == null">
-                            <button class="post_writer_follow">
+                        <th:block th:if="${session.loginedHealer != null and dto.post_writer != session.loginedHealer}">
+                            <button class="ml10 mr10 h80 e0_btn">
                                 <span id="follow_button" th:text="${dto.followstat}">팔로우</span>
                             </button>
                         </th:block>
                     </article>
-                    <article class="post_writer_right">
-                        <label class="post_menu" for="postmenu">···</label>
+                    <article class="row_c0 w10 text_hover">
+                        <label class="hauto font_s30 bor_none" for="postmenu">···</label>
                     </article>
                 </section>
-                <section class="post_content">
-                    <section class="post_main_content">
-                        <section class="post_content_main">
-                            <article class="post_content_writer_profile">
-                                <img class="profile_img" th:src="${dto.profileImg}" alt="프로필">
+                <section class="w100 h75 overflow_y col gap10 scrollbarnone">
+                    <section>
+                        <section class="w100 pad10 row">
+                            <article class="w5">
+                                <img class="w30p hauto" th:src="${dto.profileImg}" alt="프로필">
                             </article>
-                            <article class="post_content_main_content">
+                            <article class="w95 hauto ml20 mr20 col">
                                 <span>
                                     <a th:href="@{/user/userpage/{healer_id}(healer_id=${dto.healer_id})}">
-                                        <span class="hover" th:text="${dto.post_writer}"></span>
+                                        <span class="text_hover bold" th:text="${dto.post_writer}"></span>
                                     </a>
                                     <span th:text="'  ' + ${dto.post_content}"></span>
                                 </span>
-                                <span class="tags">
+                                <span class="row gap10">
                                     <span th:each="item, status : ${dto.tags}">
                                         <a th:href="@{/board/post/search(searchkey=${item})}">
-                                            <span class="hover" th:text="${item}"></span>
+                                            <span class="text_hover" th:text="${item}"></span>
                                         </a>
                                     </span>
                                 </span>
-                                <span class="regday" th:text="${dto.post_regday}"></span>
+                                <span class="mt10 font_s15" th:text="${dto.post_regday}"></span>
                             </article>
                         </section>
                     </section>
-                    <section class="comment_section" th:each="item, status : ${dtoList}">
-                        <section class="comment_main">
-                            <article class="comment_writer_profile">
-                                <img class="profile_img" th:src="${item.profileImg}" alt="프로필">
+                    <section th:each="item, status : ${dtoList}">
+                        <section class="w100 pad10 row">
+                            <article class="w5">
+                                <img class="w30p hauto" th:src="${item.profileImg}" alt="프로필">
                             </article>
-                            <article class="comment_content">
+                            <article class="w95 hauto ml20 mr20 col">
                                 <span>
                                     <a th:href="@{/user/userpage/{healer_id}(healer_id=${item.healer_id})}">
-                                        <span class="hover" th:text="${item.healer_nickname}"></span>
+                                        <span class="text_hover" th:text="${item.healer_nickname}"></span>
                                     </a>
                                     <span th:text="'  ' + ${item.comment_content}"></span>
                                 </span>
-                                <article class="comment_footer">
+                                <article class="mt10 font_s15 row_cb">
                                     <span class="regday" th:text="${item.comment_regday}"></span>
                                 </article>
                             </article>
                         </section>
                     </section>
                 </section>
-                <section class="post_footer">
-                    <article class="post_info">
-                        <article class="post_info_buttons">
-                            <button class="like_button" th:text="${dto.likeposition}"></button>
-                        </article>
-                        <article class="post_info_likes">
+                <section class="w100 h20 ">
+                    <article class="w100 h70 col">
+                        <th:block th:if="${session.loginedHealer != null and dto.post_writer != session.loginedHealer}">
+                            <article class="h40 w100 row_c0">
+                                <button class="ml10 w100p h40p bor_rad20 e0_btn" th:text="${dto.likeposition}"></button>
+                            </article>
+                        </th:block>
+                        <article class="ml10 h30 w100 row_c0">
                             <span th:text="'좋아요 ' + ${dto.likes} + ' 개'"></span>
                         </article>
-                        <article class="post_info_regday">
+                        <article class="ml10 h30 w100 row_c0">
                             <span th:text="${dto.post_regday}"></span>
                         </article>
                     </article>
-                    <article class="comment_wrtie">
-                        <textarea class="comment_area" id="comment_area" placeholder="댓글입력"></textarea>
-                        <button class="comment_button" id="comment_submit">게시</button>
-                    </article>
+                    <th:block th:if="${session.loginedHealer != null}">
+                        <article class="w100 h30 row_c0">
+                            <textarea class="comment_area" id="comment_area" placeholder="댓글입력"></textarea>
+                            <button class="w20 h50 green_btn" id="comment_submit">게시</button>
+                        </article>
+                    </th:block>
                 </section>
             </section>
         </section>
-        <footer>
+        <footer class="bg_f4 h10 w80">
         </footer>
     </main>
 </section>
@@ -440,17 +222,23 @@
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9cf7f221de3543e0bd1ed40d14a3a704&libraries=services"></script>
 <script src="js/map.js"></script>
 <script src="js/write.js"></script>
-<script>
+<script src="js/modify.js"></script>
+<script th:inline="javascript">
     $(document).ready(function () {
         // 게시 버튼 클릭 시 이벤트
         $("#comment_submit").click(function () {
             // comment_area에서 입력된 데이터 가져오기
             let commentData = $("#comment_area").val();
+            let postNo = $("#post_no").val();
             // AJAX를 사용하여 서버로 데이터 전송
             $.ajax({
                 type: "POST",
                 url: "/board/comment/write", // 적절한 URL로 변경
-                data: {comment: commentData}, // 전송할 데이터
+                contentType:"application/json; charset=utf-8",
+                data: JSON.stringify({
+                    comment_content: commentData,
+                    post_no: postNo
+                }), // JSON
                 success: function (response) {
                     // 성공적으로 응답 받았을 때의 처리
                     console.log("서버 응답:", response);
@@ -465,17 +253,36 @@
                 }
             });
         });
-
-        function menu(no) {
-            let postmenuContainer = document.querySelector(".postmenu-container");
-
-            // z-index를 10으로 설정하여 위로 올려놓습니다.
-            postmenuContainer.style.zIndex = 10;
-
-            // opacity를 1로 설정하여 보이게 합니다.
-            postmenuContainer.style.opacity = 1;
-        }
+        $('#tag_reset').click(function() {
+            $('#modify_post_tag').val('');
+        });
     });
+</script>
+<script th:inline="javascript">
+    function del(post_no){
+        if(!confirm('삭제하시겠습니까?')){
+            return;
+        }
+        let jsonObj={'post_no':post_no};
+        let jsonStr = JSON.stringify(jsonObj);
+        $.ajax({
+            type:"POST",
+            url:"/board/post/remove",
+            contentType:"application/json; charset=utf-8",
+            data:jsonStr,
+            success:function(data,status,xhr){
+                if(data!=null && data!=undefined &&data.result==1){
+                    alert(data.msg);
+                    window.location.replace('/board');
+                }else{
+                    alert('삭제를하지못했습니다');
+                }
+            },
+            error:function(xhr,status,error){
+                alert('삭제를하지못했습니다');
+            }
+        });
+    }
 </script>
 </body>
 </html>

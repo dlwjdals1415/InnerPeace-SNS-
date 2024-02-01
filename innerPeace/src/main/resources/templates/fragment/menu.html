@@ -7,17 +7,17 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
 </head>
 <body>
-<article class="menubar" th:fragment="healer_menu">
+<article class="menubar w10 bg_e0 z_i4 col po_fi " th:fragment="healer_menu">
     <a th:href="@{/user/help}">
-        <button class="Button" type="button">고객센터</button>
+        <button class="nomal_btn w100 h50p" type="button">고객센터</button>
     </a>
-    <a th:href="@{/user/signout}">
-        <button class="Button" type="button">로그아웃</button>
+    <a th:href="@{/user/account/signout}">
+      <button class="nomal_btn w100 h50p" type="button">로그아웃</button>
     </a>
 </article>
-<article class="menubar" th:fragment="user_menu">
+<article class="menubar w10 bg_e0 z_i4 col" th:fragment="user_menu">
     <a th:href="@{/user/signout}">
-        <button class="Button" type="button">고객센터</button>
+        <button class="nomal_btn w100 h50p" type="button">고객센터</button>
     </a>
 </article>
 </body>
