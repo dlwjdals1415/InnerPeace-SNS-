@@ -21,11 +21,11 @@ body {
     background-color: #f4f4f4;
 }
 
-.bg_e0{
+.bg_e0 {
     background-color: #e0e0e0;
 }
 
-.bg_008{
+.bg_008 {
     background-color: rgba(0, 0, 0, 0.8);
 }
 
@@ -61,12 +61,18 @@ body {
     align-items: center;
 }
 
-.row_cb{
+.row_cb {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
+
+.row_sc{
+    display: flex;
+    align-items: start;
+    justify-content: center;
+}
 .col {
     display: flex;
     flex-direction: column;
@@ -89,6 +95,20 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.col_cs{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+}
+
+.col_sc{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
 }
 
 .col_ss {
@@ -117,8 +137,6 @@ body {
 .gray_btn {
     margin-top: 20px;
     margin-bottom: 20px;
-    width: 90%;
-    height: 50px;
     border-radius: 10px;
     border: none;
     background-color: #5b4e4e;
@@ -186,12 +204,20 @@ body {
     margin-top: 20px;
 }
 
+.mt50{
+    margin-top: 50px;
+}
+
 .mb10 {
     margin-bottom: 10px;
 }
 
 .mb20 {
     margin-bottom: 20px;
+}
+
+.mb50{
+    margin-bottom: 50px;
 }
 
 .ml10 {
@@ -210,43 +236,55 @@ body {
     margin-right: 20px;
 }
 
+.mh40{
+    min-height: 40%;
+}
+
 .h100 {
     height: 100%;
 }
 
-.h80{
+.h90{
+    height: 90%;
+}
+
+.h80 {
     height: 80%;
 }
 
-.h75{
+.h75 {
     height: 75%;
 }
 
-.h70{
+.h70 {
     height: 70%;
 }
 
-.h50{
+.h50 {
     height: 50%;
 }
 
-.h40{
+.h40 {
     height: 40%;
 }
 
-.h30{
+.h30 {
     height: 30%;
 }
 
-.h20{
+.h25{
+    height: 25%;
+}
+
+.h20 {
     height: 20%;
 }
 
-.h10{
+.h10 {
     height: 10%;
 }
 
-.h5{
+.h5 {
     height: 5%;
 }
 
@@ -294,11 +332,11 @@ body {
     height: 100px;
 }
 
-.w30p{
+.w30p {
     width: 30px;
 }
 
-.w100p{
+.w100p {
     width: 100px;
 }
 
@@ -310,7 +348,7 @@ body {
     width: 90%;
 }
 
-.w95{
+.w95 {
     width: 95%;
 }
 
@@ -320,6 +358,10 @@ body {
 
 .w70 {
     width: 70%;
+}
+
+.w65{
+    width: 65%;
 }
 
 .w60 {
@@ -346,7 +388,7 @@ body {
     width: 10%;
 }
 
-.w5{
+.w5 {
     width: 5%;
 }
 
@@ -375,7 +417,6 @@ body {
     opacity: 1;
     z-index: 2;
 }
-
 
 
 #more:checked ~ .menubar {
@@ -506,7 +547,6 @@ body {
     justify-content: flex-start;
     width: 100%;
     align-self: flex-start;
-    overflow-y: auto;
     gap: 10px;
 }
 
@@ -558,7 +598,8 @@ body {
 .font_s30 {
     font-size: 30px;
 }
-.bor_none{
+
+.bor_none {
     border: none;
 }
 
@@ -600,19 +641,70 @@ body {
     padding: 20px;
 }
 
-.checkbox_style{
+.checkbox_style {
     transform: scale(1.5);
 }
 
 .text_hover:hover {
-    color : lightgray;
+    color: lightgray;
 }
 
-.overflow_y{
+.overflow_y {
     overflow-y: auto;
     overflow-x: hidden;
 }
 
-.bold{
+.bold {
     font_weight: bold;
 }
+
+.box_sha555{
+    box-shadow: 5px 5px 5px #cccccc;
+}
+
+@keyframes ldio-dg926s5a60v { 0% { transform: rotate(0) } 100% { transform: rotate(360deg); } }
+.ldio-dg926s5a60v > div {
+    animation: ldio-dg926s5a60v 1s infinite linear;
+    transform-origin: 100px 100px;
+}
+.ldio-dg926s5a60v > div div { position: absolute; }
+.ldio-dg926s5a60v > div div:nth-child(1), .ldio-dg926s5a60v > div div:nth-child(2) {
+    width: 40px;
+    height: 40px;
+    border: 4px solid;
+    border-radius: 50%;
+    border-color: transparent #09c86a #09c86a #09c86a;
+    box-sizing: border-box;
+    position: absolute;
+    transform: rotate(45deg);
+    transform-origin: 100px 100px;
+}
+.ldio-dg926s5a60v > div div:nth-child(1) {
+    transform: rotate(45deg) translate(80px, 80px);
+}
+.ldio-dg926s5a60v > div div:nth-child(2) {
+    transform: rotate(0deg) translate(80px, 80px);;
+}
+.ldio-dg926s5a60v > div div:nth-child(3) {
+    width: 0;
+    height: 0;
+    border: 8px solid;
+    border-color: transparent transparent transparent #09c86a;
+    transform: translate(100px, 76px);
+}
+.loadingio-spinner-reload-zv6cq6zfifd {
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+    overflow: hidden;
+    background: none;
+}
+.ldio-dg926s5a60v {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: translateZ(0) scale(1);
+    backface-visibility: hidden;
+    transform-origin: 0 0; /* see note above */
+}
+.ldio-dg926s5a60v div { box-sizing: content-box; }

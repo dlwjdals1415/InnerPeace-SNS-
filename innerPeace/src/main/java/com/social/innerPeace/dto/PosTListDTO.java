@@ -18,6 +18,7 @@ public class PosTListDTO {
     private String post_title;
     private String post_content;
     private MultipartFile post_image;
+    private String post_image_thumbnail;
     private float map_point_lat;
     private float map_point_lng;
     private List<String> tags;

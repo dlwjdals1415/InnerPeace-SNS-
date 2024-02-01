@@ -91,7 +91,6 @@ $(document).ready(function () {
   $("#create").change(function () {
     // 체크박스가 체크되었는지 확인
     if ($(this).prop("checked")) {
-      resetFileInputAndCropper();
     } else {
       $('#write_fileButton').show();
       $('#write_cutButton').hide();
@@ -113,32 +112,6 @@ $(document).ready(function () {
     };
 
     reader.readAsDataURL(file);
-  }
-
-  function initializeCropper() {
-    $('#write_preview').off('load').on('load', function () {
-      if (cropper) {
-        cropper.destroy();
-      }
-
-      var imageElement = document.getElementById('write_preview');
-      cropper = new Cropper(imageElement, {
-        aspectRatio: 1,
-        // 다른 Cropper 옵션 설정
-      });
-    });
-  }
-
-  function resetFileInputAndCropper() {
-    // 파일 입력 필드 리셋
-    $('#write_file-input').val('');
-
-    // Cropper 인스턴스 파괴 및 이미지 미리보기 리셋
-    if (cropper) {
-      cropper.destroy();
-      cropper = null;
-    }
-    $('#write_preview').removeAttr('src');
   }
 
   $("#post_textarea").on("input", function () {

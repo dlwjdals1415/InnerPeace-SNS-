@@ -39,9 +39,9 @@
     <article class="po_ab bg_f4 z_i1 col_cc" id="modify_article">
         <h1 class="bor_bt h50p">게시물 수정하기</h1>
         <img th:src="${dto.post_image}" alt="uploadImg" id="modify_preview">
-        <button class="gray_btn" type="button" id="modify_fileButton" onclick="document.getElementById('modify_file_input').click()">파일 선택</button>
-        <button class="gray_btn dis_none" type="button" id="modify_cutButton">자르기</button>
-        <label class="gray_btn row_cc" for="modify_confirm" id="modify_submitButton"><span>확인</span></label>
+        <button class="gray_btn w90 h50p" type="button" id="modify_fileButton" onclick="document.getElementById('modify_file_input').click()">파일 선택</button>
+        <button class="gray_btn w90 h50p dis_none" type="button" id="modify_cutButton">자르기</button>
+        <label class="gray_btn w90 h50p row_cc" for="modify_confirm" id="modify_submitButton"><span>확인</span></label>
     </article>
     <article class="po_ab z_i0 bg_f4 col_c0 op" id="post_modify" th:with="tagString=${#strings.listJoin(dto.tags, ' ')}">
         <div class="f_g1 w90 h50p row_cc bor_bt">
@@ -126,11 +126,11 @@
     <header class="f_g1 bg_f4">
     </header>
     <main class="bg_f4 f_g6 col_cc gap20">
-        <section class="w80 h80 row bor_rad10">
-            <article class="w70 h100 row_cc">
+        <section class="w80 h80 row_c0 bor_rad10 box_sha555">
+            <article class="w65 h100 row_cc pad20">
                 <img class="w100 hauto" th:src="${dto.post_image}" alt="">
             </article>
-            <section class="w30 h100 col">
+            <section class="w30 h90 col">
                 <section class="w100 h5 row_c0">
                     <article class="row_c0 w90">
                         <img class="ml10 mr10 w30p hauto" th:src="${dto.profileImg}" alt="profile">

@@ -39,15 +39,28 @@
 <section class="po_ab w100 h100 bg_f4 row z_i1">
     <header class="f_g3 bg_f4">
     </header>
-    <main class="f_g5 bg_f4 col_ss main1000">
+    <main class="f_g5 bg_f4 col_cs main1000 overflow_y scrollbarnone" id="postList">
         <article class="followList bg_f4 w100">
             <h2>followLIst</h2>
         </article>
-        <article class="post_contentList scrollbarnone">
+        <input type="hidden" id="last_post_no" value="">
+        <div th:if="${dtoList.size() > 0}" th:text="${dtoList.get(dtoList.size() - 1)}">[Last Item]</div>
+        <article class="post_contentList">
             <div class="post" th:each="item, status : ${dtoList}">
                 <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
                     <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
                 </a>
+            </div>
+        </article>
+        <article class="col_cc hauto w100 dis_none op" id="loading">
+            <div class="loadingio-spinner-reload-zv6cq6zfifd">
+                <div class="ldio-dg926s5a60v">
+                    <div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
             </div>
         </article>
     </main>
@@ -59,6 +72,32 @@
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9cf7f221de3543e0bd1ed40d14a3a704&libraries=services"></script>
 <script src="js/map.js"></script>
 <script src="js/write.js"></script>
+<script th:inline="javascript">
+    $('#postList').scroll(function() {
+        var element = $(this);
+        if(element.scrollTop() + element.innerHeight() >= element[0].scrollHeight - 10) {
+            // 여기에 스크롤이 #myElement의 바닥 근처에 도달했을 때 실행할 코드를 작성합니다.
+            $("#loading").css({"display": "flex", "opacity": "1"});
+
+            $.ajax({
+                url: '/board/post/list_scroll',
+                type: 'POST',
+                success: function(response) {
+                    // 성공적으로 데이터를 받아온 후 할 작업
+                },
+                error: function(error) {
+                    // 에러 처리
+                },
+                complete: function() {
+                    // Ajax 호출이 완료된 후 (성공 또는 실패)
+                    // 로딩 화면 숨기기
+                    $("#loading").hide();
+                }
+            });
+
+        }
+    });
+</script>
 </body>
 
 </html>

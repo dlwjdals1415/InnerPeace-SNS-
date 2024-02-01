@@ -4,141 +4,12 @@
     <meta charset="UTF-8">
     <title>Inner Peace</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='css/base2.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/base.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/write.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/sidebar.css'>
-    <!--    <link rel='stylesheet' type='text/css' media='screen' href='css/postdetail.css'>-->
+    <link rel='stylesheet' type='text/css' media='screen' href='css/userpage.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/map.css'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
-    <style>
-        main {
-            background-color: #5b4e4e;
-            flex-grow: 6;
-            height: auto;
-            margin: auto;
-            display: flex;
-            gap: 20px;
-            flex-direction: column;
-            justify-content: center; /* 수평 가운데 정렬 */
-            align-items: center; /* 수직 가운데 정렬 */
-        }
-
-        main .userpage-section {
-            margin-top: 20px;
-            background-color: darkgreen;
-            width: 70%;
-            height: 70%;
-            max-width: 1200px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        main .userpage-section .userpage-info {
-            width: 100%;
-            min-height: 40%;
-            height: auto;
-            display: flex;
-        }
-
-        main .userpage-section .userpage-info .userpage-profile {
-            width: 30%;
-            height: 100%;
-            display: flex;
-            justify-content: center; /* 수평 가운데 정렬 */
-            align-items: start; /* 수직 가운데 정렬 */
-        }
-
-        main .userpage-section .userpage-info .userpage-profile .profileImg {
-            width: 60%;
-            height: auto;
-            margin-top: 10px;
-        }
-
-        main .userpage-section .userpage-info .userpage-content {
-            margin-left: 20px;
-            width: 70%;
-            height: auto;
-            display: flex;
-            gap: 20px;
-            flex-direction: column;
-        }
-
-        main .userpage-section .userpage-info .userpage-content .id-button {
-            height: 25%;
-            display: flex;
-            gap: 20px;
-            align-items: center; /* 수직 가운데 정렬 */
-        }
-
-        main .userpage-section .userpage-info .userpage-content .id-button .idtext {
-            font-size: 200%;
-        }
-
-        main .userpage-section .userpage-info .userpage-content .userpage-count {
-            height: 20%;
-            display: flex;
-            gap: 20px;
-            align-items: center; /* 수직 가운데 정렬 */
-        }
-
-        main .userpage-section .userpage-info .userpage-content .userpage-nickname {
-            height: 5%;
-            margin-bottom: 20px;
-        }
-
-        main .userpage-section .userpage-info .userpage-content .userpage-statusmessage {
-            height: 50%;
-
-        }
-
-        main .userpage-section .userpage-boundary {
-            margin-top: 50px;
-            margin-bottom: 50px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-self: center;
-            border-bottom: 1px solid #2f2726; /* 1px 두께의 선, 색상은 #2f2726 */
-            border-top: 1px solid #2f2726; /* 1px 두께의 선, 색상은 #2f2726 */
-        }
-
-        main .userpage-section .post_content {
-            margin-left: 5px;
-            padding-top: 10px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            width: 100%;
-            align-self: flex-start;
-            gap: 10px;
-        }
-
-        main .userpage-section .post {
-            box-sizing: border-box;
-            width: calc(33.33% - 10px);
-            /* 최대 너비 설정 */
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        main .userpage-section .post img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            margin: auto;
-        }
-
-        footer {
-            background-color: #f4f4f4;
-            height: 100px;
-            width: 80%;
-        }
-    </style>
 </head>
 <body>
 <input type="checkbox" class="checkbox" id="create">
@@ -146,9 +17,7 @@
 <input type="checkbox" class="checkbox" id="more">
 <input type="checkbox" class="checkbox" id="userinfo">
 
-<section class="userinfo-container">
-
-</section>
+<section class="userinfo-container"></section>
 <th:block th:if="${session.loginedHealer != null}">
     <section class="write-container" th:replace="~{fragment/write::write}"></section>
 </th:block>
@@ -169,55 +38,55 @@
 <th:block th:unless="${session.loginedHealer != null}">
     <article class="menubar" th:replace="~{fragment/menu::user_menu}"></article>
 </th:block>
-<section class="container">
-    <header>
+<section class="po_ab w100 h100 bg_f4 row z_i1">
+    <header class="f_g1 bg_f4">
     </header>
-    <main>
-        <section class="userpage-section">
-            <section class="userpage-info">
-                <article class="userpage-profile">
-                    <img class="profileImg" th:src="${dto.getHealer_profile()}" alt="profile">
+    <main class="bg_f4 f_g6 col_cc gap20">
+        <section class="mt20 w70 h70 col bor_rad10 box_sha555">
+            <section class="w100 hauto row mh40">
+                <article class="w30 h100 row_sc">
+                    <img class="w60 hauto mt10" th:src="${dto.getHealer_profile()}" alt="profile">
                 </article>
-                <section class="userpage-content">
-                    <article class="id-button">
-                        <label class="idtext" for="userinfo" th:text="${dto.healer_id}"></label>
+                <section class="ml20 w70 hauto col gap20">
+                    <article class="h25 row_c0 gap20">
+                        <label class="font_s20" for="userinfo" th:text="${dto.healer_id}"></label>
                         <th:block th:if="${session.loginedHealer != null}">
                             <th:block th:if="${session.loginedHealer != dto.healer_id}">
                                 <button type="button" th:text="${dto.followstat}"></button>
                                 <button type="button">메시지보내기</button>
                             </th:block>
                             <th:block th:unless="${session.loginedHealer != dto.healer_id}">
-                                <a th:href="@{/user/userpage/profile/{healer_id}(healer_id=${dto.healer_id})}">프로필
+                                <a class="gray_btn" th:href="@{/user/userpage/profile/{healer_id}(healer_id=${dto.healer_id})}">프로필
                                     수정</a>
-                                <a th:href="@{/user/userpage/myinfo/{healer_id}(healer_id=${dto.healer_id})}">내정보 수정</a>
+                                <a class="gray_btn" th:href="@{/user/userpage/myinfo/{healer_id}(healer_id=${dto.healer_id})}">내정보 수정</a>
                             </th:block>
                         </th:block>
                     </article>
-                    <article class="userpage-count">
+                    <article class="h20 row_c0 gap20">
                         <span th:text="'개시물 '+ ${dto.postcount}"></span>
                         <a href=""><span th:text="'팔로워 ' +${dto.healer_follower}"></span></a>
                         <a href=""><span th:text="'팔로우' + ${dto.healer_follow}"></span></a>
                     </article>
-                    <article class="userpage-nickname">
+                    <article class="h5 mb20">
                         <span th:text="${dto.healer_nickname}"></span>
                     </article>
-                    <article class="userpage-statusmessage">
+                    <article class="h50">
                         <span th:text="${dto.healer_statusmessage}"></span>
                     </article>
                 </section>
             </section>
-            <article class="userpage-boundary">
+            <article class="mt50 mb50 w100 row_cc bor_tp bor_bt">
                 <span>게시글</span>
             </article>
-            <section class="post_content">
+            <section class="post_contentList scrollbarnone">
                 <div class="post" th:each="item, status : ${dtoList}">
                     <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
-                        <img th:src="${item.post_image}" alt="Post 1" loading="lazy">
+                        <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
                     </a>
                 </div>
             </section>
         </section>
-        <footer>
+        <footer class="bg_f4 h100p w80">
 
         </footer>
     </main>
