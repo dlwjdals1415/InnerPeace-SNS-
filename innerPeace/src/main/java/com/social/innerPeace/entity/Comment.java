@@ -1,6 +1,5 @@
 package com.social.innerPeace.entity;
 
-import com.social.innerPeace.dto.comment.CommentDTO;
 import jakarta.persistence.*;
 import lombok.*;
 

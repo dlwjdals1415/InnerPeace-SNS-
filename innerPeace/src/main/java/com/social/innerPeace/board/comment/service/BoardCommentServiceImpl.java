@@ -1,7 +1,7 @@
 package com.social.innerPeace.board.comment.service;
 
 import com.social.innerPeace.dto.PostDTO;
-import com.social.innerPeace.dto.comment.CommentDTO;
+import com.social.innerPeace.dto.CommentDTO;
 import com.social.innerPeace.entity.Comment;
 import com.social.innerPeace.entity.Healer;
 import com.social.innerPeace.entity.Post;
@@ -12,7 +12,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,10 +28,10 @@ public class BoardCommentServiceImpl implements BoardCommentService{
             Post post = optionalPost.get();
             Comment comment = dtoToEntity(commentDTO);
             comment.setPost_no(post);
-            Healer healer = healerRepository.findByHealerEmail(commentDTO.getHealerEmail());
-            if(healer !=null){
+            Optional<Healer> healer = healerRepository.findById(commentDTO.getHealerEmail());
+            if(healer.isPresent()){
 
-                comment.setHealer_nickname(healer);
+                comment.setHealer_nickname(healer.get());
             }
             return commentRepository.save(comment).getComment_no();
         } else {
@@ -49,15 +48,5 @@ public class BoardCommentServiceImpl implements BoardCommentService{
         }
         return null;
     }
-    @Transactional
-    public PostDTO findById(Long post_no) {
-        Optional<Post> optionalPostEntity = postRepository.findById(post_no);
-        if (optionalPostEntity.isPresent()) {
-            Post post = optionalPostEntity.get();
-            PostDTO postDTO = PostDTO.toPostDTO(post);
-            return postDTO;
-        }else {
-            return null;
-        }
-    }
+
 }
