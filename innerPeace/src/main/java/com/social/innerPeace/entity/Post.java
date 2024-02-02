@@ -1,5 +1,6 @@
 package com.social.innerPeace.entity;
 
+import com.social.innerPeace.dto.PostDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,4 +47,55 @@ public class Post extends BaseEntity{
     @Builder.Default
     @OneToMany(mappedBy = "post_no",cascade = CascadeType.ALL)
     private List<Post_Like> postLikeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post_no", fetch = FetchType.LAZY)
+    private List<Comment> commentEntityList = new ArrayList<>();
+
+    public static Post toSaveEntity(PostDTO postDTO){
+        Post post = new Post();
+        post.setPost_no(post.getPost_no());
+        post.setPost_content(post.getPost_content());
+        post.setPost_image(post.getPost_image());
+        post.setMap_point_lat(post.getMap_point_lat());
+        post.setMap_point_lng(post.getMap_point_lng());
+        post.setTags(post.getTags());
+        post.setPost_writer(post.getPost_writer());
+        post.setCommentList(post.getCommentList());
+        post.setReportList(post.getReportList());
+        post.setPostLikeList(post.getPostLikeList());
+        post.setCommentEntityList(post.getCommentEntityList());
+
+
+        return post;
+    }
+    public static Post toUpdateEntity(PostDTO postDTO){
+        Post post = new Post();
+        post.setPost_no(postDTO.getPost_no());
+        post.setPost_content(postDTO.getPost_content());
+        post.setPost_image(postDTO.getPost_image());
+        post.setMap_point_lng(postDTO.getMap_point_lng());
+        post.setMap_point_lat(postDTO.getMap_point_lat());
+        post.setTags(post.getTags());
+        post.setPost_writer(post.getPost_writer());
+        post.setCommentList(post.getCommentList());
+        post.setReportList(post.getReportList());
+        post.setPostLikeList(post.getPostLikeList());
+        post.setCommentEntityList(post.getCommentEntityList());
+       return  post;
+    }
+    public static Post toSaveFileEntity(PostDTO postDTO){
+        Post post = new Post();
+        post.setPost_no(postDTO.getPost_no());
+        post.setPost_content(postDTO.getPost_content());
+        post.setPost_image(postDTO.getPost_image());
+        post.setMap_point_lng(postDTO.getMap_point_lng());
+        post.setMap_point_lat(postDTO.getMap_point_lat());
+        post.setTags(post.getTags());
+        post.setPost_writer(post.getPost_writer());
+        post.setCommentList(post.getCommentList());
+        post.setReportList(post.getReportList());
+        post.setPostLikeList(post.getPostLikeList());
+        post.setCommentEntityList(post.getCommentEntityList());
+       return  post;
+    }
 }

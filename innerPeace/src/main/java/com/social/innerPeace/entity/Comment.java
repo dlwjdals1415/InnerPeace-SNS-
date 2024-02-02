@@ -1,5 +1,6 @@
 package com.social.innerPeace.entity;
 
+import com.social.innerPeace.dto.comment.CommentDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,5 +33,6 @@ public class Comment extends BaseEntity{
     @Builder.Default
     @OneToMany(mappedBy = "report_comment",cascade = CascadeType.ALL)
     private List<Report> reportList = new ArrayList<>();
+
 
 }
