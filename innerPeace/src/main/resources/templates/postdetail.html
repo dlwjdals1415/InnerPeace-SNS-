@@ -101,6 +101,22 @@
 
     </article>
 </section>
+<section class="po_ab w100 h100 row_cc op z_i0" id="commentmenu-container">
+    <article class="po_ab w100 h100 z_i0 bg_008" onclick="comment_menu_out()"></article>
+    <input type="hidden" id="commentmenu_comment_no" value="">
+    <input type="hidden" id="commentmenu_comment_content" value="">
+    <section class="po_ab w10 hauto bor_rad20 bg_f4 z_i5 col_cc" id="comment_menu_button">
+        <button class="e0_btn w80 h40p" id="comment_modify">수정</button>
+        <button class="e0_btn w80 h40p" id="comment_delete">삭제</button>
+    </section>
+    <section class="po_ab w20 hauto bor_rad20 bg_f4 z_i0 op col_cc" id="comment_modify_section">
+        <textarea class="modify_comment_area mb20 mt20" id="comment_modify_area" placeholder="댓글입력"></textarea>
+        <article class="row_cc w80 hauto">
+            <button class="w20 h50p gray_btn mr20" id="comment_modify_cancel">취소</button>
+            <button class="w20 h50p green_btn ml20" id="comment_modify_submit">수정</button>
+        </article>
+    </section>
+</section>
 <th:block th:if="${session.loginedHealer != null}">
     <section th:replace="~{fragment/write::write}"></section>
 </th:block>
@@ -176,7 +192,7 @@
                             <article class="w5">
                                 <img class="w30p hauto" th:src="${item.profileImg}" alt="프로필">
                             </article>
-                            <article class="w95 hauto ml20 mr20 col">
+                            <article class="w80 hauto ml20 mr20 col">
                                 <span>
                                     <a th:href="@{/user/userpage/{healer_id}(healer_id=${item.healer_id})}">
                                         <span class="text_hover" th:text="${item.healer_nickname}"></span>
@@ -186,6 +202,9 @@
                                 <article class="mt10 font_s15 row_cb">
                                     <span class="regday" th:text="${item.comment_regday}"></span>
                                 </article>
+                            </article>
+                            <article class="w10 hauto">
+                                <input class="bor_none bg_f4 text_hover font_s20" type="button" value="···" th:onclick="comment_menu([[${item.comment_no}]],[[${item.comment_content}]],[[${item.healer_id}]])">
                             </article>
                         </section>
                     </section>
@@ -253,9 +272,6 @@
                 }
             });
         });
-        $('#tag_reset').click(function() {
-            $('#modify_post_tag').val('');
-        });
     });
 </script>
 <script th:inline="javascript">
@@ -283,6 +299,89 @@
             }
         });
     }
+
+    function comment_menu(comment_no,comment_content,healer_id){
+        $('#commentmenu-container').css({'z-index':'20','opacity':'1'});
+        $('#commentmenu_comment_no').val(comment_no);
+        $('#commentmenu_comment_content').val(comment_content);
+
+        var buttonsContainer = $('#comment_menu_button');
+        buttonsContainer.empty(); // 기존 내용을 비웁니다.
+
+        // healer_id가 session.loginedHealer와 같은지 확인
+        if (healer_id === session.loginedHealer) {
+            // 수정 및 삭제 버튼 추가
+            buttonsContainer.append('<button class="e0_btn w80 h40p" id="comment_modify">수정</button>');
+            buttonsContainer.append('<button class="e0_btn w80 h40p" id="comment_delete">삭제</button>');
+        } else {
+            // 신고 버튼 추가
+            buttonsContainer.append('<button class="e0_btn w80 h40p" id="comment_report">신고</button>');
+        }
+
+    }
+
+    function  comment_menu_out(){
+        $('#commentmenu-container').css({'z-index':'0','opacity':'0'});
+        $('#comment_modify_section').css({'z-index':'0','opacity':'0'});
+        $('#comment_modify_area').val('');
+    }
+
+    $('#comment_modify').click(function(){
+       $('#comment_modify_section').css({'z-index':'20','opacity':'1'});
+       $('#comment_modify_area').val($('#commentmenu_comment_content').val());
+    });
+
+    $('#comment_modify_cancel').click(function(){
+        $('#comment_modify_section').css({'z-index':'0','opacity':'0'});
+        $('#comment_modify_area').val('');
+    });
+
+    $('#comment_modify_submit').click(function(){
+        let comment_no = $('#commentmenu_comment_no').val();
+        let comment_content = $('#comment_modify_area').val();
+        let jsonObj = {'comment_no':comment_no,'comment_content':comment_content};
+        let jsonStr = JSON.stringify(jsonObj);
+        $.ajax({
+            type:"POST",
+            url:"/board/comment/modify",
+            contentType:"application/json; charset=utf-8",
+            data:jsonStr,
+            success:function(data,status,xhr){
+                if(data!=null && data!=undefined &&data.result==1){
+                    alert(data.msg);
+                    window.location.reload();
+                }else{
+                    alert('수정을하지못했습니다');
+                }
+            },
+            error:function(xhr,status,error){
+                alert('수정을하지못했습니다');
+            }
+        });
+    });
+
+    $('#comment_delete').click(function(){
+        let comment_no = $('#commentmenu_comment_no').val();
+        let jsonObj = {'comment_no':comment_no};
+        let jsonStr = JSON.stringify(jsonObj);
+        $.ajax({
+            type:"POST",
+            url:"/board/comment/remove",
+            contentType:"application/json; charset=utf-8",
+            data:jsonStr,
+            success:function(data,status,xhr){
+                if(data!=null && data!=undefined &&data.result==1){
+                    alert(data.msg);
+                    window.location.reload();
+                }else{
+                    alert('삭제를하지못했습니다');
+                }
+            },
+            error:function(xhr,status,error){
+                alert('삭제를하지못했습니다');
+            }
+        });
+    });
 </script>
 </body>
 </html>

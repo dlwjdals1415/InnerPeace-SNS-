@@ -144,4 +144,8 @@ $(document).ready(function () {
         // '#post_tags_hidden' 필드에 값을 설정
         $('#modify_post_tags_hidden').val(updatedValue);
     });
+
+    $('#tag_reset').click(function() {
+        $('#modify_post_tag').val('');
+    });
 });
