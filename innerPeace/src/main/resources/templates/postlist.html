@@ -43,14 +43,13 @@
         <article class="followList bg_f4 w100">
             <h2>followLIst</h2>
         </article>
-        <input type="hidden" id="last_post_no" th:value="${dtoList.get(dtoList.size() - 1).post_no}">
-        <article class="post_contentList">
-            <div class="post" th:each="item, status : ${dtoList}">
-                <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
-                    <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
-                </a>
-            </div>
-        </article>
+            <article class="post_contentList">
+                <div class="post" th:each="item, status : ${dtoList}">
+                    <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
+                        <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
+                    </a>
+                </div>
+            </article>
         <article class="col_cc hauto w100" id="loading">
             <div class="loadingio-spinner-reload-zv6cq6zfifd">
                 <div class="ldio-dg926s5a60v">

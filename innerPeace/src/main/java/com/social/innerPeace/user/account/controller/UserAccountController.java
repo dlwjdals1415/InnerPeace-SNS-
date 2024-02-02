@@ -1,7 +1,7 @@
 package com.social.innerPeace.user.account.controller;
 
 import com.social.innerPeace.ip_enum.Role;
-import com.social.innerPeace.dto.SignupDTO;
+import com.social.innerPeace.dto.HealerDTO;
 import com.social.innerPeace.user.account.service.UserAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class UserAccountController {
     }
 
     @PostMapping("/signup")
-    public String register(SignupDTO dto, RedirectAttributes redirectAttributes){
+    public String register(HealerDTO dto, RedirectAttributes redirectAttributes){
         log.info("register dto:" + dto);
         String email = userAccountService.register(dto, Role.ROLE_USER);
         if(email.equals("duplicated")){

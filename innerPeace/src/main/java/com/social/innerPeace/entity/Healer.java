@@ -18,7 +18,7 @@ import java.util.List;
 public class Healer extends BaseEntity{
     @Id
     @Column(name = "healer_email")
-    private String healerEmail;
+    private String healer_email;
 
     private String healer_pw;
 

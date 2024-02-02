@@ -126,7 +126,7 @@
                 </article>
                 <th:block th:if="${session.loginedHealer != null}">
                     <article class="follow_button">
-                        <button type="button" th:text="${item.followstas}"></button>
+                        <button type="button" th:text="${item.getFollowstatus}"></button>
                     </article>
                 </th:block>
             </section>
