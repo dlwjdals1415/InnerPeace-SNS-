@@ -30,15 +30,15 @@
             </article>
             <article class="w100 hauto col_c0 mb20">
                 <form class="w100 h100 col_c0" th:action="@{/user/account/signup}" method="post">
-                    <input class="w80 h30p mt10 text_input pad10" type="text" name="email" id="healer_email" placeholder="이메일" required>
-                    <input class="w80 h30p mt10 text_input pad10" type="password" name="password" id="healer_pw" placeholder="비밀번호"
+                    <input class="w80 h30p mt10 text_input pad10" type="text" name="healer_email" id="healer_email" placeholder="이메일" required>
+                    <input class="w80 h30p mt10 text_input pad10" type="password" name="healer_pw" id="healer_pw" placeholder="비밀번호"
                            required>
                     <input class="w80 h30p mt10 text_input pad10" type="password" name="password_confirm" id="password_confirm"
                            placeholder="비밀번호 확인" required>
-                    <input class="w80 h30p mt10 text_input pad10" type="text" name="name" id="healer_name" placeholder="이름" required>
-                    <input class="w80 h30p mt10 text_input pad10" type="text" name="phone" id="healer_phone" placeholder="전화번호" required>
+                    <input class="w80 h30p mt10 text_input pad10" type="text" name="healer_name" id="healer_name" placeholder="이름" required>
+                    <input class="w80 h30p mt10 text_input pad10" type="text" name="healer_phone" id="healer_phone" placeholder="전화번호" required>
                     <div class="birthinfo">생년월일</div>
-                    <input class="w80 h30p mt10 text_input pad10" type="date" name="birth" id="healer_birth" required>
+                    <input class="w80 h30p mt10 text_input pad10" type="date" name="healer_birth" id="healer_birth" required>
                     <article class="w80 h20p row_c0 mb10 mt10">
                         <input class="checkbox_style" id="checkbox_all" name="checkbox_all" type="checkbox">
                         <label for="checkbox_all">이용약관, 개인정보 수집 및 이용, 광고성 정보 수신(선택)에 모두 동의합니다.</label>
@@ -56,7 +56,7 @@
                         <label for="checkbox_privacy">개인정보 수집 및 이용 동의 (필수)</label>
                     </article>
                     <article class="w80 h20p row_c0 mb10">
-                        <input class="checkbox_style" id="checkbox_ad_agreement" name="checkbox_ad_agreement" type="checkbox">
+                        <input class="checkbox_style" id="checkbox_ad_agreement" name="ad_agree" type="checkbox">
                         <label for="checkbox_ad_agreement">광고성 정보 수신 동의 (선택)</label>
                     </article>
                     <input class="green_btn w90 h50p" name="submit" type="submit" value="회원가입">

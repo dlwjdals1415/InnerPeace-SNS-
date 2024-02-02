@@ -16,6 +16,7 @@ class InnerPeaceApplicationTests {
 	private BoardCommentService boardCommentService;
 	@Test
 	void contextLoads() {
+
 	}
 
 	@Test

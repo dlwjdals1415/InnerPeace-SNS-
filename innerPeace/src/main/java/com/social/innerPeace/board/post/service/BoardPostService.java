@@ -1,32 +1,35 @@
 package com.social.innerPeace.board.post.service;
 
 import com.social.innerPeace.dto.PostDTO;
-import com.social.innerPeace.dto.WriteDTO;
 import com.social.innerPeace.entity.Post;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
+import java.util.List;
 
 public interface BoardPostService {
 
-    String write(WriteDTO dto);
+    String write(PostDTO dto);
 
+    PostDTO findImagename(Long post_no);
 
-    default Post dtoToEntity(WriteDTO dto){
+    List<PostDTO> findAllPostsWithBase64Thumbnail();
+
+    PostDTO findByPostNo(Long postNo);
+
+    default Post dtoToEntity(PostDTO dto){
         Post entity = Post.builder()
                 .tags(Collections.singletonList(dto.getPost_tags()))
-                .post_image(dto.getDb_post_image())
+                .post_image(dto.getPost_image())
                 .post_content(dto.getPost_content())
-                .map_point_lng(dto.getPost_map_lng())
-                .map_point_lat(dto.getPost_map_lat())
                 .build();
         return entity;
     }
 
     default PostDTO entityToDto(Post entity){
         PostDTO dto = PostDTO.builder()
-                .map_point_lng(entity.getMap_point_lng())
-                .map_point_lat(entity.getMap_point_lat())
+                .post_no(entity.getPostNo())
+                .map_point_lng(String.valueOf(entity.getMap_point_lng()))
+                .map_point_lat(String.valueOf(entity.getMap_point_lat()))
                 .post_content(entity.getPost_content())
                 .post_image(entity.getPost_image())
                 .tags(entity.getTags())

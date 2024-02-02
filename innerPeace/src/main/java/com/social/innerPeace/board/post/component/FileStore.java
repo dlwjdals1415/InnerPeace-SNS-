@@ -1,7 +1,7 @@
 package com.social.innerPeace.board.post.component;
 
 
-import com.social.innerPeace.dto.WriteDTO;
+import com.social.innerPeace.dto.PostDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -17,42 +17,32 @@ public class FileStore {
     @Value("${thumbnail.dir}")
     private String fileDir2;
 
-    public String getFullPath(String filename) {
-        return fileDir + filename;
-    }
 
-    public String getFullPath2(String filename) {
-        return fileDir2 + filename;
-    }
-
-    public WriteDTO storeFile(WriteDTO writeDTO) throws IOException{
-        if (writeDTO == null) {
+    public PostDTO storeFile(PostDTO postDTO) throws IOException{
+        if (postDTO == null) {
             return null;
         }
         //이미지 이름
         String uuid = UUID.randomUUID().toString();
         //이미지저장후 이미지 이름만 dto에저장
-        String post_image = writeDTO.getPost_image().getOriginalFilename();
-        String list_image = createStoreFileName(post_image,uuid);
-        String fullpath = getFullPath(list_image);
-        writeDTO.getPost_image().transferTo(new File(fullpath));
-        writeDTO.setDb_post_image(list_image);
+        String post_image = postDTO.getPost_image_file().getOriginalFilename();
+        String filename = createStoreFileName(post_image,uuid);
+        postDTO.getPost_image_file().transferTo(new File(fileDir + filename));
+        postDTO.setPost_image(filename);
         //썸네일저장후 썸네일 이 름만 dto에 저장
-        byte[] base64Bytes = writeDTO.getPost_image_thumbnail().getBytes();
+        byte[] base64Bytes = postDTO.getPost_image_thumbnail().getBytes();
         String base64ImageString = new String(base64Bytes, "UTF-8");
         base64ImageString = base64ImageString.replace("data:image/png;base64,", "");
         byte[] imageBytes = Base64.getDecoder().decode(base64ImageString);
-        writeDTO.setPost_image_thumbnail(uuid+".png");
 
-        try (FileOutputStream fos = new FileOutputStream(getFullPath2(uuid+".png"))) {
+        try (FileOutputStream fos = new FileOutputStream(fileDir2+filename)) {
             fos.write(imageBytes); // 파일에 바이트 배열 쓰기
         }
-        return writeDTO;
+        return postDTO;
     }
 
     private String createStoreFileName(String originalFilename,String uuid) {
-        String ext = extractExt(originalFilename);
-        return uuid + "." + ext;
+        return uuid +"."+ extractExt(originalFilename);
     }
 
     private String extractExt(String originalFilename) {

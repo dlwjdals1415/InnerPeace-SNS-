@@ -43,15 +43,14 @@
         <article class="followList bg_f4 w100">
             <h2>followLIst</h2>
         </article>
-        <input type="hidden" id="last_post_no" th:value="${dtoList.get(dtoList.size() - 1).post_no}">
-        <article class="post_contentList">
-            <div class="post" th:each="item, status : ${dtoList}">
-                <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
-                    <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
-                </a>
-            </div>
-        </article>
-        <article class="col_cc hauto w100 dis_none op" id="loading">
+            <article class="post_contentList">
+                <div class="post" th:each="item, status : ${dtoList}">
+                    <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
+                        <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
+                    </a>
+                </div>
+            </article>
+        <article class="col_cc hauto w100" id="loading">
             <div class="loadingio-spinner-reload-zv6cq6zfifd">
                 <div class="ldio-dg926s5a60v">
                     <div>
@@ -84,10 +83,9 @@
 
         // 새로운 타이머 설정
         scrollTimeout = setTimeout(function() {
-            if (element.scrollTop() + element.innerHeight() >= element[0].scrollHeight - 10) {
-                $("#loading").css({"display": "flex", "opacity": "1"});
+            if (element.scrollTop() + element.innerHeight() >= element[0].scrollHeight - 30) {
                 element.scrollTop(element.prop("scrollHeight"));
-                // 20초 지연 후의 로직을 여기에 추가
+                // 2초 지연 후의 로직을 여기에 추가
                 setTimeout(function() {
                     var post_no = $('#last_post_no').val();
 
@@ -133,10 +131,6 @@
                         error: function(error) {
                             // 에러 처리
                         },
-                        complete: function() {
-                            // 로딩 화면 숨기기
-                            $("#loading").css({"display": "none", "opacity": "0"});
-                        }
                     });
                 }, 2000); // 20초 지연
             }

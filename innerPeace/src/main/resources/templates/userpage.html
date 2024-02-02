@@ -7,7 +7,6 @@
     <link rel='stylesheet' type='text/css' media='screen' href='css/base.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/write.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/sidebar.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='css/userpage.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/map.css'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 </head>
@@ -38,27 +37,30 @@
 <th:block th:unless="${session.loginedHealer != null}">
     <article class="menubar" th:replace="~{fragment/menu::user_menu}"></article>
 </th:block>
-<section class="po_ab w100 h100 bg_f4 row z_i1">
+<section class="po_ab w100 hauto bg_f4 row z_i1" id="userpage-container">
     <header class="f_g1 bg_f4">
     </header>
-    <main class="bg_f4 f_g6 col_cc gap20 scrollbarnone overflow_y">
-        <section class="mt20 w70 h70 col bor_rad10 box_sha555 top">
+    <main class="bg_f4 f_g6 col_cc gap20 hauto">
+        <input type="hidden" th:value="${'@' + dto.healer_id}" id="healer_id">
+        <section class="po_ab mt20 w70 hauto col_cs bor_rad10 box_sha555 top overflow_y">
             <section class="w100 hauto row mh40">
                 <article class="w30 hauto row_sc">
                     <img class="w60 hauto mt10" th:src="${dto.getHealer_profile()}" alt="profile">
                 </article>
                 <section class="ml20 w70 hauto col gap20">
                     <article class="h25 row_c0 gap20">
-                        <label class="font_s20" for="userinfo" th:text="${dto.healer_id}"></label>
+                        <label class="font_s20" for="userinfo" th:text="${dto.healer_nickname}"></label>
                         <th:block th:if="${session.loginedHealer != null}">
                             <th:block th:if="${session.loginedHealer != dto.healer_id}">
                                 <button type="button" th:text="${dto.followstat}"></button>
                                 <button type="button">메시지보내기</button>
                             </th:block>
                             <th:block th:unless="${session.loginedHealer != dto.healer_id}">
-                                <a class="gray_btn" th:href="@{/user/userpage/profile/{healer_id}(healer_id=${dto.healer_id})}">프로필
+                                <a class="gray_btn"
+                                   th:href="@{/user/userpage/profile/{healer_id}(healer_id=${dto.healer_id})}">프로필
                                     수정</a>
-                                <a class="gray_btn" th:href="@{/user/userpage/myinfo/{healer_id}(healer_id=${dto.healer_id})}">내정보 수정</a>
+                                <a class="gray_btn"
+                                   th:href="@{/user/userpage/myinfo/{healer_id}(healer_id=${dto.healer_id})}">내정보 수정</a>
                             </th:block>
                         </th:block>
                     </article>
@@ -68,29 +70,40 @@
                         <a href=""><span th:text="'팔로우' + ${dto.healer_follow}"></span></a>
                     </article>
                     <article class="hauto mb20">
-                        <span th:text="${dto.healer_nickname}"></span>
+                        <span th:text="${'@' + dto.healer_id}"></span>
                     </article>
                     <article class="hauto">
                         <span th:text="${dto.healer_statusmessage}"></span>
                     </article>
                 </section>
             </section>
+            <article class="mt50 mb50 w100 row_cc bor_tp bor_bt">
+                <span>게시글</span>
+            </article>
+            <div class="w100 hauto ml10">
+                <section class="post_contentList">
+                    <input type="hidden" id="last_post_no" th:value="${dtoList.get(dtoList.size() - 1).post_no}">
+                    <div class="post" th:each="item, status : ${dtoList}">
+                        <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
+                            <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
+                        </a>
+                    </div>
+                </section>
+                <article class="col_cc hauto w100" id="loading">
+                    <div class="loadingio-spinner-reload-zv6cq6zfifd">
+                        <div class="ldio-dg926s5a60v">
+                            <div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <footer class="bg_f4 h100p w80">
+            </footer>
         </section>
-        <article class="mt50 mb50 w100 row_cc bor_tp bor_bt">
-            <span>게시글</span>
-        </article>
-        <div class="w60 hauto">
-            <section class="post_contentList">
-                <div class="post" th:each="item, status : ${dtoList}">
-                    <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
-                        <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
-                    </a>
-                </div>
-            </section>
-        </div>
-        <footer class="bg_f4 h100p w80">
-
-        </footer>
     </main>
 </section>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -98,5 +111,82 @@
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9cf7f221de3543e0bd1ed40d14a3a704&libraries=services"></script>
 <script src="js/map.js"></script>
 <script src="js/write.js"></script>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        var scrollTimeout; // 타이머를 저장할 변수
+        $(window).scroll(function () {
+
+            if (scrollTimeout) {
+                clearTimeout(scrollTimeout);
+            }
+            // 문서의 전체 높이
+            var documentHeight = $(document).height();
+
+            // 윈도우(브라우저 창)의 높이와 스크롤된 높이를 더한 값
+            var scrollPosition = $(window).height() + $(window).scrollTop();
+
+            // 스크롤이 페이지 바닥에 도달했는지 확인
+            scrollTimeout = setTimeout(function () {
+                if (scrollPosition >= documentHeight - 30) {
+                    // 페이지 바닥에 도달했을 때의 처리
+                    if (scrollTimeout) {
+                        clearTimeout(scrollTimeout);
+                    }
+                    setTimeout(function () {
+                        var post_no = $('#last_post_no').val();
+                        var search = $('#healer_id').val();
+                        console.log(search);
+                        $.ajax({
+                            url: '/board/post/search_scroll',
+                            type: 'POST',
+                            data: {
+                                "post_no": post_no,
+                                "search": search
+                            },
+                            success: function (response) {
+                                // 성공적으로 데이터를 받아온 후 할 작업
+                                // 여기에 데이터 처리 로직 추가
+                                response.forEach(function (item) {
+                                    // 각 항목에 대해 수행할 작업
+                                    // 예를 들어, 받아온 데이터를 이용하여 리스트 아이템을 생성하고 페이지에 추가
+                                    var postDetailUrl = '/board/post/detail/' + item.post_no;
+                                    // 이미지 태그 생성
+                                    var imgTag = $('<img>', {
+                                        "src": item.post_image_thumbnail,
+                                        "alt": "Post " + item.post_no,
+                                        "loading": "lazy",
+                                    });
+                                    // a 태그 생성 및 href 속성 설정
+                                    var aTag = $('<a>', {
+                                        "href": postDetailUrl
+                                    }).append(imgTag); // 이미지 태그를 a 태그 안에 넣기
+
+                                    // div 태그 생성 및 a 태그 포함
+                                    var divTag = $('<div>', {
+                                        "class": "post" // div에 클래스 추가
+                                    }).append(aTag); // a 태그를 div 태그 안에 넣기
+
+                                    // 생성된 div 태그를 페이지의 특정 요소에 추가
+                                    $('.post_contentList').append(divTag);
+                                });
+
+                                // 모든 데이터를 페이지에 추가한 후, post_no 값을 업데이트(다음 요청을 위해)
+                                if (response.length > 0) {
+                                    var lastPostNo = response[response.length - 1].post_no;
+                                    $('#last_post_no').val(lastPostNo);
+                                }
+                            },
+                            error: function (error) {
+                                // 에러 처리
+                            },
+                        });
+                    }, 2000); // 20초 지연
+                }
+            }, 1000); // 스크롤 이벤트의 1초 지연
+            // 여기에 추가적인 로직을 작성할 수 있습니다. (예: 추가 데이터 로드 등)
+
+        });
+    });
+</script>
 </body>
 </html>

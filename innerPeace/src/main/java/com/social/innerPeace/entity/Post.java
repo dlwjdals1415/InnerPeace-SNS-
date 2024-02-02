@@ -18,7 +18,8 @@ import java.util.List;
 public class Post extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long post_no;
+    @JoinColumn(name = "post_no")
+    private Long postNo;
 
     @Column(length = 1500,nullable = false)
     private String post_content;
