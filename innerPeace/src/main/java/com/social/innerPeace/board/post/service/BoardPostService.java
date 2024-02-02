@@ -14,9 +14,9 @@ public interface BoardPostService {
 
     PosTListDTO findImagename(Long post_no);
 
-    List<Post> findAll();
-
     List<PosTListDTO> findAllPostsWithBase64Thumbnail();
+
+    PosTListDTO findByPostNo(Long postNo);
 
     default Post dtoToEntity(WriteDTO dto){
         Post entity = Post.builder()
@@ -29,14 +29,15 @@ public interface BoardPostService {
         return entity;
     }
 
-    default PostDTO entityToDto(Post entity){
-        PostDTO dto = PostDTO.builder()
+    default PosTListDTO entityToDto(Post entity){
+        PosTListDTO dto = PosTListDTO.builder()
+                .post_no(entity.getPostNo())
                 .map_point_lng(entity.getMap_point_lng())
                 .map_point_lat(entity.getMap_point_lat())
                 .post_content(entity.getPost_content())
                 .post_image(entity.getPost_image())
                 .tags(entity.getTags())
-                .post_writer(entity.getPost_writer())
+                .post_writer(String.valueOf(entity.getPost_writer()))
                 .build();
         return dto;
     }

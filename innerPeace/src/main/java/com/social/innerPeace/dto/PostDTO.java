@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class PostDTO {
-    private Long post_no;
+    private Long postNo;
     private String post_content;
     private String post_image;
     private float map_point_lat;

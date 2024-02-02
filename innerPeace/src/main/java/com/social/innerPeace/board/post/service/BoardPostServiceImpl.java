@@ -5,11 +5,13 @@ import com.social.innerPeace.dto.PosTListDTO;
 import com.social.innerPeace.dto.WriteDTO;
 import com.social.innerPeace.entity.Healer;
 import com.social.innerPeace.entity.Post;
+import com.social.innerPeace.entity.Post_Like;
 import com.social.innerPeace.repository.HealerRepository;
 import com.social.innerPeace.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -59,19 +61,14 @@ public class BoardPostServiceImpl implements BoardPostService{
                 .build();
         return dto;
     }
-    @Override
-    public List<Post> findAll(){
-        List<Post> post = postRepository.findAll();
-        return postRepository.findAll();
-    }
 
     @Override
     public List<PosTListDTO> findAllPostsWithBase64Thumbnail() {
-        List<Post> posts = findAll().stream().limit(36).collect(Collectors.toList());
+        List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "postNo")).stream().limit(36).collect(Collectors.toList());
         List<PosTListDTO> dtoList = new ArrayList<>();
 
         for (Post post : posts) {
-            String image = findImagename(post.getPost_no()).getPost_image();
+            String image = findImagename(post.getPostNo()).getPost_image();
             String imagePath = thumbnail_dir + image;
             String base64String = null;
             try {
@@ -82,7 +79,7 @@ public class BoardPostServiceImpl implements BoardPostService{
             }
             PosTListDTO dto = PosTListDTO
                     .builder()
-                    .post_no(post.getPost_no())
+                    .post_no(post.getPostNo())
                     .post_image_thumbnail("data:image/png;base64," + base64String)
                     .build();
             dtoList.add(dto);
@@ -104,5 +101,16 @@ public class BoardPostServiceImpl implements BoardPostService{
     // 바이트 배열을 Base64로 인코딩하는 메서드
     private static String encodeBytesToBase64(byte[] bytes) {
         return Base64.getEncoder().encodeToString(bytes);
+    }
+
+    @Override
+    public PosTListDTO findByPostNo(Long postNo){
+        Optional<Post> optionalPost = postRepository.findById(postNo);
+        if(optionalPost.isPresent()){
+            Post post = optionalPost.get();
+            return entityToDto(post);
+        }
+
+        return null;
     }
 }
