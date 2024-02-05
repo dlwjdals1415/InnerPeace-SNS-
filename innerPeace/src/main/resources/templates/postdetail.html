@@ -209,8 +209,8 @@
                             </article>
                             <article class="w80 hauto ml20 mr20 col">
                                 <span>
-                                    <a th:href="@{/user/userpage/{healer_id}(healer_id=${item.healer_id})}">
-                                        <span class="text_hover" th:text="${item.healer_nickname}"></span>
+                                    <a th:href="@{/user/userpage/{healer_id}(healer_id=${item.nickName})}">
+                                        <span class="text_hover" th:text="${item.nickName}"></span>
                                     </a>
                                     <span th:text="'  ' + ${item.comment_content}"></span>
                                 </span>
@@ -221,7 +221,7 @@
                             <article class="w10 hauto">
                                 <th:block th:if="${session.loginedHealer != null}">
                                     <input class="bor_none bg_e0 text_hover font_s20" type="button" value="···"
-                                           th:onclick="comment_menu([[${item.comment_no}]],[[${item.comment_content}]],[[${item.healer_id}]])">
+                                           th:onclick="comment_menu([[${item.comment_no}]],[[${item.comment_content}]],[[${item.nickName}]])">
                                 </th:block>
                             </article>
                         </section>
