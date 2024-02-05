@@ -34,7 +34,7 @@ public class BoardPostServiceImpl implements BoardPostService{
     FileStore fileStore;
     @Override
     public String write(PostDTO dto) {
-        Optional<Healer> optionalHealer = healerRepository.findById(dto.getPost_writer().getHealer_email());
+        Optional<Healer> optionalHealer = healerRepository.findById(dto.getPost_writer());
         if(optionalHealer.isPresent()){
             Post post;
             try {

@@ -24,7 +24,12 @@ public class PostDTO {
     private String map_point_lng;
     private List<String> tags;
     private String post_tags;
-    private Healer post_writer;
+    private Healer healer;
+    private String post_writer;
     private String likeStatus;
     private LocalDate post_regday;
+    private String followstat;
+    private int likes;
+    private String likeposition;
+    private String profileImg;
 }

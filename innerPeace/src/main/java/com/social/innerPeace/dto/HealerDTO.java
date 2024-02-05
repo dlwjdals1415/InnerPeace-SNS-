@@ -22,4 +22,8 @@ public class HealerDTO {
     private String haeler_profile_image;
     private String healer_statusmessage;
     private List<String> ad_agree;
+    private String follow_status;
+    private Integer post_count;
+    private Integer healer_follower;
+    private Integer healer_follow;
 }

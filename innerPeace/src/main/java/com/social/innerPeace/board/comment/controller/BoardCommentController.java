@@ -16,8 +16,6 @@ import java.util.List;
 public class BoardCommentController {
     private final BoardCommentService boardCommentService;
 
-
-
     @PostMapping("/save")
 
     public ResponseEntity save(@ModelAttribute CommentDTO commentDTO, @SessionAttribute(name = "logined Healer") String healer) {

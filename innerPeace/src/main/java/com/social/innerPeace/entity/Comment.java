@@ -33,5 +33,4 @@ public class Comment extends BaseEntity{
     @OneToMany(mappedBy = "report_comment",cascade = CascadeType.ALL)
     private List<Report> reportList = new ArrayList<>();
 
-
 }

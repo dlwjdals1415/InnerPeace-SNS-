@@ -30,6 +30,10 @@ public class HealerDetails implements UserDetails {
         return healer.getHealer_email();
     }
 
+    public String getHealer_nickname(){
+        return healer.getHealer_nickname();
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

@@ -1,5 +1,6 @@
 package com.social.innerPeace.handler;
 
+import com.social.innerPeace.detail.HealerDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,9 +23,9 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         setDefaultTargetUrl("/board/post/list");
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        HealerDetails HealerDetails = (HealerDetails) authentication.getPrincipal();
         HttpSession session = request.getSession();
-        session.setAttribute("loginedHealer",userDetails.getUsername());
+        session.setAttribute("loginedHealer",HealerDetails.getHealer_nickname());
         super.onAuthenticationSuccess(request,response,authentication);
     }
 

@@ -3,6 +3,7 @@ package com.social.innerPeace.board.post.service;
 import com.social.innerPeace.dto.PostDTO;
 import com.social.innerPeace.entity.Post;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,7 +34,8 @@ public interface BoardPostService {
                 .post_content(entity.getPost_content())
                 .post_image(entity.getPost_image())
                 .tags(entity.getTags())
-                .post_writer(entity.getPost_writer())
+                .post_writer(entity.getPost_writer().getHealer_nickname())
+                .post_regday(LocalDate.from(entity.getReg_date()))
                 .build();
         return dto;
     }

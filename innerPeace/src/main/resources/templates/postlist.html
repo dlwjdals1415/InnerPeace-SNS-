@@ -9,7 +9,6 @@
     <link rel='stylesheet' type='text/css' media='screen' href='css/write.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/sidebar.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/postlist.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='css/map.css'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 </head>
 <body>
@@ -28,7 +27,7 @@
 <article class="searchbar" th:replace="~{fragment/searchbar::searchbar}">
 </article>
 <th:block th:if="${session.loginedHealer != null}">
-    <section class="map-section" th:replace="~{fragment/map::map-section}"></section>
+    <section class="map-section" th:replace="~{fragment/writeMap::map-section}"></section>
 </th:block>
 <th:block th:if="${session.loginedHealer != null}">
     <article class="menubar" th:replace="~{fragment/menu::healer_menu}"></article>
@@ -44,6 +43,7 @@
             <h2>followLIst</h2>
         </article>
             <article class="post_contentList">
+                <input type="hidden" id="last_post_no" th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[0].post_no : ''}">
                 <div class="post" th:each="item, status : ${dtoList}">
                     <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
                         <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
@@ -68,7 +68,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9cf7f221de3543e0bd1ed40d14a3a704&libraries=services"></script>
-<script src="js/map.js"></script>
+<script src="js/writeMap.js"></script>
 <script src="js/write.js"></script>
 <script th:inline="javascript">
     var scrollTimeout; // 타이머를 저장할 변수

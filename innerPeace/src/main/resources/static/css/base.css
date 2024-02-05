@@ -208,6 +208,10 @@ body {
     margin-top: 50px;
 }
 
+.mt100{
+    margin-top: 100px;
+}
+
 .mb10 {
     margin-bottom: 10px;
 }
@@ -336,6 +340,10 @@ body {
     width: 30px;
 }
 
+.wauto{
+    width: auto;
+}
+
 .w100p {
     width: 100px;
 }
@@ -421,6 +429,11 @@ body {
 
 #more:checked ~ .menubar {
     left: 0%;
+}
+
+#detail_map:checked ~ #detailMap {
+    z-index: 10;
+    opacity: 1;
 }
 
 .checkbox {
