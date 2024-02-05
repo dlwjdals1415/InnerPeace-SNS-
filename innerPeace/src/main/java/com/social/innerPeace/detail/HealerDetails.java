@@ -31,7 +31,7 @@ public class HealerDetails implements UserDetails {
     }
 
     public String getHealer_nickname(){
-        return healer.getHealer_nickname();
+        return healer.getHealerNickName();
     }
 
     @Override

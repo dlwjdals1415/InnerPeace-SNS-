@@ -1,5 +1,5 @@
 // Get the map-section element
-var mapSection = $('.map-section');
+var mapSection = $('#map_section');
 var latlng; // 전역 변수로 선언
 // Add a click event listener to the map-search button
 $('#map-search-btn').on('click', function () {
@@ -98,13 +98,13 @@ $('#map-search-btn').on('click', function () {
       }
     }
   }
-  $('.map-section').on('click', '#map-confirm', function () {
+  $('#map_section').on('click', '#map-confirm', function () {
     var infoDiv = document.getElementById('address');
     infoDiv.innerHTML = $('#centerAddr').text();
     mapSection.css({"z-index": "0", "opacity": "0"});
   });
 
-  $('.map-section').on('click', '#map-cancel', function () {
+  $('#map_section').on('click', '#map-cancel', function () {
     $('#post_map_lat').val('');
     $('#post_map_lng').val('');
     var infoDiv = document.getElementById('address');

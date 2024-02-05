@@ -9,9 +9,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-@Setter
-@Getter
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class CommentDTO {
     private Long comment_no;
@@ -21,15 +20,5 @@ public class CommentDTO {
     private String nickName;
     private LocalDate comment_regday;
     private String profileImg;
-
-    public static Comment toCommentDTO(Comment comment, Long comment_no) {
-        Comment commentDTO = new Comment();
-        commentDTO.setComment_content(comment.getComment_content());
-        commentDTO.setPost_no(comment.getPost_no());
-
-
-        return commentDTO;
-    }
-
 
 }

@@ -12,13 +12,12 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/comment")
+@RequestMapping("/board/comment")
 public class BoardCommentController {
     private final BoardCommentService boardCommentService;
 
-    @PostMapping("/save")
-
-    public ResponseEntity save(@ModelAttribute CommentDTO commentDTO, @SessionAttribute(name = "logined Healer") String healer) {
+    @PostMapping("/write")
+    public ResponseEntity save(@RequestBody CommentDTO commentDTO, @SessionAttribute(name = "loginedHealer") String healer) {
         System.out.println("commentDTO = " + commentDTO);
         if (healer==null) {
             return null;
@@ -26,8 +25,7 @@ public class BoardCommentController {
         commentDTO.setHealerEmail(healer);
         Long saveResult = boardCommentService.save(commentDTO);
         if (saveResult != null) {
-            List<CommentDTO> commentDTOList = boardCommentService.findAll(commentDTO.getPost_no());
-            return new ResponseEntity<>(commentDTOList, HttpStatus.OK);
+            return ResponseEntity.ok(saveResult);
         } else {
             return new ResponseEntity<>("해당 게시글이 존재하지 않습니다",HttpStatus.NOT_FOUND);
         }

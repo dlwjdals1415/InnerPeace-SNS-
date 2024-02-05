@@ -23,7 +23,7 @@ public interface BoardCommentService {
         CommentDTO dto = CommentDTO.builder()
                 .post_no(entity.getPost_no().getPostNo())
                 .healerEmail(entity.getHealer_nickname().getHealer_email())
-                .nickName(entity.getHealer_nickname().getHealer_nickname())
+                .nickName(entity.getHealer_nickname().getHealerNickName())
                 .comment_content(entity.getComment_content())
                 .build();
         return dto;

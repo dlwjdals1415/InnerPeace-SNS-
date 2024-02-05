@@ -34,7 +34,7 @@ public interface BoardPostService {
                 .post_content(entity.getPost_content())
                 .post_image(entity.getPost_image())
                 .tags(entity.getTags())
-                .post_writer(entity.getPost_writer().getHealer_nickname())
+                .post_writer(entity.getPost_writer().getHealerNickName())
                 .post_regday(LocalDate.from(entity.getReg_date()))
                 .build();
         return dto;

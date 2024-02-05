@@ -28,10 +28,10 @@ public class BoardCommentServiceImpl implements BoardCommentService{
             Post post = optionalPost.get();
             Comment comment = dtoToEntity(commentDTO);
             comment.setPost_no(post);
-            Optional<Healer> healer = healerRepository.findById(commentDTO.getHealerEmail());
-            if(healer.isPresent()){
+            Healer healer = healerRepository.findByHealerNickName(commentDTO.getHealerEmail());
+            if(healer != null){
 
-                comment.setHealer_nickname(healer.get());
+                comment.setHealer_nickname(healer);
             }
             return commentRepository.save(comment).getComment_no();
         } else {

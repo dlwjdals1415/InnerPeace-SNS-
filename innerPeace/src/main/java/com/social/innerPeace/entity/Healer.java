@@ -37,7 +37,7 @@ public class Healer extends BaseEntity{
     private String healer_randomcode;
 
     @Column(length = 30, nullable = false)
-    private String healer_nickname;
+    private String healerNickName;
 
     @Column(length = 1)
     private String healer_gender;
