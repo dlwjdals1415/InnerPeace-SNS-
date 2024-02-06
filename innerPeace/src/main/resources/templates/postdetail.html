@@ -112,6 +112,8 @@
     <input type="hidden" id="commentmenu_comment_no" value="">
     <input type="hidden" id="commentmenu_comment_content" value="">
     <section class="po_ab w10 hauto bor_rad20 bg_f4 z_i5 col_cc" id="comment_menu_button">
+        <button class="e0_btn w80 h40p" id="comment_modify">수정</button>
+        <button class="e0_btn w80 h40p" id="comment_delete">삭제</button>
     </section>
     <section class="po_ab w20 hauto bor_rad20 bg_f4 z_i0 op col_cc" id="comment_modify_section">
         <textarea class="modify_comment_area mb20 mt20" id="comment_modify_area" placeholder="댓글입력"></textarea>
@@ -370,21 +372,50 @@
         }
 
     }
-
+</script>
+<script>
     function comment_menu_out() {
         $('#commentmenu-container').css({'z-index': '0', 'opacity': '0'});
         $('#comment_modify_section').css({'z-index': '0', 'opacity': '0'});
-        $('#comment_modify_area').val('');
+        $('#comment_modify_area').val('');comment_modify_section
     }
 
-    $('#comment_modify').click(function () {
+    $('#comment_menu_button').on('click', '#comment_modify', function() {
         $('#comment_modify_section').css({'z-index': '20', 'opacity': '1'});
         $('#comment_modify_area').val($('#commentmenu_comment_content').val());
     });
 
-    $('#comment_modify_cancel').click(function () {
+    $('#comment_menu_button').on('click', '#comment_modify_cancel', function() {
         $('#comment_modify_section').css({'z-index': '0', 'opacity': '0'});
         $('#comment_modify_area').val('');
+    });
+
+    $('#comment_menu_button').on('click', '#comment_delete', function() {
+        // 삭제 버튼에 대한 이벤트 핸들러 로직
+        let comment_no = $('#commentmenu_comment_no').val();
+        let jsonObj = {'comment_no': comment_no};
+        let jsonStr = JSON.stringify(jsonObj);
+        $.ajax({
+            type: "POST",
+            url: "/board/comment/remove",
+            contentType: "application/json; charset=utf-8",
+            data: jsonStr,
+            success: function (data, status, xhr) {
+                if (data != null && data != undefined && data.result == 1) {
+                    alert(data.msg);
+                    window.location.reload();
+                } else {
+                    alert('삭제를하지못했습니다');
+                }
+            },
+            error: function (xhr, status, error) {
+                alert('삭제를하지못했습니다');
+            }
+        });
+    });
+
+    $('#comment_menu_button').on('click', '#comment_report', function() {
+        // 신고 버튼에 대한 이벤트 핸들러 로직
     });
 
     $('#comment_modify_submit').click(function () {
@@ -407,29 +438,6 @@
             },
             error: function (xhr, status, error) {
                 alert('수정을하지못했습니다');
-            }
-        });
-    });
-
-    $('#comment_delete').click(function () {
-        let comment_no = $('#commentmenu_comment_no').val();
-        let jsonObj = {'comment_no': comment_no};
-        let jsonStr = JSON.stringify(jsonObj);
-        $.ajax({
-            type: "POST",
-            url: "/board/comment/remove",
-            contentType: "application/json; charset=utf-8",
-            data: jsonStr,
-            success: function (data, status, xhr) {
-                if (data != null && data != undefined && data.result == 1) {
-                    alert(data.msg);
-                    window.location.reload();
-                } else {
-                    alert('삭제를하지못했습니다');
-                }
-            },
-            error: function (xhr, status, error) {
-                alert('삭제를하지못했습니다');
             }
         });
     });
