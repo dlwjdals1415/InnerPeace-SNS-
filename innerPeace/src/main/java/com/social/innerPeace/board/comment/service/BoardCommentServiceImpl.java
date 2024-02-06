@@ -28,11 +28,8 @@ public class BoardCommentServiceImpl implements BoardCommentService{
             Post post = optionalPost.get();
             Comment comment = dtoToEntity(commentDTO);
             comment.setPost_no(post);
-            Healer healer = healerRepository.findByHealerNickName(commentDTO.getHealerEmail());
-            if(healer != null){
-
-                comment.setHealer_nickname(healer);
-            }
+            Optional<Healer> healer = healerRepository.findByHealerNickName(commentDTO.getHealerEmail());
+            healer.ifPresent(comment::setHealer_nickname);
             return commentRepository.save(comment).getComment_no();
         } else {
             return null;
@@ -40,8 +37,8 @@ public class BoardCommentServiceImpl implements BoardCommentService{
     }
 
     @Transactional
-    public List<CommentDTO>findAll(Long postID) {
-        List<Comment> postEntityList = commentRepository.findAllByPostID(postID);
+    public List<CommentDTO>findAll(Long postNo) {
+        List<Comment> postEntityList = commentRepository.findAllByPostNo(postNo);
         if(postEntityList != null && postEntityList.isEmpty()==false){
             List<CommentDTO> commentDTOList = toList(postEntityList);
             return commentDTOList;

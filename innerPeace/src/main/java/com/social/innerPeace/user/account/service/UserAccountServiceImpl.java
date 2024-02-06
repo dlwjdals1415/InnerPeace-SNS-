@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UserAccountServiceImpl implements UserAccountService{
@@ -25,9 +27,10 @@ public class UserAccountServiceImpl implements UserAccountService{
             return "duplicated";
         }
         Healer healer = dtoToEntity(dto);
-        healer.setHealerNickName(dto.getHealer_email());
+        healer.setHealerNickName(getUUID());
         healer.setHealer_pw(passwordEncoder.encode(dto.getHealer_pw()));
         healer.setRole(role);
+        healer.setHaeler_profile_image("userbaseprofile.jpg");
         healer = healerRepository.save(healer);
         return healer.getHealer_email();
     }
@@ -41,5 +44,9 @@ public class UserAccountServiceImpl implements UserAccountService{
             return entityToDto(healer);
         }
         return null;
+    }
+
+    public String getUUID(){
+        return UUID.randomUUID().toString().substring(0,20);
     }
 }

@@ -33,9 +33,10 @@ public interface BoardPostService {
                 .map_point_lat(String.valueOf(entity.getMap_point_lat()))
                 .post_content(entity.getPost_content())
                 .post_image(entity.getPost_image())
+                .healer(entity.getPost_writer())
                 .tags(entity.getTags())
-                .post_writer(entity.getPost_writer().getHealerNickName())
                 .post_regday(LocalDate.from(entity.getReg_date()))
+                .commentList(entity.getCommentList())
                 .build();
         return dto;
     }

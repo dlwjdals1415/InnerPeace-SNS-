@@ -154,7 +154,7 @@
     <main class="bg_f4 f_g6 col_cc gap20">
         <section class="w80 h80 row_c0 bor_rad10 box_sha555">
             <article class="w65 h100 row_cc pad20">
-                <img class="w100 hauto" th:src="${dto.post_image}" alt="">
+                <img class="wauto hauto obj-fit" th:src="${dto.post_image}" alt="">
             </article>
             <section class="w30 h90 col bg_e0 box_sha555 bor_rad10 gap10    ">
                     <section class="w100 h5 row_c0">
@@ -202,7 +202,7 @@
                             </article>
                         </section>
                     </section>
-                    <section th:each="item, status : ${dtoList}" id="comment">
+                    <section th:each="item, status : ${comment}" id="comment">
                         <section class="w100 pad10 row">
                             <article class="w5">
                                 <img class="w30p hauto" th:src="${item.profileImg}" alt="프로필">

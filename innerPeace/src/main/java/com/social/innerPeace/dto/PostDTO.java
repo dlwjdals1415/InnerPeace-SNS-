@@ -1,5 +1,6 @@
 package com.social.innerPeace.dto;
 
+import com.social.innerPeace.entity.Comment;
 import com.social.innerPeace.entity.Healer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -31,5 +33,5 @@ public class PostDTO {
     private String followstat;
     private int likes;
     private String likeposition;
-    private String profileImg;
+    private List<Comment> commentList = new ArrayList<>();
 }

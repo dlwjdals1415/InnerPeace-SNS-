@@ -23,6 +23,7 @@ public class Post extends BaseEntity{
     @Column(length = 1500,nullable = false)
     private String post_content;
 
+    @Column(length = 512)
     private String post_image;
 
     private float map_point_lat;

@@ -2,6 +2,9 @@ package com.social.innerPeace.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +24,7 @@ public class Comment extends BaseEntity{
     @Column(length = 200,nullable = false)
     private String comment_content;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_no")
     private Post post_no;
 

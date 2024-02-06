@@ -6,10 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import javax.naming.Name;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment,Long> {
-    @Query("select c from Comment as c where c.post_no = :post_no")
-    List<Comment>findAllByPostID(@Param("post_no") Long postId);
+    @Query("select c from Comment c where c.post_no.postNo = :postNo")
+    List<Comment>findAllByPostNo(@Param("postNo") Long postNo);
+
+
 }

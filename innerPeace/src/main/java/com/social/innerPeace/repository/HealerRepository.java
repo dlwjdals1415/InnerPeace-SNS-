@@ -4,7 +4,8 @@ import com.social.innerPeace.entity.Healer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface HealerRepository extends JpaRepository<Healer,String> {
-    Healer findByHealerNickName(String healerNickName);
+    Optional<Healer> findByHealerNickName(String healerNickName);
 }
