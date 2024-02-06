@@ -149,6 +149,7 @@
     <input type="hidden" id="post_no" th:value="${dto.post_no}"/>
     <input type="hidden" id="map_lng" th:value="${dto.map_point_lng}">
     <input type="hidden" id="map_lat" th:value="${dto.map_point_lat}">
+    <input type="hidden" id="loginedHealer" th:value="${session.loginedHealer}">
     <header class="f_g1 bg_f4">
     </header>
     <main class="bg_f4 f_g6 col_cc gap20">
@@ -178,7 +179,7 @@
                         </th:block>
                     </article>
                 </section>
-                <section class="w100 h70 overflow_y col gap10 scrollbarnone">
+                <section class="w100 h70 overflow_y col gap10 scrollbarnone" id="detail_content">
                     <section>
                         <section class="w100 pad10 row">
                             <article class="w5">
@@ -202,6 +203,7 @@
                             </article>
                         </section>
                     </section>
+                    <input type="hidden" id="last_comment_no" th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].comment_no : ''}">
                     <section th:each="item, status : ${dtoList}" id="comment">
                         <section class="w100 pad10 row">
                             <article class="w5">
@@ -352,7 +354,7 @@
         $('#commentmenu-container').css({'z-index': '20', 'opacity': '1'});
         $('#commentmenu_comment_no').val(comment_no);
         $('#commentmenu_comment_content').val(comment_content);
-        const loginedHealer = sessionStorage.getItem('loginedHealer');
+        const loginedHealer = $('#loginedHealer').val();
 
         var buttonsContainer = $('#comment_menu_button');
         buttonsContainer.empty(); // 기존 내용을 비웁니다.
@@ -430,6 +432,44 @@
                 alert('삭제를하지못했습니다');
             }
         });
+    });
+</script>
+<script th:inline="javascript">
+    var scrollTimeout; // 타이머를 저장할 변수
+
+    $('#detail_content').scroll(function() {
+        var element = $(this);
+
+        // 이미 설정된 타이머가 있으면 초기화
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+        }
+
+        // 새로운 타이머 설정
+        scrollTimeout = setTimeout(function() {
+            if (element.scrollTop() + element.innerHeight() >= element[0].scrollHeight - 30) {
+                element.scrollTop(element.prop("scrollHeight"));
+                // 2초 지연 후의 로직을 여기에 추가
+                setTimeout(function() {
+                    var comment_no = $('#last_comment_no').val();
+                    var post_no = $('#post_no').val();
+                    $.ajax({
+                        url: '/board/comment/scroll',
+                        type: 'POST',
+                        data: {
+                            "comment_no": comment_no,
+                            "post_no": post_no
+                        },
+                        success: function(response) {
+
+                        },
+                        error: function(error) {
+                            // 에러 처리
+                        },
+                    });
+                }, 2000); // 20초 지연
+            }
+        }, 1000); // 스크롤 이벤트의 1초 지연
     });
 </script>
 </body>

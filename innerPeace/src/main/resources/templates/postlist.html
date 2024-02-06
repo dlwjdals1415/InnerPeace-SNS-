@@ -43,7 +43,7 @@
             <h2>followLIst</h2>
         </article>
             <article class="post_contentList">
-                <input type="hidden" id="last_post_no" th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[0].post_no : ''}">
+                <input type="hidden" id="last_post_no" th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].post_no : ''}">
                 <div class="post" th:each="item, status : ${dtoList}">
                     <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
                         <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
