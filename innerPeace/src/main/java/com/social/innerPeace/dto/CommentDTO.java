@@ -1,10 +1,11 @@
 package com.social.innerPeace.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.social.innerPeace.entity.Comment;
+import com.social.innerPeace.entity.Post;
+import lombok.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -14,9 +15,10 @@ import java.time.LocalDateTime;
 public class CommentDTO {
     private Long comment_no;
     private String comment_content;
-    private Long Post_no;
-    private String healer_id;
-    private String healer_nickname;
+    private Long post_no;
+    private String healerEmail;
+    private String nickName;
+    private LocalDate comment_regday;
     private String profileImg;
-    private LocalDateTime comment_regday;
+
 }

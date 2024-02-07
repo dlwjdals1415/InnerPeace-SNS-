@@ -13,5 +13,5 @@ public class FollowDTO {
     private String healer_id;
     private String healer_nickname;
     private String healer_profile;
-    private String followstas;
+    private String followstatus;
 }

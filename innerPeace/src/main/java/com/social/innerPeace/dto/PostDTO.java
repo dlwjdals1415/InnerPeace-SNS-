@@ -1,16 +1,13 @@
 package com.social.innerPeace.dto;
 
-import com.social.innerPeace.entity.Comment;
 import com.social.innerPeace.entity.Healer;
-import com.social.innerPeace.entity.Post_Like;
-import com.social.innerPeace.entity.Report;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -20,12 +17,19 @@ import java.util.List;
 public class PostDTO {
     private Long post_no;
     private String post_content;
+    private MultipartFile post_image_file;
     private String post_image;
-    private float map_point_lat;
-    private float map_point_lng;
+    private String post_image_thumbnail;
+    private String map_point_lat;
+    private String map_point_lng;
     private List<String> tags;
-    private Healer post_writer;
-    private List<Comment> commentList = new ArrayList<>();
-    private List<Report> reportList = new ArrayList<>();
-    private List<Post_Like> postLikeList = new ArrayList<>();
+    private String post_tags;
+    private Healer healer;
+    private String post_writer;
+    private String likeStatus;
+    private LocalDate post_regday;
+    private String followstat;
+    private int likes;
+    private String likeposition;
+    private String profileImg;
 }

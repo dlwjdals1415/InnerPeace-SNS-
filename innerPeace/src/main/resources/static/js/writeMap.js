@@ -1,11 +1,11 @@
 // Get the map-section element
-var mapSection = $('.map-section');
+var mapSection = $('#map_section');
 var latlng; // 전역 변수로 선언
 // Add a click event listener to the map-search button
 $('#map-search-btn').on('click', function () {
   // Set the z-index of the map-section to 10
   var inputsearchValue = $('#map-search').val();
-  mapSection.css('z-index', 20);
+  mapSection.css({"z-index": "20", "opacity": "1"});
   var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = {
       center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
@@ -98,13 +98,13 @@ $('#map-search-btn').on('click', function () {
       }
     }
   }
-  $('.map-section').on('click', '#map-confirm', function () {
+  $('#map_section').on('click', '#map-confirm', function () {
     var infoDiv = document.getElementById('address');
     infoDiv.innerHTML = $('#centerAddr').text();
-    mapSection.css('z-index', 0);
+    mapSection.css({"z-index": "0", "opacity": "0"});
   });
 
-  $('.map-section').on('click', '#map-cancel', function () {
+  $('#map_section').on('click', '#map-cancel', function () {
     $('#post_map_lat').val('');
     $('#post_map_lng').val('');
     var infoDiv = document.getElementById('address');
@@ -112,6 +112,6 @@ $('#map-search-btn').on('click', function () {
   
     map.relayout();
     map = null;
-    mapSection.css('z-index', 0);
+    mapSection.css({"z-index": "0", "opacity": "0"});
   });
 });

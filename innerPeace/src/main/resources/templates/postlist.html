@@ -9,7 +9,6 @@
     <link rel='stylesheet' type='text/css' media='screen' href='css/write.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/sidebar.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/postlist.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='css/map.css'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 </head>
 <body>
@@ -28,7 +27,7 @@
 <article class="searchbar" th:replace="~{fragment/searchbar::searchbar}">
 </article>
 <th:block th:if="${session.loginedHealer != null}">
-    <section class="map-section" th:replace="~{fragment/map::map-section}"></section>
+    <section class="map-section" th:replace="~{fragment/writeMap::map-section}"></section>
 </th:block>
 <th:block th:if="${session.loginedHealer != null}">
     <article class="menubar" th:replace="~{fragment/menu::healer_menu}"></article>
@@ -43,16 +42,15 @@
         <article class="followList bg_f4 w100">
             <h2>followLIst</h2>
         </article>
-        <input type="hidden" id="last_post_no" value="">
-        <div th:if="${dtoList.size() > 0}" th:text="${dtoList.get(dtoList.size() - 1)}">[Last Item]</div>
-        <article class="post_contentList">
-            <div class="post" th:each="item, status : ${dtoList}">
-                <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
-                    <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
-                </a>
-            </div>
-        </article>
-        <article class="col_cc hauto w100 dis_none op" id="loading">
+            <article class="post_contentList">
+                <input type="hidden" id="last_post_no" th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].post_no : ''}">
+                <div class="post" th:each="item, status : ${dtoList}">
+                    <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
+                        <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
+                    </a>
+                </div>
+            </article>
+        <article class="col_cc hauto w100" id="loading">
             <div class="loadingio-spinner-reload-zv6cq6zfifd">
                 <div class="ldio-dg926s5a60v">
                     <div>
@@ -70,32 +68,73 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9cf7f221de3543e0bd1ed40d14a3a704&libraries=services"></script>
-<script src="js/map.js"></script>
+<script src="js/writeMap.js"></script>
 <script src="js/write.js"></script>
 <script th:inline="javascript">
+    var scrollTimeout; // 타이머를 저장할 변수
+
     $('#postList').scroll(function() {
         var element = $(this);
-        if(element.scrollTop() + element.innerHeight() >= element[0].scrollHeight - 10) {
-            // 여기에 스크롤이 #myElement의 바닥 근처에 도달했을 때 실행할 코드를 작성합니다.
-            $("#loading").css({"display": "flex", "opacity": "1"});
 
-            $.ajax({
-                url: '/board/post/list_scroll',
-                type: 'POST',
-                success: function(response) {
-                    // 성공적으로 데이터를 받아온 후 할 작업
-                },
-                error: function(error) {
-                    // 에러 처리
-                },
-                complete: function() {
-                    // Ajax 호출이 완료된 후 (성공 또는 실패)
-                    // 로딩 화면 숨기기
-                    $("#loading").hide();
-                }
-            });
-
+        // 이미 설정된 타이머가 있으면 초기화
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
         }
+
+        // 새로운 타이머 설정
+        scrollTimeout = setTimeout(function() {
+            if (element.scrollTop() + element.innerHeight() >= element[0].scrollHeight - 30) {
+                element.scrollTop(element.prop("scrollHeight"));
+                // 2초 지연 후의 로직을 여기에 추가
+                setTimeout(function() {
+                    var post_no = $('#last_post_no').val();
+
+                    $.ajax({
+                        url: '/board/post/list_scroll',
+                        type: 'POST',
+                        data: {
+                            "post_no": post_no
+                        },
+                        success: function(response) {
+                            // 성공적으로 데이터를 받아온 후 할 작업
+                            // 여기에 데이터 처리 로직 추가
+                            response.forEach(function(item) {
+                                // 각 항목에 대해 수행할 작업
+                                // 예를 들어, 받아온 데이터를 이용하여 리스트 아이템을 생성하고 페이지에 추가
+                                var postDetailUrl = '/board/post/detail/' + item.post_no;
+                                // 이미지 태그 생성
+                                var imgTag = $('<img>', {
+                                    "src": item.post_image_thumbnail,
+                                    "alt": "Post " + item.post_no,
+                                    "loading": "lazy",
+                                });
+                                // a 태그 생성 및 href 속성 설정
+                                var aTag = $('<a>', {
+                                    "href": postDetailUrl
+                                }).append(imgTag); // 이미지 태그를 a 태그 안에 넣기
+
+                                // div 태그 생성 및 a 태그 포함
+                                var divTag = $('<div>', {
+                                    "class": "post" // div에 클래스 추가
+                                }).append(aTag); // a 태그를 div 태그 안에 넣기
+
+                                // 생성된 div 태그를 페이지의 특정 요소에 추가
+                                $('.post_contentList').append(divTag);
+                            });
+
+                            // 모든 데이터를 페이지에 추가한 후, post_no 값을 업데이트(다음 요청을 위해)
+                            if(response.length > 0) {
+                                var lastPostNo = response[response.length - 1].post_no;
+                                $('#last_post_no').val(lastPostNo);
+                            }
+                        },
+                        error: function(error) {
+                            // 에러 처리
+                        },
+                    });
+                }, 2000); // 20초 지연
+            }
+        }, 1000); // 스크롤 이벤트의 1초 지연
     });
 </script>
 </body>

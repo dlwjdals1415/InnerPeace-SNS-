@@ -1,33 +1,33 @@
 package com.social.innerPeace.user.account.service;
 
 import com.social.innerPeace.ip_enum.Role;
-import com.social.innerPeace.dto.SignupDTO;
+import com.social.innerPeace.dto.HealerDTO;
 import com.social.innerPeace.entity.Healer;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public interface UserAccountService {
-    String register(SignupDTO dto, Role role);
+    String register(HealerDTO dto, Role role);
 
-    default Healer dtoToEntity(SignupDTO dto){
+    default Healer dtoToEntity(HealerDTO dto){
         Healer entity = Healer.builder()
-                .healerEmail(dto.getEmail())
-                .healer_name(dto.getName())
-                .healer_pw(dto.getPassword())
-                .healer_bitrh(convertStringToLocalDate(dto.getBirth()))
-                .healer_phone(dto.getPhone())
+                .healer_email(dto.getHealer_email())
+                .healer_name(dto.getHealer_name())
+                .healer_pw(dto.getHealer_pw())
+                .healer_bitrh(convertStringToLocalDate(dto.getHealer_birth()))
+                .healer_phone(dto.getHealer_phone())
                 .build();
         return entity;
     }
 
-    default SignupDTO entityToDto(Healer entity){
-        SignupDTO dto = SignupDTO.builder()
-                .email(entity.getHealerEmail())
-                .name(entity.getHealer_name())
-                .password(entity.getHealer_pw())
-                .birth(entity.getHealer_bitrh().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                .phone(entity.getHealer_phone())
+    default HealerDTO entityToDto(Healer entity){
+        HealerDTO dto = HealerDTO.builder()
+                .healer_email(entity.getHealer_email())
+                .healer_name(entity.getHealer_name())
+                .healer_pw(entity.getHealer_pw())
+                .healer_birth(entity.getHealer_bitrh().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .healer_phone(entity.getHealer_phone())
                 .build();
         return dto;
     }
@@ -37,5 +37,5 @@ public interface UserAccountService {
         return LocalDate.parse(dateString, formatter);
     }
 
-    SignupDTO compareByEmail(String email);
+    HealerDTO compareByEmail(String email);
 }

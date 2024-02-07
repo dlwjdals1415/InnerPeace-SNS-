@@ -27,7 +27,11 @@ public class HealerDetails implements UserDetails {
         return healer.getHealer_pw();
     }
     @Override public String getUsername() {
-        return healer.getHealerEmail();
+        return healer.getHealer_email();
+    }
+
+    public String getHealer_nickname(){
+        return healer.getHealerNickName();
     }
 
     @Override

@@ -208,6 +208,10 @@ body {
     margin-top: 50px;
 }
 
+.mt100{
+    margin-top: 100px;
+}
+
 .mb10 {
     margin-bottom: 10px;
 }
@@ -336,6 +340,10 @@ body {
     width: 30px;
 }
 
+.wauto{
+    width: auto;
+}
+
 .w100p {
     width: 100px;
 }
@@ -421,6 +429,11 @@ body {
 
 #more:checked ~ .menubar {
     left: 0%;
+}
+
+#detail_map:checked ~ #detailMap {
+    z-index: 10;
+    opacity: 1;
 }
 
 .checkbox {
@@ -560,6 +573,12 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    transition: box-shadow 0.5s ease-in-out; /* Transition 설정 */
+    box-shadow: none; /* 초기 상태 */
+}
+
+.post_contentList .post:hover {
+    box-shadow: 10px 10px 10px #7e7979;
 }
 
 .post_contentList .post img {
@@ -708,3 +727,7 @@ body {
     transform-origin: 0 0; /* see note above */
 }
 .ldio-dg926s5a60v div { box-sizing: content-box; }
+
+.top{
+    top: 10%;
+}

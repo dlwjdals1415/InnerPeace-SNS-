@@ -20,23 +20,22 @@
 </article>
 <article class="menubar" th:replace="~{fragment/menu :: user_menu}">
 </article>
-<section class="container">
-    <header>
+<section class="po_ab w100 h100 bg_f4 row z_i1">
+    <header class="f_g3 bg_f4">
     </header>
-    <main>
-        <section class="find-section">
-            <span class="bold-text">로그인에 문제가 있나요?</span>
-            <span class="info">이메일 주소를 입력하시면 계정에 다시 엑세스할 수 있는 링크를 보내드립니다.</span>
-            <form class="findForm" th:action="@{/user/find/pwForm}" method="post">
-                <input class="find_input" type="text" name="healer_id" id="healer_id" placeholder="이메일"/>
-                <div class="errorrow" id="IdError"></div>
-                <input class="findButton" type="submit" value="로그인 링크 보내기">
+    <main class="f_g5 col_cc main1000">
+        <section class="bg_f4 w50 col_cc bor_rad10 pad20">
+            <span class="bold">로그인에 문제가 있나요?</span>
+            <span class="ml20 mr20 mt20 mb20">이메일 주소를 입력하시면 계정에 다시 엑세스할 수 있는 링크를 보내드립니다.</span>
+            <form class="w80 hauto col_cc" th:action="@{/user/find/pwForm}" method="post">
+                <input class="w90 h30p bor_rad10 pad10 mb20" type="text" name="healer_id" id="healer_id" placeholder="이메일"/>
+                <input class="green_btn w90 h40p mb20" type="submit" value="로그인 링크 보내기">
             </form>
             <span class="text-with-lines">또는</span>
             <a class="regist-link" th:href="@{/user/account/signup}">새 계정 만들기</a>
         </section>
     </main>
-    <footer>
+    <footer class="f_g2 bg_f4">
         <span>© 2024 INNER-PEACE</span>
     </footer>
 </section>
