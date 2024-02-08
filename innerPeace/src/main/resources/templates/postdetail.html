@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <title>Inner Peace</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='css/base.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='css/write.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='css/modify.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='css/sidebar.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='css/postdetail.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/base.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/write.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/modify.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/sidebar.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/postdetail.css'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 </head>
 <body>
@@ -159,16 +159,16 @@
             <article class="w65 h100 row_cc pad20">
                 <img class="w100 hauto" th:src="${dto.post_image}" alt="">
             </article>
-            <section class="w30 h90 col bg_e0 box_sha555 bor_rad10 gap10    ">
-                    <section class="w100 h5 row_c0">
+            <section class="w30 h90 col bg_e0 box_sha555 bor_rad10 gap10">
+                <section class="w100 h5 row_c0">
                     <article class="row_c0 w90">
                         <img class="ml10 mr10 w30p hauto" th:src="${dto.profileImg}" alt="profile">
-                       <div class="col">
-                           <a th:href="@{/user/userpage/{healer_id}(healer_id=${dto.post_writer})}">
-                               <span class="ml10 mr10 font_s15 text_hover" th:text="${dto.post_writer}">닉네임</span>
-                           </a>
-                           <label for="detail_map" class="text_hover ml10 mr10" id="de_map_address"></label>
-                       </div>
+                        <div class="col">
+                            <a th:href="@{/user/userpage/{healer_id}(healer_id=${dto.post_writer})}">
+                                <span class="ml10 mr10 font_s15 text_hover" th:text="${dto.post_writer}">닉네임</span>
+                            </a>
+                            <label for="detail_map" class="text_hover ml10 mr10" id="de_map_address"></label>
+                        </div>
                         <th:block th:if="${session.loginedHealer != null and dto.post_writer != session.loginedHealer}">
                             <button class="ml10 mr10 h80 e0_btn">
                                 <span id="follow_button" th:text="${dto.followstat}">팔로우</span>
@@ -205,9 +205,10 @@
                             </article>
                         </section>
                     </section>
-                    <input type="hidden" id="last_comment_no" th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].comment_no : ''}">
-                    <section th:each="item, status : ${dtoList}" id="comment">
-                        <section class="w100 pad10 row">
+                    <input type="hidden" id="last_comment_no"
+                           th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].comment_no : ''}">
+                    <section id="comment_content">
+                        <section class="w100 pad10 row" th:each="item, status : ${dtoList}">
                             <article class="w5">
                                 <img class="w30p hauto" th:src="${item.profileImg}" alt="프로필">
                             </article>
@@ -230,6 +231,9 @@
                             </article>
                         </section>
                     </section>
+                    <div class="square">
+                        <div class="spin"></div>
+                    </div>
                 </section>
                 <section class="w100 h20 ">
                     <article class="w100 h70 col">
@@ -261,9 +265,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9cf7f221de3543e0bd1ed40d14a3a704&libraries=services"></script>
-<script src="js/writeMap.js"></script>
-<script src="js/write.js"></script>
-<script src="js/modify.js"></script>
+<script src="/js/writeMap.js"></script>
+<script src="/js/write.js"></script>
+<script src="/js/modify.js"></script>
 <script>
     var map_lat = document.getElementById('map_lat').value;
     var map_lng = document.getElementById('map_lng').value;
@@ -283,7 +287,7 @@
         position: coord
     });
 
-    var callback = function(result, status) {
+    var callback = function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
             document.getElementById('de_map_address').innerText = result[0].address.address_name;
         }
@@ -377,21 +381,25 @@
     function comment_menu_out() {
         $('#commentmenu-container').css({'z-index': '0', 'opacity': '0'});
         $('#comment_modify_section').css({'z-index': '0', 'opacity': '0'});
-        $('#comment_modify_area').val('');comment_modify_section
+        $('#comment_modify_area').val('');
+        comment_modify_section
     }
 
-    $('#comment_menu_button').on('click', '#comment_modify', function() {
+    $('#comment_menu_button').on('click', '#comment_modify', function () {
         $('#comment_modify_section').css({'z-index': '20', 'opacity': '1'});
         $('#comment_modify_area').val($('#commentmenu_comment_content').val());
     });
 
-    $('#comment_menu_button').on('click', '#comment_modify_cancel', function() {
+    $('#comment_modify_cancel').click(function () {
         $('#comment_modify_section').css({'z-index': '0', 'opacity': '0'});
         $('#comment_modify_area').val('');
     });
 
-    $('#comment_menu_button').on('click', '#comment_delete', function() {
+    $('#comment_menu_button').on('click', '#comment_delete', function () {
         // 삭제 버튼에 대한 이벤트 핸들러 로직
+        if (!confirm('삭제하시겠습니까?')) {
+            return;
+        }
         let comment_no = $('#commentmenu_comment_no').val();
         let jsonObj = {'comment_no': comment_no};
         let jsonStr = JSON.stringify(jsonObj);
@@ -414,7 +422,7 @@
         });
     });
 
-    $('#comment_menu_button').on('click', '#comment_report', function() {
+    $('#comment_menu_button').on('click', '#comment_report', function () {
         // 신고 버튼에 대한 이벤트 핸들러 로직
     });
 
@@ -445,7 +453,7 @@
 <script th:inline="javascript">
     var scrollTimeout; // 타이머를 저장할 변수
 
-    $('#detail_content').scroll(function() {
+    $('#detail_content').scroll(function () {
         var element = $(this);
 
         // 이미 설정된 타이머가 있으면 초기화
@@ -454,11 +462,11 @@
         }
 
         // 새로운 타이머 설정
-        scrollTimeout = setTimeout(function() {
+        scrollTimeout = setTimeout(function () {
             if (element.scrollTop() + element.innerHeight() >= element[0].scrollHeight - 30) {
                 element.scrollTop(element.prop("scrollHeight"));
                 // 2초 지연 후의 로직을 여기에 추가
-                setTimeout(function() {
+                setTimeout(function () {
                     var comment_no = $('#last_comment_no').val();
                     var post_no = $('#post_no').val();
                     $.ajax({
@@ -468,10 +476,16 @@
                             "comment_no": comment_no,
                             "post_no": post_no
                         },
-                        success: function(response) {
-
+                        success: function (response) {
+                            response.forEach(function (item) {
+                                $('#comment_content').append(item.commentHtml);
+                            });
+                            if (response.length > 0) {
+                                var lastPostNo = response[response.length - 1].comment_no;
+                                $('#last_comment_no').val(lastPostNo);
+                            }
                         },
-                        error: function(error) {
+                        error: function (error) {
                             // 에러 처리
                         },
                     });

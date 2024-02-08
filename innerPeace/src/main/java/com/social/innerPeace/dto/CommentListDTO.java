@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FollowDTO {
-    private HealerDTO follow;
-    private String followstatus;
-    private Long follow_no;
-    private String healer_nickname;
+public class CommentListDTO {
+    private String commentHtml;
+    private Long comment_no;
 }

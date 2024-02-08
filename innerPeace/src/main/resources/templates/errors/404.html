@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found</title>
+    <style>
+        * {
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        #notfound {
+            position: relative;
+            height: 100vh;
+        }
+
+        #notfound .notfound {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+        }
+
+        #notfound .notfound-404 {
+            position: relative;
+            height: 200px;
+        }
+
+        #notfound .notfound-404 h1 {
+            font-family: 'Montserrat', sans-serif;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            font-size: 224px;
+            font-weight: 900;
+            margin: 0px;
+            color: #262626;
+            text-transform: uppercase;
+            letter-spacing: -40px;
+            margin-left: -20px;
+        }
+
+        #notfound .notfound-404 h1>span {
+            text-shadow: -8px 0px 0px #fff;
+        }
+
+        #notfound h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #262626;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        #notfound p {
+            font-family: 'Montserrat', sans-serif;
+            color: #000;
+            font-weight: 300;
+        }
+
+        #notfound a {
+            font-family: 'Montserrat', sans-serif;
+            display: inline-block;
+            font-weight: 700;
+            border-radius: 40px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #262626;
+            padding: 13px 23px;
+            font-size: 18px;
+            -webkit-transition: 0.2s all;
+            transition: 0.2s all;
+        }
+
+        #notfound a:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+<div id="notfound">
+    <div class="notfound">
+        <div class="notfound-404">
+            <h1>404</h1>
+        </div>
+        <h2>Oops! Page Not Found</h2>
+        <p>당신이 찾고 있는 페이지가 삭제되었거나 이름이 변경되었거나 일시적으로 사용할 수 없을 수 있습니다.</p>
+        <a href="/">Go To Homepage</a>
+    </div>
+</div>
+</body>
+</html>
