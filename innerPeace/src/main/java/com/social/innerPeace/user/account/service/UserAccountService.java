@@ -12,23 +12,23 @@ public interface UserAccountService {
 
     default Healer dtoToEntity(HealerDTO dto){
         Healer entity = Healer.builder()
-                .healer_email(dto.getHealer_email())
-                .healer_name(dto.getHealer_name())
-                .healer_pw(dto.getHealer_pw())
-                .healer_bitrh(convertStringToLocalDate(dto.getHealer_birth()))
-                .healer_phone(dto.getHealer_phone())
+                .healerEmail(dto.getHealer_email())
+                .healerName(dto.getHealer_name())
+                .healerPw(dto.getHealer_pw())
+                .healerBitrh(convertStringToLocalDate(dto.getHealer_birth()))
+                .healerPhone(dto.getHealer_phone())
                 .build();
         return entity;
     }
 
     default HealerDTO entityToDto(Healer entity){
         HealerDTO dto = HealerDTO.builder()
-                .healer_email(entity.getHealer_email())
-                .healer_name(entity.getHealer_name())
-                .healer_pw(entity.getHealer_pw())
-                .healer_birth(entity.getHealer_bitrh().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .healer_email(entity.getHealerEmail())
+                .healer_name(entity.getHealerName())
+                .healer_pw(entity.getHealerPw())
+                .healer_birth(entity.getHealerBitrh().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .healer_nickname(entity.getHealerNickName())
-                .healer_phone(entity.getHealer_phone())
+                .healer_phone(entity.getHealerPhone())
                 .build();
         return dto;
     }

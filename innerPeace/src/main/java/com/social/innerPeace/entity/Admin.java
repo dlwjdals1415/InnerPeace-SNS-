@@ -16,33 +16,33 @@ import java.util.List;
 public class Admin extends BaseEntity{
     @Id
     @Column(length = 30)
-    private String admin_id;
+    private String adminId;
 
     @Column(length = 40,nullable = false)
-    private String admin_pw;
+    private String adminPw;
 
     @Builder.Default
-    @OneToMany(mappedBy = "fnq_writer",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "admin",cascade = CascadeType.ALL)
     private List<FNQ> fnqList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "answer_writer",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "admin",cascade = CascadeType.ALL)
     private List<Answer> answerList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "notice_writer",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "admin",cascade = CascadeType.ALL)
     private List<Notice> noticeList = new ArrayList<>();
 
     public void addFnq(FNQ fnq){
         fnqList.add(fnq);
-        fnq.setFnq_writer(this);
+        fnq.setAdmin(this);
     }
     public void addAnswer(Answer answer){
         answerList.add(answer);
-        answer.setAnswer_writer(this);
+        answer.setAdmin(this);
     }
     public void addNotice(Notice notice){
         noticeList.add(notice);
-        notice.setNotice_writer(this);
+        notice.setAdmin(this);
     }
 }

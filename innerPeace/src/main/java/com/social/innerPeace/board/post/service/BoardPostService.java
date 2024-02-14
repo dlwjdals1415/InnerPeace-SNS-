@@ -19,11 +19,12 @@ public interface BoardPostService {
     PostDTO findByPostNo(Long postNo,String healerNickName);
 
     String modify(PostDTO dto);
+    String like(Long postNo, String healerNickname);
 
     default Post dtoToEntity(PostDTO dto){
         Post entity = Post.builder()
-                .post_image(dto.getPost_image())
-                .post_content(dto.getPost_content())
+                .postImage(dto.getPost_image())
+                .postContent(dto.getPost_content())
                 .build();
         return entity;
     }
@@ -31,13 +32,14 @@ public interface BoardPostService {
     default PostDTO entityToDto(Post entity){
         PostDTO dto = PostDTO.builder()
                 .post_no(entity.getPostNo())
-                .post_map_lng(String.valueOf(entity.getPost_map_lng()))
-                .post_map_lat(String.valueOf(entity.getPost_map_lat()))
-                .post_content(entity.getPost_content())
-                .post_image(entity.getPost_image())
+                .post_map_lng(String.valueOf(entity.getPostMapLng()))
+                .post_map_lat(String.valueOf(entity.getPostMapLat()))
+                .post_content(entity.getPostContent())
+                .post_image(entity.getPostImage())
                 .tags(entity.getTags())
                 .post_regday(LocalDateTime.from(entity.getReg_date()))
                 .build();
         return dto;
     }
+
 }

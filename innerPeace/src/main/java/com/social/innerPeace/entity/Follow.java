@@ -13,7 +13,7 @@ import lombok.*;
 public class Follow extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long follow_no;
+    private Long followNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower")

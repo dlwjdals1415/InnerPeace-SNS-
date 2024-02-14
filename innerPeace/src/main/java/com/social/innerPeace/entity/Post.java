@@ -21,32 +21,32 @@ public class Post extends BaseEntity{
     private Long postNo;
 
     @Column(length = 1500,nullable = false)
-    private String post_content;
+    private String postContent;
 
     @Column(length = 512)
-    private String post_image;
+    private String postImage;
 
-    private float post_map_lat;
+    private float postMapLat;
 
-    private float post_map_lng;
+    private float postMapLng;
 
     @ElementCollection(fetch = FetchType.LAZY)
     private List<String> tags;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "healer_email")
+    @JoinColumn(name = "healerEmail")
     private Healer healer;
 
     @Builder.Default
-    @OneToMany(mappedBy = "post_no",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     private List<Comment> commentList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "report_post",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     private List<Report> reportList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "postNo",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     private List<Post_Like> postLikeList = new ArrayList<>();
 
 }

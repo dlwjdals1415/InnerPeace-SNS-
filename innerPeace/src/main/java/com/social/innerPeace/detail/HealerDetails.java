@@ -24,10 +24,10 @@ public class HealerDetails implements UserDetails {
     }
 
     @Override public String getPassword() {
-        return healer.getHealer_pw();
+        return healer.getHealerPw();
     }
     @Override public String getUsername() {
-        return healer.getHealer_email();
+        return healer.getHealerEmail();
     }
 
     public String getHealer_nickname(){

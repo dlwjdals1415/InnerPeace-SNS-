@@ -59,15 +59,15 @@ public class BoardPostServiceImpl implements BoardPostService {
                 post = dtoToEntity(dto);
                 post.setHealer(healer);
                 if (!dto.getPost_map_lat().isEmpty() && dto.getPost_map_lat() != null) {
-                    post.setPost_map_lat(Float.parseFloat(dto.getPost_map_lat()));
-                    post.setPost_map_lng(Float.parseFloat(dto.getPost_map_lng()));
+                    post.setPostMapLat(Float.parseFloat(dto.getPost_map_lat()));
+                    post.setPostMapLng(Float.parseFloat(dto.getPost_map_lng()));
                 }
                 post.setTags(splitAndClean(dto.getPost_tags()));
                 post = postRepository.save(post);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            return post.getPost_image();
+            return post.getPostImage();
         }
         return null;
     }
@@ -96,7 +96,7 @@ public class BoardPostServiceImpl implements BoardPostService {
         Post post = postRepository.findById(post_no).orElse(null);
         assert post != null;
         PostDTO dto = PostDTO.builder()
-                .post_image(post.getPost_image())
+                .post_image(post.getPostImage())
                 .build();
         return dto;
     }
@@ -147,12 +147,12 @@ public class BoardPostServiceImpl implements BoardPostService {
         Post post = postRepository.findByPostNoWithHealer(postNo);
         String base64String = null;
         if (post != null) {
-            List<Post_Like> likeList = likeRepository.findByPostNoPostNo(postNo);
+            List<Post_Like> likeList = likeRepository.findByPostPostNo(postNo);
             PostDTO postDTO = entityToDto(post);
             postDTO.setHealer_nickname(post.getHealer().getHealerNickName());
             String image = findImagename(postDTO.getPost_no()).getPost_image();
             String postimagePath = upload_dir + image;
-            String profileImagePath = profile_dir + post.getHealer().getHaeler_profile_image();
+            String profileImagePath = profile_dir + post.getHealer().getHaelerProfileImage();
             postDTO.setLikes(likeList.size());
             if(healerNickName != null && !healerNickName.isEmpty()){
                 Optional<Post_Like> like = likeList.stream().filter(post_like -> post_like.getHealer().getHealerNickName().equals(healerNickName)).findFirst();
@@ -191,15 +191,38 @@ public class BoardPostServiceImpl implements BoardPostService {
             dto = fileStore.storeFile(dto);
             post = dtoToEntity(dto);
             if (!dto.getPost_map_lat().isEmpty() && dto.getPost_map_lat() != null) {
-                post.setPost_map_lat(Float.parseFloat(dto.getPost_map_lat()));
-                post.setPost_map_lng(Float.parseFloat(dto.getPost_map_lng()));
+                post.setPostMapLat(Float.parseFloat(dto.getPost_map_lat()));
+                post.setPostMapLng(Float.parseFloat(dto.getPost_map_lng()));
             }
             post.setTags(splitAndClean(dto.getPost_tags()));
             post = postRepository.save(post);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return post.getPost_image();
+        return post.getPostImage();
+    }
+
+    @Override
+    public String like(Long postNo, String healerNickname) {
+        Optional<Healer> healer = healerRepository.findByHealerNickName(healerNickname);
+        if(healer.isPresent()){
+            Optional<Post> post = postRepository.findById(postNo);
+            if(post.isPresent()){
+                Optional<Post_Like> like = likeRepository.findByHealerHealerEmailAndPostPostNo(healer.get().getHealerEmail(),post.get().getPostNo());
+                if(like.isPresent()){
+                    likeRepository.delete(like.get());
+                    return "좋아요";
+                }else{
+                    Post_Like post_like = Post_Like.builder()
+                            .healer(healer.get())
+                            .post(post.get())
+                            .build();
+                    likeRepository.save(post_like);
+                    return "좋아요 취소";
+                }
+            }
+        }
+        return null;
     }
 
 }

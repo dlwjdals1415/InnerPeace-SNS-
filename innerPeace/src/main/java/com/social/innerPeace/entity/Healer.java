@@ -17,37 +17,37 @@ import java.util.List;
 @ToString(exclude = {"followerList","followingList","postList"})
 public class Healer extends BaseEntity{
     @Id
-    @Column(name = "healer_email")
-    private String healer_email;
+    @Column(name = "healerEmail")
+    private String healerEmail;
 
-    private String healer_pw;
+    private String healerPw;
 
     @Column(length = 50,nullable = false)
-    private String healer_name;
+    private String healerName;
 
     @Column(length = 20,nullable = false)
-    private String healer_phone;
+    private String healerPhone;
 
     @Column(nullable = false)
     @Builder.Default
-    private boolean healer_status = true;
+    private boolean healerStatus = true;
 
-    private String haeler_profile_image;
+    private String haelerProfileImage;
 
-    private String healer_randomcode;
+    private String healerRandomcode;
 
-    @Column(length = 30, nullable = false, name = "healer_nickname")
+    @Column(length = 30, nullable = false, name = "healerNickName")
     private String healerNickName;
 
     @Column(length = 1)
-    private String healer_gender;
+    private String healerGender;
 
-    private LocalDate healer_bitrh;
+    private LocalDate healerBitrh;
 
     @Column(length = 400)
-    private String healer_statusmessage;
+    private String healerStatusmessage;
 
-    private boolean ad_agree;
+    private boolean adAgree;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)

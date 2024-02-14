@@ -21,19 +21,19 @@ public interface BoardCommentService {
     List<CommentDTO>findAll(Long postID);
     default Comment dtoToEntity(CommentDTO dto){
         Comment entity = Comment.builder()
-                .comment_content(dto.getComment_content())
+                .commentContent(dto.getComment_content())
                 .build();
         return entity;
     }
 
     default CommentDTO entityToDto(Comment entity){
         CommentDTO dto = CommentDTO.builder()
-                .post_no(entity.getPost_no().getPostNo())
-                .comment_no(entity.getComment_no())
-                .comment_content(entity.getComment_content())
+                .post_no(entity.getPost().getPostNo())
+                .comment_no(entity.getCommentNo())
+                .comment_content(entity.getCommentContent())
                 .comment_regday(LocalDateTime.from(entity.getReg_date()))
                 .nickName(entity.getHealer().getHealerNickName())
-                .healer_profile_image(entity.getHealer().getHaeler_profile_image())
+                .healer_profile_image(entity.getHealer().getHaelerProfileImage())
                 .build();
         return dto;
     }

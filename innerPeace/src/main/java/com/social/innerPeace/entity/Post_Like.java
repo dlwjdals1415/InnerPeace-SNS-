@@ -13,11 +13,11 @@ import lombok.*;
 public class Post_Like extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long like_id;
+    private Long likeNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "postNo")
-    private Post postNo;
+    private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "healerNickName")

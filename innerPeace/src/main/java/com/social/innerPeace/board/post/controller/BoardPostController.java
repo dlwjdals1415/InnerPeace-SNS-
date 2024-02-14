@@ -96,4 +96,12 @@ public class BoardPostController {
         return "postdetail";
     }
 
+    @PostMapping("/board/post/like")
+    @ResponseBody
+    public ResponseEntity<Object> post_like(@RequestParam("post_no") Long post_no,HttpSession session){
+        log.info("call post_like post_no : {}",post_no);
+        String healer_nickname = (String) session.getAttribute("loginedHealer");
+        String like = boardPostService.like(post_no,healer_nickname);
+        return ResponseEntity.status(HttpStatus.OK).body(like);
+    }
 }

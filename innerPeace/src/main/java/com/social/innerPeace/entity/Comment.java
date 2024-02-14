@@ -19,21 +19,21 @@ import java.util.List;
 public class Comment extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long comment_no;
+    private Long commentNo;
 
     @Column(length = 200,nullable = false)
-    private String comment_content;
+    private String commentContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_no")
-    private Post post_no;
+    @JoinColumn(name = "postNo")
+    private Post post;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "healer_nickname")
+    @JoinColumn(name = "healerNickname")
     private Healer healer;
 
     @Builder.Default
-    @OneToMany(mappedBy = "report_comment",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "comment",cascade = CascadeType.ALL)
     private List<Report> reportList = new ArrayList<>();
 
 }

@@ -28,11 +28,11 @@ public class UserAccountServiceImpl implements UserAccountService{
         }
         Healer healer = dtoToEntity(dto);
         healer.setHealerNickName(getUUID());
-        healer.setHealer_pw(passwordEncoder.encode(dto.getHealer_pw()));
+        healer.setHealerPw(passwordEncoder.encode(dto.getHealer_pw()));
         healer.setRole(role);
-        healer.setHaeler_profile_image("userbaseprofile.jpg");
+        healer.setHaelerProfileImage("userbaseprofile.jpg");
         healer = healerRepository.save(healer);
-        return healer.getHealer_email();
+        return healer.getHealerEmail();
     }
 
     @Override
