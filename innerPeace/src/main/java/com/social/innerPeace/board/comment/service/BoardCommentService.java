@@ -2,7 +2,15 @@ package com.social.innerPeace.board.comment.service;
 
 import com.social.innerPeace.dto.CommentDTO;
 import com.social.innerPeace.entity.Comment;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +22,6 @@ public interface BoardCommentService {
     default Comment dtoToEntity(CommentDTO dto){
         Comment entity = Comment.builder()
                 .comment_content(dto.getComment_content())
-
                 .build();
         return entity;
     }
@@ -22,14 +29,32 @@ public interface BoardCommentService {
     default CommentDTO entityToDto(Comment entity){
         CommentDTO dto = CommentDTO.builder()
                 .post_no(entity.getPost_no().getPostNo())
-                .healerEmail(entity.getHealer_nickname().getHealer_email())
-                .nickName(entity.getHealer_nickname().getHealerNickName())
+                .comment_no(entity.getComment_no())
                 .comment_content(entity.getComment_content())
+                .comment_regday(LocalDateTime.from(entity.getReg_date()))
+                .nickName(entity.getHealer().getHealerNickName())
+                .healer_profile_image(entity.getHealer().getHaeler_profile_image())
                 .build();
         return dto;
     }
 
-    default List<CommentDTO> toList(List<Comment> commentList){
+    default List<CommentDTO> toList(Page<Comment> commentList){
         return commentList.stream().map(entity->entityToDto(entity)).collect(Collectors.toList());
     }
+
+    private static byte[] readBytesFromFile(String filePath) throws IOException {
+        File file = new File(filePath);
+        byte[] fileBytes = new byte[(int) file.length()];
+
+        try (FileInputStream fis = new FileInputStream(file)) {
+            fis.read(fileBytes);
+        }
+
+        return fileBytes;
+    }
+
+    private static String encodeBytesToBase64(byte[] bytes) {
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+
 }

@@ -1,15 +1,20 @@
 package com.social.innerPeace.board.post.service;
 
 import com.social.innerPeace.board.post.component.FileStore;
+import com.social.innerPeace.detail.HealerDetails;
 import com.social.innerPeace.dto.PostDTO;
+import com.social.innerPeace.entity.Comment;
 import com.social.innerPeace.entity.Healer;
 import com.social.innerPeace.entity.Post;
+import com.social.innerPeace.repository.CommentRepository;
 import com.social.innerPeace.repository.HealerRepository;
 import com.social.innerPeace.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -23,29 +28,37 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class BoardPostServiceImpl implements BoardPostService{
+public class BoardPostServiceImpl implements BoardPostService {
     @Value("${thumbnail.dir}")
     String thumbnail_dir;
+    @Value("${upload.dir}")
+    String upload_dir;
+    @Value("${profile.dir}")
+    String profile_dir;
     @Autowired
     PostRepository postRepository;
     @Autowired
     HealerRepository healerRepository;
     @Autowired
+    CommentRepository commentRepository;
+    @Autowired
     FileStore fileStore;
+
     @Override
     public String write(PostDTO dto) {
-        Optional<Healer> optionalHealer = healerRepository.findById(dto.getPost_writer());
-        if(optionalHealer.isPresent()){
+        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(dto.getHealer_nickname());
+        if (optionalHealer.isPresent()) {
             Post post;
             try {
                 dto = fileStore.storeFile(dto);
                 Healer healer = optionalHealer.get();
                 post = dtoToEntity(dto);
-                post.setPost_writer(healer);
-                if (dto.getMap_point_lat() != null) {
-                    post.setMap_point_lat(Float.parseFloat(dto.getMap_point_lat()));
-                    post.setMap_point_lng(Float.parseFloat(dto.getMap_point_lng()));
+                post.setHealer(healer);
+                if (!dto.getPost_map_lat().isEmpty() && dto.getPost_map_lat() != null) {
+                    post.setPost_map_lat(Float.parseFloat(dto.getPost_map_lat()));
+                    post.setPost_map_lng(Float.parseFloat(dto.getPost_map_lng()));
                 }
+                post.setTags(splitAndClean(dto.getPost_tags()));
                 post = postRepository.save(post);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -54,8 +67,28 @@ public class BoardPostServiceImpl implements BoardPostService{
         }
         return null;
     }
+
+
+    //태그를 나눠서 리스트에 추가하는 메소드
+    public static List<String> splitAndClean(String input) {
+        List<String> words = new ArrayList<>();
+
+        // '#'을 기준으로 문자열을 분리
+        String[] splitWords = input.split(" ");
+
+        // 분리된 각 단어에서 공백을 제거하여 리스트에 추가
+        for (String word : splitWords) {
+            String cleanWord = word.trim(); // 공백 제거
+            if (!cleanWord.isEmpty()) { // 빈 문자열이 아니면 리스트에 추가
+                words.add(cleanWord);
+            }
+        }
+
+        return words;
+    }
+
     @Override
-    public PostDTO findImagename(Long post_no){
+    public PostDTO findImagename(Long post_no) {
         Post post = postRepository.findById(post_no).orElse(null);
         assert post != null;
         PostDTO dto = PostDTO.builder()
@@ -106,13 +139,53 @@ public class BoardPostServiceImpl implements BoardPostService{
     }
 
     @Override
-    public PostDTO findByPostNo(Long postNo){
-        Optional<Post> optionalPost = postRepository.findById(postNo);
-        if(optionalPost.isPresent()){
-            Post post = optionalPost.get();
-            return entityToDto(post);
+    public PostDTO findByPostNo(Long postNo) {
+        Post post = postRepository.findByPostNoWithHealer(postNo);
+        String base64String = null;
+        if (post != null) {
+            PostDTO postDTO = entityToDto(post);
+            postDTO.setHealer_nickname(post.getHealer().getHealerNickName());
+            String image = findImagename(postDTO.getPost_no()).getPost_image();
+            String postimagePath = upload_dir + image;
+            String profileImagePath = profile_dir + post.getHealer().getHaeler_profile_image();
+            try {
+                byte[] fileBytes = readBytesFromFile(postimagePath);
+                base64String = encodeBytesToBase64(fileBytes);
+                postDTO.setPost_image("data:image/png;base64," + base64String);
+                fileBytes = readBytesFromFile(profileImagePath);
+                base64String = encodeBytesToBase64(fileBytes);
+                postDTO.setHealer_profile_image("data:image/png;base64," + base64String);
+
+            } catch (IOException e) {
+                // 예외 처리
+            }
+
+            return postDTO;
         }
 
         return null;
     }
+
+    @Override
+    public String modify(PostDTO dto) {
+        Post post;
+        String oldImage = dto.getPost_image();
+        if(dto.getPost_image().equals(dto.getPost_image())){
+
+        }
+        try {
+            dto = fileStore.storeFile(dto);
+            post = dtoToEntity(dto);
+            if (!dto.getPost_map_lat().isEmpty() && dto.getPost_map_lat() != null) {
+                post.setPost_map_lat(Float.parseFloat(dto.getPost_map_lat()));
+                post.setPost_map_lng(Float.parseFloat(dto.getPost_map_lng()));
+            }
+            post.setTags(splitAndClean(dto.getPost_tags()));
+            post = postRepository.save(post);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return post.getPost_image();
+    }
+
 }

@@ -36,7 +36,7 @@ public class Healer extends BaseEntity{
 
     private String healer_randomcode;
 
-    @Column(length = 30, nullable = false)
+    @Column(length = 30, nullable = false, name = "healer_nickname")
     private String healerNickName;
 
     @Column(length = 1)
@@ -62,7 +62,7 @@ public class Healer extends BaseEntity{
     private List<Follow> followingList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "post_writer",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "healer",cascade = CascadeType.ALL)
     private List<Post> postList = new ArrayList<>();
 
     @Builder.Default

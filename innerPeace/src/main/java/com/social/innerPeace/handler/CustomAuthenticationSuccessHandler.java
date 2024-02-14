@@ -23,9 +23,9 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         setDefaultTargetUrl("/board/post/list");
-        HealerDetails HealerDetails = (HealerDetails) authentication.getPrincipal();
+        HealerDetails healerDetails = (HealerDetails) authentication.getPrincipal();
         HttpSession session = request.getSession();
-        session.setAttribute("loginedHealer",HealerDetails.getHealer_nickname());
+        session.setAttribute("loginedHealer",healerDetails.getHealer_nickname());
         super.onAuthenticationSuccess(request,response,authentication);
     }
 

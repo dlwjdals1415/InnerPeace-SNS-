@@ -16,7 +16,8 @@
                 onclick="document.getElementById('write_file-input').click()">파일 선택
         </button>
         <button class="gray_btn w90 h50p dis_none" type="button" id="write_cutButton">자르기</button>
-        <label class="gray_btn w90 h50p dis_none row_cc" for="write_confirm" id="write_submitButton"><span>확인</span></label>
+        <label class="gray_btn w90 h50p dis_none row_cc" for="write_confirm"
+               id="write_submitButton"><span>확인</span></label>
     </article>
     <article class="po_ab z_i0 bg_f4 col_c0 op" id="post_write">
         <div class="f_g1 w90 h50p row_cc bor_bt">
@@ -62,7 +63,7 @@
                       enctype="multipart/form-data">
                     <input type="hidden" id="post_tags_hidden" name="post_tags" value="">
                     <input type="hidden" id="post_content_hidden" name="post_content" value="">
-                    <input type="hidden" id="post_writer" name="post_writer"
+                    <input type="hidden" id="post_writer" name="healer_nickname"
                            th:value="${session.loginedHealer}">
                     <input type="hidden" id="post_map_lat" name="post_map_lat" value="">
                     <input type="hidden" id="post_map_lng" name="post_map_lng" value="">

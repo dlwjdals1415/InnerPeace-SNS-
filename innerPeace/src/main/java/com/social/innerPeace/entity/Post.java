@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -23,18 +24,19 @@ public class Post extends BaseEntity{
     @Column(length = 1500,nullable = false)
     private String post_content;
 
+    @Column(length = 512)
     private String post_image;
 
-    private float map_point_lat;
+    private float post_map_lat;
 
-    private float map_point_lng;
+    private float post_map_lng;
 
     @ElementCollection(fetch = FetchType.LAZY)
     private List<String> tags;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "healer_nickname")
-    private Healer post_writer;
+    @JoinColumn(name = "healer_email")
+    private Healer healer;
 
     @Builder.Default
     @OneToMany(mappedBy = "post_no",cascade = CascadeType.ALL)
@@ -47,4 +49,5 @@ public class Post extends BaseEntity{
     @Builder.Default
     @OneToMany(mappedBy = "post_no",cascade = CascadeType.ALL)
     private List<Post_Like> postLikeList = new ArrayList<>();
+
 }
