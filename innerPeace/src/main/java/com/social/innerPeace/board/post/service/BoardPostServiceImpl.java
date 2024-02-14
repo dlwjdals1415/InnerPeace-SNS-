@@ -6,8 +6,10 @@ import com.social.innerPeace.dto.PostDTO;
 import com.social.innerPeace.entity.Comment;
 import com.social.innerPeace.entity.Healer;
 import com.social.innerPeace.entity.Post;
+import com.social.innerPeace.entity.Post_Like;
 import com.social.innerPeace.repository.CommentRepository;
 import com.social.innerPeace.repository.HealerRepository;
+import com.social.innerPeace.repository.LikeRepository;
 import com.social.innerPeace.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,8 @@ public class BoardPostServiceImpl implements BoardPostService {
     HealerRepository healerRepository;
     @Autowired
     CommentRepository commentRepository;
+    @Autowired
+    LikeRepository likeRepository;
     @Autowired
     FileStore fileStore;
 
@@ -139,15 +143,25 @@ public class BoardPostServiceImpl implements BoardPostService {
     }
 
     @Override
-    public PostDTO findByPostNo(Long postNo) {
+    public PostDTO findByPostNo(Long postNo,String healerNickName) {
         Post post = postRepository.findByPostNoWithHealer(postNo);
         String base64String = null;
         if (post != null) {
+            List<Post_Like> likeList = likeRepository.findByPostNoPostNo(postNo);
             PostDTO postDTO = entityToDto(post);
             postDTO.setHealer_nickname(post.getHealer().getHealerNickName());
             String image = findImagename(postDTO.getPost_no()).getPost_image();
             String postimagePath = upload_dir + image;
             String profileImagePath = profile_dir + post.getHealer().getHaeler_profile_image();
+            postDTO.setLikes(likeList.size());
+            if(healerNickName != null && !healerNickName.isEmpty()){
+                Optional<Post_Like> like = likeList.stream().filter(post_like -> post_like.getHealer().getHealerNickName().equals(healerNickName)).findFirst();
+                if(like.isPresent()){
+                    postDTO.setLikeStatus("좋아요 취소");
+                }else{
+                    postDTO.setLikeStatus("좋아요");
+                }
+            }
             try {
                 byte[] fileBytes = readBytesFromFile(postimagePath);
                 base64String = encodeBytesToBase64(fileBytes);

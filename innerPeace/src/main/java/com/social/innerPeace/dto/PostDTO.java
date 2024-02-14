@@ -33,6 +33,5 @@ public class PostDTO {
     private LocalDateTime post_regday;
     private String followstat;
     private int likes;
-    private String likeposition;
     private List<CommentDTO> commentList = new ArrayList<>();
 }

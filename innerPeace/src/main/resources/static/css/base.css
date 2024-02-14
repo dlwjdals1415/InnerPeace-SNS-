@@ -827,3 +827,8 @@ body {
     resize: none;
     /* textarea의 크기 조절을 금지합니다 */
 }
+
+.obj-fit{
+    max-width: 100%;
+    max-height: 100%;
+}

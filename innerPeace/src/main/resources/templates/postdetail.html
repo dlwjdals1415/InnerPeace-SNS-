@@ -149,6 +149,7 @@
     <input type="hidden" id="post_no" th:value="${dto.post_no}"/>
     <input type="hidden" id="map_lng" th:value="${dto.post_map_lng}">
     <input type="hidden" id="map_lat" th:value="${dto.post_map_lat}">
+    <input type="hidden" id="loginedHealer" th:value="${session.loginedHealer}">
     <header class="f_g1 bg_f4">
     </header>
     <main class="bg_f4 f_g6 col_cc gap20">
@@ -157,16 +158,17 @@
                 <img class="wauto hauto obj-fit" th:src="${dto.post_image}" alt="">
             </article>
             <section class="w30 h90 col bg_e0 box_sha555 bor_rad10 gap10">
-                    <section class="w100 h5 row_c0">
+                <section class="w100 h5 row_c0">
                     <article class="row_c0 w90">
                         <img class="ml10 mr10 w30p hauto" th:src="${dto.healer_profile_image}" alt="profile">
-                       <div class="col">
-                           <a th:href="@{/user/userpage/{healer_nickname}(healer_nickname=${dto.healer_nickname})}">
-                               <span class="ml10 mr10 font_s15 text_hover" th:text="${dto.healer_nickname}">닉네임</span>
-                           </a>
-                           <label for="detail_map" class="text_hover ml10 mr10" id="de_map_address"></label>
-                       </div>
-                        <th:block th:if="${session.loginedHealer != null and dto.healer_nickname != session.loginedHealer}">
+                        <div class="col">
+                            <a th:href="@{/user/userpage/{healer_nickname}(healer_nickname=${dto.healer_nickname})}">
+                                <span class="ml10 mr10 font_s15 text_hover" th:text="${dto.healer_nickname}">닉네임</span>
+                            </a>
+                            <label for="detail_map" class="text_hover ml10 mr10" id="de_map_address"></label>
+                        </div>
+                        <th:block
+                                th:if="${session.loginedHealer != null and dto.healer_nickname != session.loginedHealer}">
                             <button class="ml10 mr10 h80 e0_btn">
                                 <span id="follow_button" th:text="${dto.followstat}">팔로우</span>
                             </button>
@@ -191,54 +193,61 @@
                                     </a>
                                     <span th:text="'  ' + ${dto.post_content}"></span>
                                 </span>
-                                <span class="row gap10">
-                                    <span th:each="item, status : ${dto.tags}">
+                                <div class="row gap10 mt10 ">
+                                    <div th:each="item, status : ${dto.tags}">
                                         <a th:href="@{/board/post/search(searchkey=${item})}">
                                             <span class="text_hover" th:text="${item}"></span>
                                         </a>
-                                    </span>
-                                </span>
-                                <span class="mt10 font_s15" th:text="${#temporals.format(dto.post_regday, 'yyyy/MM/dd HH:mm')}"></span>
+                                    </div>
+                                </div>
+                                <span class="mt10 font_s15"
+                                      th:text="${#temporals.format(dto.post_regday, 'yyyy/MM/dd HH:mm')}"></span>
                             </article>
                         </section>
                     </section>
-                    <section th:each="item, status : ${comment}" id="comment">
+                    <section>
                         <section class="w100 pad10 row">
-                    <input type="hidden" id="last_comment_no"
-                           th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].comment_no : ''}">
-                    <section id="comment_content">
-                        <section class="w100 pad10 row" th:each="item, status : ${dtoList}">
-                            <article class="w5">
-                                <img class="w30p hauto" th:src="${item.healer_profile_image}" alt="프로필">
-                            </article>
-                            <article class="w80 hauto ml20 mr20 col">
-                                <span>
-                                    <a th:href="@{/user/userpage/{healer_id}(healer_id=${item.nickName})}">
-                                        <span class="text_hover" th:text="${item.nickName}"></span>
-                                    </a>
-                                    <span th:text="'  ' + ${item.comment_content}"></span>
-                                </span>
-                                <article class="mt10 font_s15 row_cb">
-                                    <span class="regday" th:text="${#temporals.format(item.comment_regday, 'yyyy/MM/dd HH:mm')}"></span>
-                                </article>
-                            </article>
-                            <article class="w10 hauto">
-                                <th:block th:if="${session.loginedHealer != null}">
-                                    <input class="bor_none bg_e0 text_hover font_s20" type="button" value="···"
-                                           th:onclick="comment_menu([[${item.comment_no}]],[[${item.comment_content}]],[[${item.nickName}]])">
-                                </th:block>
-                            </article>
+                            <input type="hidden" id="last_comment_no"
+                                   th:value="${comment != null && !comment.isEmpty() ? comment[comment.size() - 1].comment_no : ''}">
+                            <section class="w95" id="comment_content">
+                                <section class="w100 pad10 row" th:each="item, status : ${comment}">
+                                    <article class="w5">
+                                        <img class="w30p hauto" th:src="${item.healer_profile_image}" alt="프로필">
+                                    </article>
+                                    <article class="w80 hauto ml20 mr20 col">
+                                        <span>
+                                            <a th:href="@{/user/userpage/{healer_id}(healer_id=${item.nickName})}">
+                                                <span class="text_hover" th:text="${item.nickName}"></span>
+                                            </a>
+                                            <span th:text="'  ' + ${item.comment_content}"></span>
+                                        </span>
+                                        <article class="mt10 font_s15 row_cb">
+                                            <span class="regday"
+                                                  th:text="${#temporals.format(item.comment_regday, 'yyyy/MM/dd HH:mm')}"></span>
+                                        </article>
+                                    </article>
+                                    <article class="w10 hauto">
+                                        <th:block th:if="${session.loginedHealer != null}">
+                                            <input class="bor_none bg_e0 text_hover font_s20" type="button" value="···"
+                                                   th:onclick="comment_menu([[${item.comment_no}]],[[${item.comment_content}]],[[${item.nickName}]])">
+                                        </th:block>
+                                    </article>
+                                </section>
+                            </section>
                         </section>
+                        <div class="square op">
+                            <div class="spin"></div>
+                        </div>
                     </section>
-                    <div class="square">
-                        <div class="spin"></div>
-                    </div>
                 </section>
                 <section class="w100 h20 ">
                     <article class="w100 h70 col">
-                        <th:block th:if="${session.loginedHealer != null and dto.healer_nickname != session.loginedHealer}">
+                        <th:block
+                                th:if="${session.loginedHealer != null and dto.healer_nickname != session.loginedHealer}">
                             <article class="h40 w100 row_c0">
-                                <button class="ml10 w100p h40p bor_rad20 e0_btn" th:text="${dto.likeposition}"></button>
+                                <button class="ml10 w100p h40p bor_rad20 e0_btn" id="like_btn"
+                                        th:text="${dto.likeStatus}">
+                                </button>
                             </article>
                         </th:block>
                         <article class="ml10 h30 w100 row_c0">
@@ -447,12 +456,32 @@
             }
         });
     });
+
+    $('#like_btn').click(function () {
+        let post_no = $('#post_no').val();
+        $.ajax({
+            type: "POST",
+            url: "/board/post/like",
+            data: {
+                "post_no": post_no
+            },
+            success: function (response) {
+                if (response.result == 1) {
+                    $('#like_btn').text(response.msg);
+                }
+            },
+            error: function (error) {
+                // 에러 처리
+            }
+        });
+    });
 </script>
 <script th:inline="javascript">
     var scrollTimeout; // 타이머를 저장할 변수
 
     $('#detail_content').scroll(function () {
         var element = $(this);
+        $('.square').css('opacity', '1');
 
         // 이미 설정된 타이머가 있으면 초기화
         if (scrollTimeout) {
@@ -479,13 +508,15 @@
                                 $('#comment_content').append(item.commentHtml);
                             });
                             if (response.length > 0) {
-                                var lastPostNo = response[response.length - 1].comment_no;
-                                $('#last_comment_no').val(lastPostNo);
+                                var lastCommentNo = response[response.length - 1].comment_no;
+                                $('#last_comment_no').val(lastCommentNo);
                             }
                         },
                         error: function (error) {
                             // 에러 처리
-                        },
+                        }
+                    }).always(function () {
+                        $('.square').css('opacity', '0');
                     });
                 }, 2000); // 20초 지연
             }

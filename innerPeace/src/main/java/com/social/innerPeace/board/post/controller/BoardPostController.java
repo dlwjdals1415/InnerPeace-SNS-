@@ -5,6 +5,7 @@ import com.social.innerPeace.board.post.service.BoardPostService;
 import com.social.innerPeace.dto.CommentDTO;
 import com.social.innerPeace.dto.PostDTO;
 import com.social.innerPeace.entity.Post;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,9 +74,10 @@ public class BoardPostController {
     }
 
     @GetMapping("board/post/detail/{post_no}")
-    public String postdetail(Model model,@PathVariable("post_no") Long postNo){
+    public String postdetail(Model model, @PathVariable("post_no") Long postNo, HttpSession session){
         log.info("call boarddetail");
-        PostDTO dto = boardPostService.findByPostNo(postNo);
+        String healer_nickname = (String) session.getAttribute("loginedHealer");
+        PostDTO dto = boardPostService.findByPostNo(postNo,healer_nickname);
         List<CommentDTO> comment = boardCommentService.findAll(postNo);
         model.addAttribute("dto",dto);
         model.addAttribute("comment",comment);

@@ -15,11 +15,11 @@ public class Post_Like extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long like_id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "post_no")
-    private Post post_no;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "postNo")
+    private Post postNo;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "healer_no")
-    private Healer healer_no;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "healerNickName")
+    private Healer healer;
 }

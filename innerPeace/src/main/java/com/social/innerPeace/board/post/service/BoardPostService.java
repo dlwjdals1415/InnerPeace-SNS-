@@ -16,7 +16,7 @@ public interface BoardPostService {
 
     List<PostDTO> findAllPostsWithBase64Thumbnail();
 
-    PostDTO findByPostNo(Long postNo);
+    PostDTO findByPostNo(Long postNo,String healerNickName);
 
     String modify(PostDTO dto);
 

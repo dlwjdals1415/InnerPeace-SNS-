@@ -18,7 +18,6 @@ import java.util.Optional;
 public class Post extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JoinColumn(name = "post_no")
     private Long postNo;
 
     @Column(length = 1500,nullable = false)
@@ -47,7 +46,7 @@ public class Post extends BaseEntity{
     private List<Report> reportList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "post_no",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "postNo",cascade = CascadeType.ALL)
     private List<Post_Like> postLikeList = new ArrayList<>();
 
 }
