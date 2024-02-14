@@ -69,24 +69,23 @@ $(document).ready(function () {
 
     // tag가 비어있지 않은 경우에만 실행
     if (tag) {
-      var currentPostTag = $('#post_tag').val();
+      var currentPostTag = $('#post_tag').text(); // .val() 대신 .text() 사용
 
-      // 현재 태그가 비어있지 않으면 앞에 공백 추가
-      if (currentPostTag) {
-        currentPostTag += ' ';
-      }
-      $('#post_tag').val(currentPostTag + '#' + tag);
+      // 현재 텍스트가 비어 있지 않으면 태그 앞에 공백 추가
+      var newText = currentPostTag ? currentPostTag + ' #' + tag : '#' + tag;
+
+      $('#post_tag').text(newText);
       $('#tag').val('');
+      var tags = $('#post_tag').text();
+      $('#post_tags_hidden').val(tags);
     }
   });
 
-  $('#post_tag').change(function() {
-    // 변경된 값을 가져옴
-    var updatedValue = $(this).val();
 
-    // '#post_tags_hidden' 필드에 값을 설정
-    $('#post_tags_hidden').val(updatedValue);
-  });
+    $('#post_tag_reset').click(function (){
+      $('#post_tag').text('');
+      $('#post_tags_hidden').val('');
+    });
 
   $("#create").change(function () {
     // 체크박스가 체크되었는지 확인

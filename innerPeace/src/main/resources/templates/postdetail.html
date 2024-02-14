@@ -23,10 +23,10 @@
     <input type="checkbox" class="checkbox" id="report">
     <section class="w10 hauto bor_rad20 bg_f4 z_i5 col_cc">
         <th:block th:if="${session.loginedHealer != null}">
-            <th:block th:if="${dto.post_writer != session.loginedHealer}">
+            <th:block th:if="${dto.healer_nickname != session.loginedHealer}">
                 <label for="report" class="e0_btn w80 h40p">신고</label>
             </th:block>
-            <th:block th:unless="${dto.post_writer != session.loginedHealer}">
+            <th:block th:unless="${dto.healer_nickname != session.loginedHealer}">
                 <label for="modify" class="e0_btn w80 h40p">수정</label>
                 <button id="post_delete" type="button" class="e0_btn w80 h40p" th:onclick="del([[${dto.post_no}]])">삭제
                 </button>
@@ -96,8 +96,8 @@
                     <input type="hidden" id="modify_post_content_hidden" name="post_content"
                            th:value="${dto.post_content}">
                     <input type="hidden" name="post_writer" th:value="${session.loginedHealer}">
-                    <input type="hidden" id="post_map_lat" name="post_map_lat" th:value="${dto.map_point_lat}">
-                    <input type="hidden" id="post_map_lng" name="post_map_lng" th:value="${dto.map_point_lng}">
+                    <input type="hidden" id="post_map_lat" name="post_map_lat" th:value="${dto.post_map_lat}">
+                    <input type="hidden" id="post_map_lng" name="post_map_lng" th:value="${dto.post_map_lng}">
                     <input class="dis_none" type="file" id="modify_file_input" name="post_image" accept="image/*">
                     <input type="hidden" id="post_img_hidden" name="post_image_thumbnail" value="">
                     <input class="green_btn w90 h50p" type="submit" value="수정하기">
@@ -147,8 +147,8 @@
 </th:block>
 <section class="po_ab w100 h100 bg_f4 row z_i1">
     <input type="hidden" id="post_no" th:value="${dto.post_no}"/>
-    <input type="hidden" id="map_lng" th:value="${dto.map_point_lng}">
-    <input type="hidden" id="map_lat" th:value="${dto.map_point_lat}">
+    <input type="hidden" id="map_lng" th:value="${dto.post_map_lng}">
+    <input type="hidden" id="map_lat" th:value="${dto.post_map_lat}">
     <header class="f_g1 bg_f4">
     </header>
     <main class="bg_f4 f_g6 col_cc gap20">
@@ -156,19 +156,19 @@
             <article class="w65 h100 row_cc pad20">
                 <img class="wauto hauto obj-fit" th:src="${dto.post_image}" alt="">
             </article>
-            <section class="w30 h90 col bg_e0 box_sha555 bor_rad10 gap10    ">
+            <section class="w30 h90 col bg_e0 box_sha555 bor_rad10 gap10">
                     <section class="w100 h5 row_c0">
                     <article class="row_c0 w90">
-                        <img class="ml10 mr10 w30p hauto" th:src="${dto.profileImg}" alt="profile">
+                        <img class="ml10 mr10 w30p hauto" th:src="${dto.healer_profile_image}" alt="profile">
                        <div class="col">
-                           <a th:href="@{/user/userpage/{healer_id}(healer_id=${dto.post_writer})}">
-                               <span class="ml10 mr10 font_s15 text_hover" th:text="${dto.post_writer}">닉네임</span>
+                           <a th:href="@{/user/userpage/{healer_nickname}(healer_nickname=${dto.healer_nickname})}">
+                               <span class="ml10 mr10 font_s15 text_hover" th:text="${dto.healer_nickname}">닉네임</span>
                            </a>
                            <label for="detail_map" class="text_hover ml10 mr10" id="de_map_address"></label>
                        </div>
-                        <th:block th:if="${session.loginedHealer != null and dto.post_writer != session.loginedHealer}">
+                        <th:block th:if="${session.loginedHealer != null and dto.healer_nickname != session.loginedHealer}">
                             <button class="ml10 mr10 h80 e0_btn">
-                                <span id="follow_button" th:text="${dto.followstat}">팔로우</span>
+                                <span id="follow_button">팔로우</span>
                             </button>
                         </th:block>
                     </article>
@@ -182,12 +182,12 @@
                     <section>
                         <section class="w100 pad10 row">
                             <article class="w5">
-                                <img class="w30p hauto" th:src="${dto.profileImg}" alt="프로필">
+                                <img class="w30p hauto" th:src="${dto.healer_profile_image}" alt="프로필">
                             </article>
                             <article class="w95 hauto ml20 mr20 col">
                                 <span>
-                                    <a th:href="@{/user/userpage/{healer_id}(healer_id=${dto.post_writer})}">
-                                        <span class="text_hover bold" th:text="${dto.post_writer}"></span>
+                                    <a th:href="@{/user/userpage/{healerNickName}(healerNickName=${dto.healer_nickname})}">
+                                        <span class="text_hover bold" th:text="${dto.healer_nickname}"></span>
                                     </a>
                                     <span th:text="'  ' + ${dto.post_content}"></span>
                                 </span>
@@ -198,14 +198,14 @@
                                         </a>
                                     </span>
                                 </span>
-                                <span class="mt10 font_s15" th:text="${dto.post_regday}"></span>
+                                <span class="mt10 font_s15" th:text="${#temporals.format(dto.post_regday, 'yyyy/MM/dd HH:mm')}"></span>
                             </article>
                         </section>
                     </section>
                     <section th:each="item, status : ${comment}" id="comment">
                         <section class="w100 pad10 row">
                             <article class="w5">
-                                <img class="w30p hauto" th:src="${item.profileImg}" alt="프로필">
+                                <img class="w30p hauto" th:src="${item.healer_profile_image}" alt="프로필">
                             </article>
                             <article class="w80 hauto ml20 mr20 col">
                                 <span>
@@ -215,7 +215,7 @@
                                     <span th:text="'  ' + ${item.comment_content}"></span>
                                 </span>
                                 <article class="mt10 font_s15 row_cb">
-                                    <span class="regday" th:text="${item.comment_regday}"></span>
+                                    <span class="regday" th:text="${#temporals.format(item.comment_regday, 'yyyy/MM/dd HH:mm')}"></span>
                                 </article>
                             </article>
                             <article class="w10 hauto">
@@ -229,16 +229,16 @@
                 </section>
                 <section class="w100 h20 ">
                     <article class="w100 h70 col">
-                        <th:block th:if="${session.loginedHealer != null and dto.post_writer != session.loginedHealer}">
+                        <th:block th:if="${session.loginedHealer != null and dto.healer_nickname != session.loginedHealer}">
                             <article class="h40 w100 row_c0">
-                                <button class="ml10 w100p h40p bor_rad20 e0_btn" th:text="${dto.likeposition}"></button>
+                                <button class="ml10 w100p h40p bor_rad20 e0_btn">좋아요</button>
                             </article>
                         </th:block>
                         <article class="ml10 h30 w100 row_c0">
                             <span th:text="'좋아요 ' + ${dto.likes} + ' 개'"></span>
                         </article>
                         <article class="ml10 h30 w100 row_c0">
-                            <span th:text="${dto.post_regday}"></span>
+                            <span th:text="${#temporals.format(dto.post_regday, 'yyyy/MM/dd HH:mm')}"></span>
                         </article>
                     </article>
                     <th:block th:if="${session.loginedHealer != null}">

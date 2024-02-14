@@ -62,7 +62,7 @@ public class Healer extends BaseEntity{
     private List<Follow> followingList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "post_writer",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "healer",cascade = CascadeType.ALL)
     private List<Post> postList = new ArrayList<>();
 
     @Builder.Default

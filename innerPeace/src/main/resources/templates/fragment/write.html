@@ -16,7 +16,8 @@
                 onclick="document.getElementById('write_file-input').click()">파일 선택
         </button>
         <button class="gray_btn w90 h50p dis_none" type="button" id="write_cutButton">자르기</button>
-        <label class="gray_btn w90 h50p dis_none row_cc" for="write_confirm" id="write_submitButton"><span>확인</span></label>
+        <label class="gray_btn w90 h50p dis_none row_cc" for="write_confirm"
+               id="write_submitButton"><span>확인</span></label>
     </article>
     <article class="po_ab z_i0 bg_f4 col_c0 op" id="post_write">
         <div class="f_g1 w90 h50p row_cc bor_bt">
@@ -32,14 +33,12 @@
             <div class="col_cc f_g3">
                 <textarea id="post_textarea" required placeholder="내용입력"></textarea>
                 <section class="row w90 h30p mt10">
-                    <form class="row w100 hauto">
-                        <article class="w80 h100 row_cc">
-                            <input class="w100 h80 text_input" type="text" id="post_tag" readonly>
-                        </article>
-                        <article class="w20 h100 ml10 row_cc">
-                            <input class="nomal_btn w90 hauto" type="reset" value="지우기">
-                        </article>
-                    </form>
+                    <article class="w80 h100 row_cc">
+                        <span class="w100 h80 text_input" id="post_tag"></span>
+                    </article>
+                    <article class="w20 h100 ml10 row_cc">
+                        <input class="nomal_btn w90 hauto" type="button" value="지우기" id="post_tag_reset">
+                    </article>
                 </section>
                 <section class="row w90 h30p mt10">
                     <article class="w80 h100 row_cc">
@@ -64,7 +63,7 @@
                       enctype="multipart/form-data">
                     <input type="hidden" id="post_tags_hidden" name="post_tags" value="">
                     <input type="hidden" id="post_content_hidden" name="post_content" value="">
-                    <input type="hidden" id="post_writer" name="post_writer"
+                    <input type="hidden" id="post_writer" name="healer_nickname"
                            th:value="${session.loginedHealer}">
                     <input type="hidden" id="post_map_lat" name="post_map_lat" value="">
                     <input type="hidden" id="post_map_lng" name="post_map_lng" value="">

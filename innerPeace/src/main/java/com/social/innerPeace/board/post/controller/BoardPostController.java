@@ -83,9 +83,15 @@ public class BoardPostController {
     }
 
     @PostMapping("board/post/write")
-    public String postwrite(PostDTO dto) throws IOException {
+    public String postwrite(PostDTO dto){
         String write = boardPostService.write(dto);
         return "redirect:/board/post/list";
+    }
+
+    @PostMapping("/board/post/modify")
+    public String postModify(PostDTO dto){
+        String modify = boardPostService.modify(dto);
+        return "postdetail";
     }
 
 }

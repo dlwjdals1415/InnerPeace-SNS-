@@ -28,9 +28,9 @@ public class Comment extends BaseEntity{
     @JoinColumn(name = "post_no")
     private Post post_no;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "healer_nickname")
-    private Healer healer_nickname;
+    private Healer healer;
 
     @Builder.Default
     @OneToMany(mappedBy = "report_comment",cascade = CascadeType.ALL)

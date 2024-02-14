@@ -4,6 +4,7 @@ import com.social.innerPeace.dto.PostDTO;
 import com.social.innerPeace.entity.Post;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,9 +18,10 @@ public interface BoardPostService {
 
     PostDTO findByPostNo(Long postNo);
 
+    String modify(PostDTO dto);
+
     default Post dtoToEntity(PostDTO dto){
         Post entity = Post.builder()
-                .tags(Collections.singletonList(dto.getPost_tags()))
                 .post_image(dto.getPost_image())
                 .post_content(dto.getPost_content())
                 .build();
@@ -29,14 +31,12 @@ public interface BoardPostService {
     default PostDTO entityToDto(Post entity){
         PostDTO dto = PostDTO.builder()
                 .post_no(entity.getPostNo())
-                .map_point_lng(String.valueOf(entity.getMap_point_lng()))
-                .map_point_lat(String.valueOf(entity.getMap_point_lat()))
+                .post_map_lng(String.valueOf(entity.getPost_map_lng()))
+                .post_map_lat(String.valueOf(entity.getPost_map_lat()))
                 .post_content(entity.getPost_content())
                 .post_image(entity.getPost_image())
-                .healer(entity.getPost_writer())
                 .tags(entity.getTags())
-                .post_regday(LocalDate.from(entity.getReg_date()))
-                .commentList(entity.getCommentList())
+                .post_regday(LocalDateTime.from(entity.getReg_date()))
                 .build();
         return dto;
     }

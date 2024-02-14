@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,16 +23,16 @@ public class PostDTO {
     private MultipartFile post_image_file;
     private String post_image;
     private String post_image_thumbnail;
-    private String map_point_lat;
-    private String map_point_lng;
+    private String post_map_lat;
+    private String post_map_lng;
     private List<String> tags;
     private String post_tags;
-    private Healer healer;
-    private String post_writer;
+    private String healer_profile_image;
+    private String healer_nickname;
     private String likeStatus;
-    private LocalDate post_regday;
+    private LocalDateTime post_regday;
     private String followstat;
     private int likes;
     private String likeposition;
-    private List<Comment> commentList = new ArrayList<>();
+    private List<CommentDTO> commentList = new ArrayList<>();
 }

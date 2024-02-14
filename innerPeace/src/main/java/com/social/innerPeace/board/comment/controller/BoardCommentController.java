@@ -22,7 +22,7 @@ public class BoardCommentController {
         if (healer==null) {
             return null;
         }
-        commentDTO.setHealerEmail(healer);
+        commentDTO.setNickName(healer);
         Long saveResult = boardCommentService.save(commentDTO);
         if (saveResult != null) {
             return ResponseEntity.ok(saveResult);

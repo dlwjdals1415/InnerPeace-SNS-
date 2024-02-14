@@ -27,6 +27,7 @@ public interface UserAccountService {
                 .healer_name(entity.getHealer_name())
                 .healer_pw(entity.getHealer_pw())
                 .healer_birth(entity.getHealer_bitrh().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .healer_nickname(entity.getHealerNickName())
                 .healer_phone(entity.getHealer_phone())
                 .build();
         return dto;
