@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="kr">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Inner Peace</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/base.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/write.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/sidebar.css'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+</head>
+<body>
+<input type="checkbox" class="checkbox" id="create">
+<input type="checkbox" class="checkbox" id="search">
+<input type="checkbox" class="checkbox" id="more">
+<th:block th:if="${session.loginedHealer != null}">
+    <section class="write-container" th:replace="~{fragment/write::write}"></section>
+</th:block>
+<th:block th:if="${session.loginedHealer != null}">
+    <section class="sidebar" th:replace="~{fragment/sidebar::healer_sidebar}"></section>
+</th:block>
+<th:block th:unless="${session.loginedHealer != null}">
+    <section class="sidebar" th:replace="~{fragment/sidebar::user_sidebar}"></section>
+</th:block>
+<article class="searchbar" th:replace="~{fragment/searchbar::searchbar}">
+</article>
+<th:block th:if="${session.loginedHealer != null}">
+    <section class="map-section" th:replace="~{fragment/writeMap::map-section}"></section>
+</th:block>
+<th:block th:if="${session.loginedHealer != null}">
+    <article class="menubar" th:replace="~{fragment/menu::healer_menu}"></article>
+</th:block>
+<th:block th:unless="${session.loginedHealer != null}">
+    <article class="menubar" th:replace="~{fragment/menu::user_menu}"></article>
+</th:block>
+<section class="po_ab w100 h100 bg_f4 row z_i1">
+    <header class="f_g3 bg_f4">
+    </header>
+    <main class="f_g5 main1000 col_cc">
+        <section class="mt100 w70 h80 overflow_y bor_rad20 scrollbarnone box_sha555" id="follow_section">
+            <section id="follow_content">
+                <input type="hidden" id="last_follow_no"
+                       th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].follow_no : ''}">
+                <input type="hidden" id="healer_nickname"
+                       th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].healer_nickname : ''}">
+                <input type="hidden" id="">
+                <section class="ml20 w90 h50p row_cc" th:each="item,status : ${dtoList}">
+                    <article class="w20 hauto">
+                        <img class="h40p wauto" th:src="${item.follow.haeler_profile_image}" alt="">
+                    </article>
+                    <article class="w65 hauto col ml20">
+                        <a th:href="@{/user/userpage/{healer_id}(healer_id=${item.follow.healer_nickname})}">
+                            <span class="healer_id" th:text="${item.follow.healer_nickname}"></span>
+                        </a>
+                    </article>
+                    <th:block th:if="${session.loginedHealer != null}">
+                        <article class="w10 hauto row_cc ml20">
+                            <button class="nomal_btn w100 h30p" type="button"
+                                    th:text="${item.getFollowstatus}"></button>
+                        </article>
+                    </th:block>
+                </section>
+            </section>
+            <div class="square">
+                <div class="spin"></div>
+            </div>
+        </section>
+    </main>
+    <footer class="f_g2 bg_f4">
+        <span>© 2024 INNER-PEACE</span>
+    </footer>
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9cf7f221de3543e0bd1ed40d14a3a704&libraries=services"></script>
+<script src="/js/writeMap.js"></script>
+<script src="/js/write.js"></script>
+<script>
+    var scrollTimeout; // 타이머를 저장할 변수
+
+    $('#follow_section').scroll(function () {
+        var element = $(this);
+
+        // 이미 설정된 타이머가 있으면 초기화
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+        }
+
+        // 새로운 타이머 설정
+        scrollTimeout = setTimeout(function () {
+            if (element.scrollTop() + element.innerHeight() >= element[0].scrollHeight - 30) {
+                element.scrollTop(element.prop("scrollHeight"));
+                // 2초 지연 후의 로직을 여기에 추가
+                setTimeout(function () {
+                    var follow_no = $('#last_follow_no').val();
+                    var healer_nickname = $('#healer_nickname').val();
+                    $.ajax({
+                        url: '/user/'+ healer_nickname +'/follower/scroll',
+                        type: 'POST',
+                        data: {
+                            "follow_no": follow_no,
+                        },
+                        success: function (response) {
+                            response.forEach(function (item) {
+                                $('#detail_content').append(item.commentHtml);
+                            });
+                            if (response.length > 0) {
+                                var lastPostNo = response[response.length - 1].comment_no;
+                                $('#last_comment_no').val(lastPostNo);
+                            }
+                        },
+                        error: function (error) {
+                            // 에러 처리
+                        },
+                    });
+                }, 2000); // 20초 지연
+            }
+        }, 1000); // 스크롤 이벤트의 1초 지연
+    });
+</script>
+</body>
+</html>
