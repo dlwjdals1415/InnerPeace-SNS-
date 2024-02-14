@@ -352,7 +352,7 @@
         $('#commentmenu-container').css({'z-index': '20', 'opacity': '1'});
         $('#commentmenu_comment_no').val(comment_no);
         $('#commentmenu_comment_content').val(comment_content);
-        const loginedHealer = sessionStorage.getItem('loginedHealer');
+        const loginedHealer = $('#loginedHealer').val();
 
         var buttonsContainer = $('#comment_menu_button');
         buttonsContainer.empty(); // 기존 내용을 비웁니다.
@@ -368,21 +368,50 @@
         }
 
     }
-
+</script>
+<script>
     function comment_menu_out() {
         $('#commentmenu-container').css({'z-index': '0', 'opacity': '0'});
         $('#comment_modify_section').css({'z-index': '0', 'opacity': '0'});
-        $('#comment_modify_area').val('');
+        $('#comment_modify_area').val('');comment_modify_section
     }
 
-    $('#comment_modify').click(function () {
+    $('#comment_menu_button').on('click', '#comment_modify', function() {
         $('#comment_modify_section').css({'z-index': '20', 'opacity': '1'});
         $('#comment_modify_area').val($('#commentmenu_comment_content').val());
     });
 
-    $('#comment_modify_cancel').click(function () {
+    $('#comment_menu_button').on('click', '#comment_modify_cancel', function() {
         $('#comment_modify_section').css({'z-index': '0', 'opacity': '0'});
         $('#comment_modify_area').val('');
+    });
+
+    $('#comment_menu_button').on('click', '#comment_delete', function() {
+        // 삭제 버튼에 대한 이벤트 핸들러 로직
+        let comment_no = $('#commentmenu_comment_no').val();
+        let jsonObj = {'comment_no': comment_no};
+        let jsonStr = JSON.stringify(jsonObj);
+        $.ajax({
+            type: "POST",
+            url: "/board/comment/remove",
+            contentType: "application/json; charset=utf-8",
+            data: jsonStr,
+            success: function (data, status, xhr) {
+                if (data != null && data != undefined && data.result == 1) {
+                    alert(data.msg);
+                    window.location.reload();
+                } else {
+                    alert('삭제를하지못했습니다');
+                }
+            },
+            error: function (xhr, status, error) {
+                alert('삭제를하지못했습니다');
+            }
+        });
+    });
+
+    $('#comment_menu_button').on('click', '#comment_report', function() {
+        // 신고 버튼에 대한 이벤트 핸들러 로직
     });
 
     $('#comment_modify_submit').click(function () {
@@ -408,28 +437,43 @@
             }
         });
     });
+</script>
+<script th:inline="javascript">
+    var scrollTimeout; // 타이머를 저장할 변수
 
-    $('#comment_delete').click(function () {
-        let comment_no = $('#commentmenu_comment_no').val();
-        let jsonObj = {'comment_no': comment_no};
-        let jsonStr = JSON.stringify(jsonObj);
-        $.ajax({
-            type: "POST",
-            url: "/board/comment/remove",
-            contentType: "application/json; charset=utf-8",
-            data: jsonStr,
-            success: function (data, status, xhr) {
-                if (data != null && data != undefined && data.result == 1) {
-                    alert(data.msg);
-                    window.location.reload();
-                } else {
-                    alert('삭제를하지못했습니다');
-                }
-            },
-            error: function (xhr, status, error) {
-                alert('삭제를하지못했습니다');
+    $('#detail_content').scroll(function() {
+        var element = $(this);
+
+        // 이미 설정된 타이머가 있으면 초기화
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+        }
+
+        // 새로운 타이머 설정
+        scrollTimeout = setTimeout(function() {
+            if (element.scrollTop() + element.innerHeight() >= element[0].scrollHeight - 30) {
+                element.scrollTop(element.prop("scrollHeight"));
+                // 2초 지연 후의 로직을 여기에 추가
+                setTimeout(function() {
+                    var comment_no = $('#last_comment_no').val();
+                    var post_no = $('#post_no').val();
+                    $.ajax({
+                        url: '/board/comment/scroll',
+                        type: 'POST',
+                        data: {
+                            "comment_no": comment_no,
+                            "post_no": post_no
+                        },
+                        success: function(response) {
+
+                        },
+                        error: function(error) {
+                            // 에러 처리
+                        },
+                    });
+                }, 2000); // 20초 지연
             }
-        });
+        }, 1000); // 스크롤 이벤트의 1초 지연
     });
 </script>
 </body>
