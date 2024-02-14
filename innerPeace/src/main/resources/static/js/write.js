@@ -80,10 +80,11 @@ $(document).ready(function () {
     }
   });
 
-  $('#post_tag_reset').click(function (){
-    $('#post_tag').text('');
-    $('#post_tags_hidden').val('');
-  });
+
+    $('#post_tag_reset').click(function (){
+      $('#post_tag').text('');
+      $('#post_tags_hidden').val('');
+    });
 
   $("#create").change(function () {
     // 체크박스가 체크되었는지 확인

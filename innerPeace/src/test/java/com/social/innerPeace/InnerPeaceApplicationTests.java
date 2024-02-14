@@ -21,7 +21,7 @@ class InnerPeaceApplicationTests {
 
 	@Test
 	void commentInsertTest(){
-		CommentDTO commentDTO  = CommentDTO.builder().post_no(1L).healerEmail("asd@gmail.com")
+		CommentDTO commentDTO  = CommentDTO.builder().post_no(1L).nickName("123")
 						.comment_content("댓글 테스트")
 								.build();
 

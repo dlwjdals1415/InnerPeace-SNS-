@@ -238,7 +238,7 @@
                     <article class="w100 h70 col">
                         <th:block th:if="${session.loginedHealer != null and dto.healer_nickname != session.loginedHealer}">
                             <article class="h40 w100 row_c0">
-                                <button class="ml10 w100p h40p bor_rad20 e0_btn">좋아요</button>
+                                <button class="ml10 w100p h40p bor_rad20 e0_btn" th:text="${dto.likeposition}"></button>
                             </article>
                         </th:block>
                         <article class="ml10 h30 w100 row_c0">
@@ -380,7 +380,7 @@
     function comment_menu_out() {
         $('#commentmenu-container').css({'z-index': '0', 'opacity': '0'});
         $('#comment_modify_section').css({'z-index': '0', 'opacity': '0'});
-        $('#comment_modify_area').val('');comment_modify_section
+        $('#comment_modify_area').val('');
     }
 
     $('#comment_menu_button').on('click', '#comment_modify', function () {
