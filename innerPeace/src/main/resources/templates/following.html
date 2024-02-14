@@ -62,8 +62,8 @@
                     </th:block>
                 </section>
             </section>
-            <div class="square">
-                <div class="spin"></div>
+            <div class="square_2">
+                <div class="spin_2"></div>
             </div>
         </section>
     </main>
@@ -96,19 +96,13 @@
                     var follow_no = $('#last_follow_no').val();
                     var healer_nickname = $('#healer_nickname').val();
                     $.ajax({
-                        url: '/user/'+ healer_nickname +'/follower/scroll',
+                        url: '/user/' + healer_nickname + '/following/scroll',
                         type: 'POST',
                         data: {
                             "follow_no": follow_no,
                         },
                         success: function (response) {
-                            response.forEach(function (item) {
-                                $('#detail_content').append(item.commentHtml);
-                            });
-                            if (response.length > 0) {
-                                var lastPostNo = response[response.length - 1].comment_no;
-                                $('#last_comment_no').val(lastPostNo);
-                            }
+                            appendDataToPage(response);
                         },
                         error: function (error) {
                             // 에러 처리
@@ -118,6 +112,32 @@
             }
         }, 1000); // 스크롤 이벤트의 1초 지연
     });
+
+    function appendDataToPage(data) {
+        const container = document.querySelector('#follow_content'); // HTML을 추가할 컨테이너 선택
+
+        data.forEach(item => {
+            // 각 아이템에 대한 HTML 요소 생성
+            const itemHTML = `
+      <section class="ml20 w90 h50p row_cc">
+        <article class="w20 hauto">
+          <img class="h40p wauto" src="${item.follow.healer_profile_image}" alt="">
+        </article>
+        <article class="w65 hauto col ml20">
+          <a href="/user/userpage/${item.follow.healer_nickname}">
+            <span class="healer_id">${item.follow.healer_nickname}</span>
+          </a>
+        </article>
+        ${item.followstatus != null ? `
+        <article class="w10 hauto row_cc ml20">
+          <button class="nomal_btn w100 h30p" type="button">${item.followstatus}</button>
+        </article>` : ''}
+      </section>
+    `;
+            // 컨테이너에 HTML 추가
+            container.innerHTML += itemHTML;
+        });
+    }
 </script>
 </body>
 </html>

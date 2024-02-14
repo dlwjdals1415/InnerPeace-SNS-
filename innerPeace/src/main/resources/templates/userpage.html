@@ -55,11 +55,14 @@
                                 <button type="button">메시지보내기</button>
                             </th:block>
                             <th:block th:unless="${session.loginedHealer != dto.healer_nickname}">
-                                <a class="gray_btn"
-                                   th:href="@{/user/userpage/profile/{healer_nickname}(healer_nickname=${dto.healer_nickname})}">프로필
-                                    수정</a>
-                                <a class="gray_btn"
-                                   th:href="@{/user/userpage/myinfo/{healer_nickname}(healer_nickname=${dto.healer_nickname})}">내정보 수정</a>
+                                <form action="/user/account/profile" method="post">
+                                    <input type="hidden" name="healer_nickname" th:value="${dto.healer_nickname}">
+                                    <input class="gray_btn w100p h20p" type="submit" value="프로필 수정"/>
+                                </form>
+                                <form action="/user/account/myinfo" method="post">
+                                    <input type="hidden" name="healer_nickname" th:value="${dto.healer_nickname}">
+                                    <input class="gray_btn w100p h20p" type="submit" value="내정보 수정"/>
+                                </form>
                             </th:block>
                         </th:block>
                     </article>

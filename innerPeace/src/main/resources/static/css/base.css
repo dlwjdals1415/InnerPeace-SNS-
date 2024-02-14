@@ -337,16 +337,24 @@ body {
     height: 100px;
 }
 
-.w30p {
-    width: 30px;
+.h500p{
+    height: 500px;
 }
+
 
 .wauto {
     width: auto;
 }
+.w30p {
+    width: 30px;
+}
 
 .w100p {
     width: 100px;
+}
+
+.w500p{
+    width: 500px;
 }
 
 .w100 {
@@ -781,4 +789,41 @@ body {
     to {
         -webkit-transform: rotate(360deg);
     }
+}
+
+.square_2 {
+    border: 0;
+    width: 80px;
+    padding: 0px;
+    margin-left: calc(50% - 40px);
+    margin-left: -webkit-calc(50% - 40px);
+    margin-left: -moz-calc(50% - 40px);
+    background: #f4f4f4;
+}
+
+.spin_2 {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border: dashed 5px white;
+    -webkit-animation-name: spin;
+    -webkit-animation-duration: 1.5s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+}
+
+@-webkit-keyframes spin_2 {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+.profile_textarea {
+    width: 50% !important;
+    height: 50px !important;
+    resize: none;
+    /* textarea의 크기 조절을 금지합니다 */
 }

@@ -53,4 +53,22 @@ public class UserAccountController {
         attributes.addFlashAttribute("msg", msg);
         return "redirect:/login";
     }
+
+    @PostMapping("/profile")
+    public String profile(HealerDTO dto){
+        log.info("profile nickname : {}", dto.getHealer_nickname());
+        return "profile";
+    }
+
+    @PostMapping("/myinfo")
+    public String myinfo(HealerDTO dto){
+        log.info("profile nickname : {}", dto.getHealer_nickname());
+        return "myinfo";
+    }
+
+    @PostMapping("/profile/img")
+    public String profileImg(HealerDTO dto){
+        log.info("profile nickname : {}", dto.getHealer_nickname());
+        return "profile";
+    }
 }

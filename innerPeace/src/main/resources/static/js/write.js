@@ -17,18 +17,13 @@ $(document).ready(function () {
       // Set up image write_preview
       $('#write_preview').attr('src', e.target.result).on('load', function () {
         // Set image height
-        var uploadHeight = $('.upload').height();
+        var uploadHeight = $('#upload_article').height();
         $(this).height(uploadHeight * 5 / 7);
 
         cropper = new Cropper(document.getElementById('write_preview'), {
           aspectRatio: 1,
-          data: {
-            width: 500,
-            fillColor: '#fff',
-            imageSmoothingQuality: 'high'
-          }
+          viewMode: 1, // 크롭 박스가 캔버스 밖으로 나가지 않도록 설정
         });
-        $('#post_image').val(e.target.result.split(',')[1]);
       });
     }
 
@@ -38,7 +33,11 @@ $(document).ready(function () {
   // 자르기 버튼 클릭 시
   $('#write_cutButton').click(function () {
     if (cropper) {
-      var croppedCanvas = cropper.getCroppedCanvas();
+      var croppedCanvas = cropper.getCroppedCanvas({
+        width: 500,
+        fillColor: '#fff',
+        imageSmoothingQuality: 'high',
+      });
       var finalCanvas = document.createElement('canvas');
       finalCanvas.width = finalCanvas.height = Math.max(croppedCanvas.width, croppedCanvas.height);
 
@@ -69,23 +68,21 @@ $(document).ready(function () {
 
     // tag가 비어있지 않은 경우에만 실행
     if (tag) {
-      var currentPostTag = $('#post_tag').val();
+      var currentPostTag = $('#post_tag').text(); // .val() 대신 .text() 사용
 
-      // 현재 태그가 비어있지 않으면 앞에 공백 추가
-      if (currentPostTag) {
-        currentPostTag += ' ';
-      }
-      $('#post_tag').val(currentPostTag + '#' + tag);
+      // 현재 텍스트가 비어 있지 않으면 태그 앞에 공백 추가
+      var newText = currentPostTag ? currentPostTag + ' #' + tag : '#' + tag;
+
+      $('#post_tag').text(newText);
       $('#tag').val('');
+      var tags = $('#post_tag').text();
+      $('#post_tags_hidden').val(tags);
     }
   });
 
-  $('#post_tag').change(function() {
-    // 변경된 값을 가져옴
-    var updatedValue = $(this).val();
-
-    // '#post_tags_hidden' 필드에 값을 설정
-    $('#post_tags_hidden').val(updatedValue);
+  $('#post_tag_reset').click(function (){
+    $('#post_tag').text('');
+    $('#post_tags_hidden').val('');
   });
 
   $("#create").change(function () {

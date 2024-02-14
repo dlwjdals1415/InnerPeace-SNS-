@@ -2,6 +2,7 @@ package com.social.innerPeace.user.follow.controller;
 
 import com.social.innerPeace.dto.FollowDTO;
 import com.social.innerPeace.dto.HealerDTO;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,8 +69,8 @@ public class HealerFollowController {
 
     @PostMapping("/{healer_nickname}/following/scroll")
     @ResponseBody
-    public ResponseEntity<Object> followingScroll(@PathVariable(name = "healer_nickname") String healer_nickname) {
-        log.info("follower scroll call");
+    public ResponseEntity<Object> followingScroll(@PathVariable(name = "healer_nickname") String healer_nickname,@ModelAttribute("follow_no") long follow_no) {
+        log.info("follower scroll call follow_no : {}", follow_no);
         List<FollowDTO> dtoList = new ArrayList<>();
         IntStream.rangeClosed(1, 100).forEach(i -> {
             HealerDTO healer = HealerDTO
@@ -91,8 +92,8 @@ public class HealerFollowController {
 
     @PostMapping("/{healer_nickname}/follower/scroll")
     @ResponseBody
-    public ResponseEntity<Object> followerScroll(@PathVariable(name = "healer_nickname") String healer_nickname) {
-        log.info("follower scroll call");
+    public ResponseEntity<Object> followerScroll(@PathVariable(name = "healer_nickname") String healer_nickname,@ModelAttribute("follow_no") long follow_no) {
+        log.info("follower scroll call follow_no : {}", follow_no);
         List<FollowDTO> dtoList = new ArrayList<>();
         IntStream.rangeClosed(1, 100).forEach(i -> {
             HealerDTO healer = HealerDTO
@@ -110,5 +111,12 @@ public class HealerFollowController {
             dtoList.add(dto);
         });
         return ResponseEntity.status(HttpStatus.OK).body(dtoList);
+    }
+
+    @PostMapping("/{healer_nickname}/follow")
+    @ResponseBody
+    public ResponseEntity<Object> follow(@PathVariable(name = "healer_nickname") String healer_nickname, HttpSession session) {
+        log.info("follow call follow_no : {}", healer_nickname);
+        return ResponseEntity.status(HttpStatus.OK).body("팔로우 성공");
     }
 }
