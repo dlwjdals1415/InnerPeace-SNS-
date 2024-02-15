@@ -18,8 +18,10 @@ public interface BoardPostService {
 
     PostDTO findByPostNo(Long postNo,String healerNickName);
 
-    PostDTO modify(PostDTO dto);
+    PostDTO modify(PostDTO dto, String loginHealer);
     String like(Long postNo, String healerNickname);
+
+    int deletePost(PostDTO postDTO);
 
     default Post dtoToEntity(PostDTO dto){
         Post entity = Post.builder()

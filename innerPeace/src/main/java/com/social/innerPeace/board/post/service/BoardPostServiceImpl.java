@@ -70,13 +70,13 @@ public class BoardPostServiceImpl implements BoardPostService {
         List<String> words = new ArrayList<>();
 
         // '#'을 기준으로 문자열을 분리
-        String[] splitWords = input.split(" ");
+        String[] splitWords = input.split("#");
 
         // 분리된 각 단어에서 공백을 제거하여 리스트에 추가
         for (String word : splitWords) {
             String cleanWord = word.trim(); // 공백 제거
             if (!cleanWord.isEmpty()) { // 빈 문자열이 아니면 리스트에 추가
-                words.add(cleanWord);
+                words.add("#" + cleanWord);
             }
         }
 
@@ -146,6 +146,7 @@ public class BoardPostServiceImpl implements BoardPostService {
             String image = findImagename(postDTO.getPost_no()).getPost_image();
             String postimagePath = upload_dir + image;
             String profileImagePath = profile_dir + post.getHealer().getHaelerProfileImage();
+            String thumbnailImagePath = thumbnail_dir + image;
             postDTO.setLikes(likeList.size());
             if (healerNickName != null && !healerNickName.isEmpty()) {
                 Optional<Post_Like> like = likeList.stream().filter(post_like -> post_like.getHealer().getHealerNickName().equals(healerNickName)).findFirst();
@@ -165,6 +166,9 @@ public class BoardPostServiceImpl implements BoardPostService {
                 byte[] fileBytes = readBytesFromFile(postimagePath);
                 base64String = encodeBytesToBase64(fileBytes);
                 postDTO.setPost_image("data:image/png;base64," + base64String);
+                fileBytes = readBytesFromFile(thumbnailImagePath);
+                base64String = encodeBytesToBase64(fileBytes);
+                postDTO.setPost_image_thumbnail("data:image/png;base64," + base64String);
                 fileBytes = readBytesFromFile(profileImagePath);
                 base64String = encodeBytesToBase64(fileBytes);
                 postDTO.setHealer_profile_image("data:image/png;base64," + base64String);
@@ -180,37 +184,46 @@ public class BoardPostServiceImpl implements BoardPostService {
     }
 
     @Override
-    public PostDTO modify(PostDTO dto) {
+    public PostDTO modify(PostDTO dto, String loginHealer) {
         Optional<Post> optionalPost = postRepository.findById(dto.getPost_no());
-        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(dto.getHealer_nickname());
-        Healer healer = null;
-        if(optionalHealer.isPresent()){
-            healer = optionalHealer.get();
+        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(loginHealer);
+        if(!optionalHealer.get().getHealerEmail().equals(optionalPost.get().getHealer().getHealerEmail())){
+            return null;
         }
         if (optionalPost.isPresent()) {
             Post post = optionalPost.get();
             // 게시물을 찾은 경우
-            if (dto.getPost_image_thumbnail() != null) {
+            if (dto.getPost_image_thumbnail() != null && !dto.getPost_image_thumbnail().isEmpty()) {
                 // 이미지 해시값이 변경된 경우
                 try {
                     dto = fileStore.storeFile(dto); // 파일 저장
-                    post.setPostImage(dto.getPost_image_thumbnail()+"png");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
-
             if (!dto.getPost_map_lat().isEmpty() && dto.getPost_map_lat() != null) {
                 post.setPostMapLat(Float.parseFloat(dto.getPost_map_lat()));
                 post.setPostMapLng(Float.parseFloat(dto.getPost_map_lng()));
             }
-            post.setPostContent(dto.getPost_content());
+            post.setPostImage(dto.getPost_image());
             post.setTags(splitAndClean(dto.getPost_tags()));
-            post.setHealer(healer);
+            post.setPostContent(dto.getPost_content());
             post = postRepository.save(post);
             return entityToDto(post);
         }
         return null;
+    }
+
+    @Override
+    public int deletePost(PostDTO postDTO) {
+        int result = 0;
+        try{
+            postRepository.deleteById(postDTO.getPost_no());
+            result = 1;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override

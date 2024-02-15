@@ -99,8 +99,10 @@ $('#map-search-btn').on('click', function () {
     }
   }
   $('#map_section').on('click', '#map-confirm', function () {
-    var infoDiv = document.getElementById('address');
-    infoDiv.innerHTML = $('#centerAddr').text();
+    var infoDiv1 = document.getElementById('address');
+    var infoDiv2 = document.getElementById('modify_address');
+    infoDiv1.innerHTML = $('#centerAddr').text();
+    infoDiv2.innerHTML = $('#centerAddr').text();
     mapSection.css({"z-index": "0", "opacity": "0"});
   });
 

@@ -54,7 +54,7 @@
         <div class="row_cc w90 f_g13 modify-main">
             <div class="f_g5 row_cc">
                 <img class="ml10 w100 h100"
-                     th:src="${dto.post_image}"
+                     th:src="${dto.post_image_thumbnail}"
                      alt="uploadImg" id="post_img">
             </div>
             <div class="col_cc f_g3">
@@ -62,7 +62,8 @@
                 <section class="row w90 h30p mt10">
                     <form class="row w100 hauto">
                         <article class="w80 h100 row_cc">
-                            <span class="w100 h80 text_input overflow_y" id="modify_post_tag" th:text="${tagString}"></span>
+                            <span class="w100 h80 text_input overflow_y" id="modify_post_tag"
+                                  th:text="${tagString}"></span>
                         </article>
                         <article class="w20 h100 ml10 row_cc">
                             <input class="nomal_btn w90 hauto" type="button" id="tag_reset" value="지우기">
@@ -87,8 +88,8 @@
                         <button class="nomal_btn w90 hauto" type="button" id="map-search-btn">검색</button>
                     </article>
                 </section>
-                <div class="map" id="address"></div>
-                <form class="w100 hauto row_cc mt20" th:action="@{/board/post/modify}" method="post"
+                <div class="map" id="modify_address"></div>
+                <form id="modify_form" class="w100 hauto row_cc mt20" th:action="@{/board/post/modify}" method="post"
                       enctype="multipart/form-data">
                     <input type="hidden" name="post_no" th:value="${dto.post_no}">
                     <input type="hidden" id="modify_post_tags_hidden" name="post_tags" th:value="${tagString}">
@@ -97,7 +98,7 @@
                     <input type="hidden" name="post_writer" th:value="${session.loginedHealer}">
                     <input type="hidden" id="post_map_lat" name="post_map_lat" th:value="${dto.post_map_lat}">
                     <input type="hidden" id="post_map_lng" name="post_map_lng" th:value="${dto.post_map_lng}">
-                    <input class="dis_none" type="file" id="modify_file_input" name="post_image" accept="image/*">
+                    <input class="dis_none" type="file" id="modify_file_input" name="post_image_file" accept="image/*">
                     <input type="hidden" id="post_img_hidden" name="post_image_thumbnail" value="">
                     <input class="green_btn w90 h50p" type="submit" value="수정하기">
                 </form>
@@ -158,7 +159,7 @@
                 <img class="wauto hauto obj-fit" th:src="${dto.post_image}" alt="">
             </article>
             <section class="w30 h90 col bg_e0 box_sha555 bor_rad10 gap10">
-                <section class="w100 h5 row_c0">
+                <section class="w100 h10 row_c0">
                     <article class="row_c0 w90">
                         <img class="ml10 mr10 w30p hauto" th:src="${dto.healer_profile_image}" alt="profile">
                         <div class="col">
@@ -167,7 +168,8 @@
                             </a>
                             <label for="detail_map" class="text_hover ml10 mr10" id="de_map_address"></label>
                         </div>
-                        <th:block th:if="${session.loginedHealer != null and dto.healer_nickname != session.loginedHealer}">
+                        <th:block
+                                th:if="${session.loginedHealer != null and dto.healer_nickname != session.loginedHealer}">
                             <button class="ml10 mr10 h80 gray_btn" id="follow_btn" th:text="${dto.followstat}">
                             </button>
                         </th:block>
@@ -296,6 +298,7 @@
     var callback = function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
             document.getElementById('de_map_address').innerText = result[0].address.address_name;
+            document.getElementById('modify_address').innerText = result[0].address.address_name;
         }
     };
 
@@ -334,6 +337,27 @@
                 }
             });
         });
+
+        $('#modify_form').submit(function(e) {
+    e.preventDefault(); // 기본 동작 막기
+
+    var formData = new FormData(this);
+    let postNo = $("#post_no").val();
+    $.ajax({
+        url: '/board/post/modify',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+             window.location.replace(response);
+        },
+        error: function(xhr, status, error) {
+            // 오류 발생 시 수행할 작업
+            console.error('실패');
+        }
+    });
+});
     });
 </script>
 <script th:inline="javascript">
@@ -345,13 +369,13 @@
         let jsonStr = JSON.stringify(jsonObj);
         $.ajax({
             type: "POST",
-            url: "/board/post/remove",
+            url: "/board/post/delete",
             contentType: "application/json; charset=utf-8",
             data: jsonStr,
             success: function (data, status, xhr) {
                 if (data != null && data != undefined && data.result == 1) {
                     alert(data.msg);
-                    window.location.replace('/board');
+                    window.location.replace('/board/post/list');
                 } else {
                     alert('삭제를하지못했습니다');
                 }
@@ -489,6 +513,8 @@
             }
         });
     });
+
+
 </script>
 <script th:inline="javascript">
     var scrollTimeout; // 타이머를 저장할 변수

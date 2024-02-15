@@ -91,9 +91,30 @@ public class BoardPostController {
     }
 
     @PostMapping("/board/post/modify")
-    public String postModify(PostDTO dto) {
-        PostDTO postDTO = boardPostService.modify(dto);
-        return "postdetail";
+    @ResponseBody
+    public ResponseEntity<Object> postModify(PostDTO dto, HttpSession session) {
+        String loginHealer = (String) session.getAttribute("loginedHealer");
+        PostDTO postDTO = boardPostService.modify(dto, loginHealer);
+        if(postDTO == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정에 실패하였습니다");
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.OK).body("http://localhost:8080/board/post/detail/" + postDTO.getPost_no());
+        }
+    }
+
+    @PostMapping("/board/post/delete")
+    @ResponseBody
+    public ResponseEntity<Object> postDelete(@RequestBody PostDTO postDTO, HttpSession session){
+        int result = boardPostService.deletePost(postDTO);
+        HashMap res = new HashMap<>();
+        res.put("result",result);
+        if(result>0){
+            res.put("msg","삭제가 되었습니다.");
+        }else{
+            res.put("msg","삭제를 하지 못했습니다.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
     @PostMapping("/board/post/like")
