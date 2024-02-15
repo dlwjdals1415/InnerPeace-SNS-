@@ -24,8 +24,9 @@ public class BoardCommentController {
     private final BoardCommentService boardCommentService;
 
     @PostMapping("/write")
-    public ResponseEntity<Object> save(@RequestBody CommentDTO commentDTO, @SessionAttribute(name = "loginedHealer") String healer) {
+    public ResponseEntity<Object> save(@RequestBody CommentDTO commentDTO, HttpSession session) {
         System.out.println("commentDTO = " + commentDTO);
+        String healer = (String) session.getAttribute("loginedHealer");
         if (healer == null) {
             return null;
         }
@@ -35,6 +36,41 @@ public class BoardCommentController {
             return ResponseEntity.ok(saveResult);
         } else {
             return new ResponseEntity<>("해당 게시글이 존재하지 않습니다", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/modify")
+    public ResponseEntity<Object> modify(@RequestBody CommentDTO commentDTO, HttpSession session) {
+        String healer = (String) session.getAttribute("loginedHealer");
+        if (healer == null) {
+            return new ResponseEntity<>("로그인한 사용자가 아닙니다", HttpStatus.BAD_REQUEST);
+        }
+        commentDTO.setNickName(healer);
+        Long saveResult = boardCommentService.modify(commentDTO);
+        if (saveResult == 1L) {
+            return ResponseEntity.ok(saveResult);
+        } else if (saveResult == 0L) {
+            return new ResponseEntity<>("작성자가 일치하지않습니다.", HttpStatus.BAD_GATEWAY);
+        } else {
+            return new ResponseEntity<>("해당 댓글을 찾을수 없습니다", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/delete")
+    @ResponseBody
+    public ResponseEntity<Object> delete(@RequestBody CommentDTO commentDTO, HttpSession session) {
+        String healer = (String) session.getAttribute("loginedHealer");
+        if (healer == null) {
+            return new ResponseEntity<>("로그인한 사용자가 아닙니다", HttpStatus.BAD_REQUEST);
+        }
+        commentDTO.setNickName(healer);
+        Long saveResult = boardCommentService.delete(commentDTO);
+        if (saveResult == 1L) {
+            return ResponseEntity.ok(saveResult);
+        } else if (saveResult == 0L) {
+            return new ResponseEntity<>("작성자가 일치하지않습니다.", HttpStatus.BAD_GATEWAY);
+        } else {
+            return new ResponseEntity<>("해당 댓글을 찾을수 없습니다", HttpStatus.NOT_FOUND);
         }
     }
 

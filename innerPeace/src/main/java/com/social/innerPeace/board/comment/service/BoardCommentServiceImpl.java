@@ -50,6 +50,27 @@ public class BoardCommentServiceImpl implements BoardCommentService {
         }
     }
 
+    @Override
+    public Long modify(CommentDTO commentDTO) {
+        Optional<Comment> optionalComment = commentRepository.findById(commentDTO.getComment_no());
+        if(!commentDTO.getNickName().equals(optionalComment.get().getHealer().getHealerNickName())) {
+            return 0L;
+        }
+        Comment comment = optionalComment.get();
+        comment.setCommentContent(commentDTO.getComment_content());
+        return commentRepository.save(comment).getCommentNo();
+    }
+
+    @Override
+    public Long delete(CommentDTO commentDTO) {
+        Optional<Comment> optionalComment = commentRepository.findById(commentDTO.getComment_no());
+        if(!commentDTO.getNickName().equals(optionalComment.get().getHealer().getHealerNickName())) {
+            return 0L;
+        }
+        commentRepository.deleteById(commentDTO.getComment_no());
+        return 1L;
+    }
+
     @Transactional
     public List<CommentDTO> findAll(Long postNo) {
         Sort sort = Sort.by(Sort.Direction.DESC, "commentNo");
