@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"post_no","healer_no"})
+@ToString(exclude = {"post","healer"})
 public class Post_Like extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

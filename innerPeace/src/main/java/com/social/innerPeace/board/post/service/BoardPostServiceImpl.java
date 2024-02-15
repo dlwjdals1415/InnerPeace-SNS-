@@ -6,8 +6,12 @@ import com.social.innerPeace.dto.PostDTO;
 import com.social.innerPeace.entity.*;
 import com.social.innerPeace.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +27,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class BoardPostServiceImpl implements BoardPostService {
     @Value("${thumbnail.dir}")
@@ -50,7 +55,7 @@ public class BoardPostServiceImpl implements BoardPostService {
                 Healer healer = optionalHealer.get();
                 post = dtoToEntity(dto);
                 post.setHealer(healer);
-                if (!dto.getPost_map_lat().isEmpty() && dto.getPost_map_lat() != null) {
+                if (!dto.getPost_map_lat().isEmpty()) {
                     post.setPostMapLat(Float.parseFloat(dto.getPost_map_lat()));
                     post.setPostMapLng(Float.parseFloat(dto.getPost_map_lng()));
                 }
@@ -65,24 +70,6 @@ public class BoardPostServiceImpl implements BoardPostService {
     }
 
 
-    //태그를 나눠서 리스트에 추가하는 메소드
-    public static List<String> splitAndClean(String input) {
-        List<String> words = new ArrayList<>();
-
-        // '#'을 기준으로 문자열을 분리
-        String[] splitWords = input.split("#");
-
-        // 분리된 각 단어에서 공백을 제거하여 리스트에 추가
-        for (String word : splitWords) {
-            String cleanWord = word.trim(); // 공백 제거
-            if (!cleanWord.isEmpty()) { // 빈 문자열이 아니면 리스트에 추가
-                words.add("#" + cleanWord);
-            }
-        }
-
-        return words;
-    }
-
     @Override
     public PostDTO findImagename(Long post_no) {
         Post post = postRepository.findById(post_no).orElse(null);
@@ -94,48 +81,14 @@ public class BoardPostServiceImpl implements BoardPostService {
     }
 
     @Override
-    public List<PostDTO> findAllPostsWithBase64Thumbnail() {
+    public List<PostDTO> list() {
         List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "postNo")).stream().limit(36).collect(Collectors.toList());
-        List<PostDTO> dtoList = new ArrayList<>();
-
-        for (Post post : posts) {
-            String image = findImagename(post.getPostNo()).getPost_image();
-            String imagePath = thumbnail_dir + image;
-            String base64String = null;
-            try {
-                byte[] fileBytes = readBytesFromFile(imagePath);
-                base64String = encodeBytesToBase64(fileBytes);
-            } catch (IOException e) {
-                // 예외 처리
-            }
-            PostDTO dto = PostDTO
-                    .builder()
-                    .post_no(post.getPostNo())
-                    .post_image_thumbnail("data:image/png;base64," + base64String)
-                    .build();
-            dtoList.add(dto);
-        }
-        return dtoList;
+        return listEntityToDto(posts);
     }
 
-    private static byte[] readBytesFromFile(String filePath) throws IOException {
-        File file = new File(filePath);
-        byte[] fileBytes = new byte[(int) file.length()];
-
-        try (FileInputStream fis = new FileInputStream(file)) {
-            fis.read(fileBytes);
-        }
-
-        return fileBytes;
-    }
-
-    // 바이트 배열을 Base64로 인코딩하는 메서드
-    private static String encodeBytesToBase64(byte[] bytes) {
-        return Base64.getEncoder().encodeToString(bytes);
-    }
 
     @Override
-    public PostDTO findByPostNo(Long postNo, String healerNickName) {
+    public PostDTO detail(Long postNo, String healerNickName) {
         Post post = postRepository.findByPostNoWithHealer(postNo);
         String base64String = null;
         if (post != null) {
@@ -201,7 +154,7 @@ public class BoardPostServiceImpl implements BoardPostService {
                     throw new RuntimeException(e);
                 }
             }
-            if (!dto.getPost_map_lat().isEmpty() && dto.getPost_map_lat() != null) {
+            if (!dto.getPost_map_lat().isEmpty()) {
                 post.setPostMapLat(Float.parseFloat(dto.getPost_map_lat()));
                 post.setPostMapLng(Float.parseFloat(dto.getPost_map_lng()));
             }
@@ -215,13 +168,43 @@ public class BoardPostServiceImpl implements BoardPostService {
     }
 
     @Override
+    public List<PostDTO> search(String searchkey) {
+        if (searchkey == null) {
+            return null; // searchKey가 null인 경우, null을 반환
+        }
+
+        String modifiedSearchKey = searchkey.trim(); // 앞뒤 공백 제거
+
+        // searchKey가 "#"으로 시작하는 경우
+        if (modifiedSearchKey.startsWith("#")) {
+            modifiedSearchKey = modifiedSearchKey.substring(1); // "#" 제거
+            Pageable pageable = PageRequest.of(0, 36, Sort.by("postNo").descending());
+            Page<Post> posts = postRepository.findByTagContaining(modifiedSearchKey, pageable);
+            List<Post> postList = posts.getContent(); // 실제 Post 목록을 얻음
+            return listEntityToDto(postList);
+        }
+        // searchKey가 "@"으로 시작하는 경우
+        else if (modifiedSearchKey.startsWith("@")) {
+            modifiedSearchKey = modifiedSearchKey.substring(1); // "@" 제거
+            Pageable pageable = PageRequest.of(0, 36, Sort.by("postNo").descending());
+            Page<Post> posts = postRepository.findByHealerNickNameContaining(modifiedSearchKey, pageable);
+            List<Post> postList = posts.getContent(); // 실제 Post 목록을 얻음
+            return listEntityToDto(postList);
+        }
+        Pageable pageable = PageRequest.of(0, 36, Sort.by("postNo").descending());
+        Page<Post> posts = postRepository.findByContentContaining(searchkey, pageable);
+        List<Post> postList = posts.getContent(); // 실제 Post 목록을 얻음
+        return listEntityToDto(postList);
+    }
+
+    @Override
     public int deletePost(PostDTO postDTO) {
         int result = 0;
         try{
             postRepository.deleteById(postDTO.getPost_no());
             result = 1;
         }catch (Exception e){
-            e.printStackTrace();
+            log.debug(e.getMessage());
         }
         return result;
     }
@@ -248,5 +231,62 @@ public class BoardPostServiceImpl implements BoardPostService {
         }
         return null;
     }
+
+    private List<PostDTO> listEntityToDto(List<Post> posts) {
+        List<PostDTO> dtoList = new ArrayList<>();
+        for (Post post : posts) {
+            String image = findImagename(post.getPostNo()).getPost_image();
+            String imagePath = thumbnail_dir + image;
+            String base64String = null;
+            try {
+                byte[] fileBytes = readBytesFromFile(imagePath);
+                base64String = encodeBytesToBase64(fileBytes);
+            } catch (IOException e) {
+                // 예외 처리
+            }
+            PostDTO dto = PostDTO
+                    .builder()
+                    .post_no(post.getPostNo())
+                    .post_image_thumbnail("data:image/png;base64," + base64String)
+                    .build();
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
+
+    private static byte[] readBytesFromFile(String filePath) throws IOException {
+        File file = new File(filePath);
+        byte[] fileBytes = new byte[(int) file.length()];
+
+        try (FileInputStream fis = new FileInputStream(file)) {
+            fis.read(fileBytes);
+        }
+
+        return fileBytes;
+    }
+
+    // 바이트 배열을 Base64로 인코딩하는 메서드
+    private static String encodeBytesToBase64(byte[] bytes) {
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+
+    //태그를 나눠서 리스트에 추가하는 메소드
+    public static List<String> splitAndClean(String input) {
+        List<String> words = new ArrayList<>();
+
+        // '#'을 기준으로 문자열을 분리
+        String[] splitWords = input.split("#");
+
+        // 분리된 각 단어에서 공백을 제거하여 리스트에 추가
+        for (String word : splitWords) {
+            String cleanWord = word.trim(); // 공백 제거
+            if (!cleanWord.isEmpty()) { // 빈 문자열이 아니면 리스트에 추가
+                words.add("#" + cleanWord);
+            }
+        }
+
+        return words;
+    }
+
 
 }

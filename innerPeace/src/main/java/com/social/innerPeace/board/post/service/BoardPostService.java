@@ -14,11 +14,12 @@ public interface BoardPostService {
 
     PostDTO findImagename(Long post_no);
 
-    List<PostDTO> findAllPostsWithBase64Thumbnail();
+    List<PostDTO> list();
 
-    PostDTO findByPostNo(Long postNo,String healerNickName);
+    PostDTO detail(Long postNo,String healerNickName);
 
     PostDTO modify(PostDTO dto, String loginHealer);
+    List<PostDTO> search(String searchkey);
     String like(Long postNo, String healerNickname);
 
     int deletePost(PostDTO postDTO);

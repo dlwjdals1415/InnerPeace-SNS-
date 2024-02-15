@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"inquiry_writer","answer"})
+@ToString(exclude = {"healer","answer"})
 public class Inquiry extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

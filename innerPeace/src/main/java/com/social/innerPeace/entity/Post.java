@@ -14,7 +14,7 @@ import java.util.Optional;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"post_writer","commentList","reportList"})
+@ToString(exclude = {"healer","commentList","reportList"})
 public class Post extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

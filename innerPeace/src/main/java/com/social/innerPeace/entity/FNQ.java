@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = "fnq_writer")
+@ToString(exclude = "admin")
 public class FNQ extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

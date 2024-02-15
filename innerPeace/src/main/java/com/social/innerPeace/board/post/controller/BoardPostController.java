@@ -34,7 +34,7 @@ public class BoardPostController {
     public String postlist(Model model) {
         log.info("call postlist");
         List<PostDTO> dtoList = new ArrayList<>();
-        dtoList = boardPostService.findAllPostsWithBase64Thumbnail();
+        dtoList = boardPostService.list();
         model.addAttribute("dtoList", dtoList);
         return "postlist";
     }
@@ -77,7 +77,7 @@ public class BoardPostController {
     public String postdetail(Model model, @PathVariable("post_no") Long postNo, HttpSession session) {
         log.info("call boarddetail");
         String healer_nickname = (String) session.getAttribute("loginedHealer");
-        PostDTO dto = boardPostService.findByPostNo(postNo, healer_nickname);
+        PostDTO dto = boardPostService.detail(postNo, healer_nickname);
         List<CommentDTO> comment = boardCommentService.findAll(postNo);
         model.addAttribute("dto", dto);
         model.addAttribute("comment", comment);
@@ -115,6 +115,15 @@ public class BoardPostController {
             res.put("msg","삭제를 하지 못했습니다.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+
+    @GetMapping("/board/post/search")
+    public String postsearch(Model model, @RequestParam("searchkey") String searchkey) {
+        log.info("call postsearch search : {}", searchkey);
+        List<PostDTO> dtoList = boardPostService.search(searchkey);
+        model.addAttribute("search", searchkey);
+        model.addAttribute("dtoList", dtoList);
+        return "postsearchlist";
     }
 
     @PostMapping("/board/post/like")
