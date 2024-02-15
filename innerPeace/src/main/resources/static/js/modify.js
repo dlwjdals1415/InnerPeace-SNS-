@@ -126,26 +126,20 @@ $(document).ready(function () {
 
         // tag가 비어있지 않은 경우에만 실행
         if (tag) {
-            var currentPostTag = $('#modify_post_tag').val();
+            var currentPostTag = $('#modify_post_tag').text(); // .val() 대신 .text() 사용
 
-            // 현재 태그가 비어있지 않으면 앞에 공백 추가
-            if (currentPostTag) {
-                currentPostTag += ' ';
-            }
-            $('#modify_post_tag').val(currentPostTag + '#' + tag);
+            // 현재 텍스트가 비어 있지 않으면 태그 앞에 공백 추가
+            var newText = currentPostTag ? currentPostTag + ' #' + tag : '#' + tag;
+
+            $('#modify_post_tag').text(newText);
             $('#modify_tag').val('');
+            var tags = $('#modify_post_tag').text();
+            $('#modify_post_tags_hidden').val(tags);
         }
     });
 
-    $('#modify_post_tag').change(function() {
-        // 변경된 값을 가져옴
-        var updatedValue = $(this).val();
-
-        // '#post_tags_hidden' 필드에 값을 설정
-        $('#modify_post_tags_hidden').val(updatedValue);
-    });
-
     $('#tag_reset').click(function() {
-        $('#modify_post_tag').val('');
+        $('#modify_post_tag').text('');
+        $('#modify_post_tags_hidden').val('');
     });
 });

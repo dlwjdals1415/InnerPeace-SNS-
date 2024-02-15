@@ -3,14 +3,8 @@ package com.social.innerPeace.board.post.service;
 import com.social.innerPeace.board.post.component.FileStore;
 import com.social.innerPeace.detail.HealerDetails;
 import com.social.innerPeace.dto.PostDTO;
-import com.social.innerPeace.entity.Comment;
-import com.social.innerPeace.entity.Healer;
-import com.social.innerPeace.entity.Post;
-import com.social.innerPeace.entity.Post_Like;
-import com.social.innerPeace.repository.CommentRepository;
-import com.social.innerPeace.repository.HealerRepository;
-import com.social.innerPeace.repository.LikeRepository;
-import com.social.innerPeace.repository.PostRepository;
+import com.social.innerPeace.entity.*;
+import com.social.innerPeace.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,15 +32,13 @@ public class BoardPostServiceImpl implements BoardPostService {
     @Value("${profile.dir}")
     String profile_dir;
     @Autowired
-    PostRepository postRepository;
+    private PostRepository postRepository;
     @Autowired
-    HealerRepository healerRepository;
+    private HealerRepository healerRepository;
     @Autowired
-    CommentRepository commentRepository;
+    private LikeRepository likeRepository;
     @Autowired
-    LikeRepository likeRepository;
-    @Autowired
-    FileStore fileStore;
+    private FileStore fileStore;
 
     @Override
     public String write(PostDTO dto) {
@@ -143,23 +135,30 @@ public class BoardPostServiceImpl implements BoardPostService {
     }
 
     @Override
-    public PostDTO findByPostNo(Long postNo,String healerNickName) {
+    public PostDTO findByPostNo(Long postNo, String healerNickName) {
         Post post = postRepository.findByPostNoWithHealer(postNo);
         String base64String = null;
         if (post != null) {
             List<Post_Like> likeList = likeRepository.findByPostPostNo(postNo);
+            List<Follow> followerList = healerRepository.findFollowersByHealerEmail(post.getHealer().getHealerEmail());
             PostDTO postDTO = entityToDto(post);
             postDTO.setHealer_nickname(post.getHealer().getHealerNickName());
             String image = findImagename(postDTO.getPost_no()).getPost_image();
             String postimagePath = upload_dir + image;
             String profileImagePath = profile_dir + post.getHealer().getHaelerProfileImage();
             postDTO.setLikes(likeList.size());
-            if(healerNickName != null && !healerNickName.isEmpty()){
+            if (healerNickName != null && !healerNickName.isEmpty()) {
                 Optional<Post_Like> like = likeList.stream().filter(post_like -> post_like.getHealer().getHealerNickName().equals(healerNickName)).findFirst();
-                if(like.isPresent()){
+                if (like.isPresent()) {
                     postDTO.setLikeStatus("좋아요 취소");
-                }else{
+                } else {
                     postDTO.setLikeStatus("좋아요");
+                }
+                Optional<Follow> follow = followerList.stream().filter(f -> f.getFollowing().getHealerNickName().equals(post.getHealer().getHealerNickName())).findFirst();
+                if (follow.isPresent()) {
+                    postDTO.setFollowstat("팔로우 취소");
+                } else {
+                    postDTO.setFollowstat("팔로우");
                 }
             }
             try {
@@ -184,7 +183,7 @@ public class BoardPostServiceImpl implements BoardPostService {
     public String modify(PostDTO dto) {
         Post post;
         String oldImage = dto.getPost_image();
-        if(dto.getPost_image().equals(dto.getPost_image())){
+        if (dto.getPost_image().equals(dto.getPost_image())) {
 
         }
         try {
@@ -205,14 +204,14 @@ public class BoardPostServiceImpl implements BoardPostService {
     @Override
     public String like(Long postNo, String healerNickname) {
         Optional<Healer> healer = healerRepository.findByHealerNickName(healerNickname);
-        if(healer.isPresent()){
+        if (healer.isPresent()) {
             Optional<Post> post = postRepository.findById(postNo);
-            if(post.isPresent()){
-                Optional<Post_Like> like = likeRepository.findByHealerHealerEmailAndPostPostNo(healer.get().getHealerEmail(),post.get().getPostNo());
-                if(like.isPresent()){
+            if (post.isPresent()) {
+                Optional<Post_Like> like = likeRepository.findByHealerHealerEmailAndPostPostNo(healer.get().getHealerEmail(), post.get().getPostNo());
+                if (like.isPresent()) {
                     likeRepository.delete(like.get());
                     return "좋아요";
-                }else{
+                } else {
                     Post_Like post_like = Post_Like.builder()
                             .healer(healer.get())
                             .post(post.get())

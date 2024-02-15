@@ -31,21 +31,21 @@ public class BoardPostController {
     private BoardCommentService boardCommentService;
 
     @GetMapping("board/post/list")
-    public String postlist(Model model){
+    public String postlist(Model model) {
         log.info("call postlist");
         List<PostDTO> dtoList = new ArrayList<>();
         dtoList = boardPostService.findAllPostsWithBase64Thumbnail();
-        model.addAttribute("dtoList",dtoList);
+        model.addAttribute("dtoList", dtoList);
         return "postlist";
     }
 
     @PostMapping("board/post/list_scroll")
     @ResponseBody
-    public ResponseEntity<Object> postlistscroll(@RequestParam("post_no") Long post_no){
+    public ResponseEntity<Object> postlistscroll(@RequestParam("post_no") Long post_no) {
         log.info("call postlistscroll post_no : " + post_no);
 
         List<PostDTO> dtoList = new ArrayList<>();
-        IntStream.rangeClosed((int)(post_no+1), (int)(post_no+36)).forEach(i->{
+        IntStream.rangeClosed((int) (post_no + 1), (int) (post_no + 36)).forEach(i -> {
             PostDTO dto = PostDTO
                     .builder()
                     .post_no((long) i)
@@ -58,11 +58,11 @@ public class BoardPostController {
 
     @PostMapping("board/post/search_scroll")
     @ResponseBody
-    public ResponseEntity<Object> postsearchscroll(@RequestParam("post_no") Long post_no,@RequestParam("search") String search){
-        log.info("call postlistscroll post_no : {} search : {}",post_no,search);
+    public ResponseEntity<Object> postsearchscroll(@RequestParam("post_no") Long post_no, @RequestParam("search") String search) {
+        log.info("call postlistscroll post_no : {} search : {}", post_no, search);
 
         List<PostDTO> dtoList = new ArrayList<>();
-        IntStream.rangeClosed((int)(post_no+1), (int)(post_no+36)).forEach(i->{
+        IntStream.rangeClosed((int) (post_no + 1), (int) (post_no + 36)).forEach(i -> {
             PostDTO dto = PostDTO
                     .builder()
                     .post_no((long) i)
@@ -74,34 +74,38 @@ public class BoardPostController {
     }
 
     @GetMapping("board/post/detail/{post_no}")
-    public String postdetail(Model model, @PathVariable("post_no") Long postNo, HttpSession session){
+    public String postdetail(Model model, @PathVariable("post_no") Long postNo, HttpSession session) {
         log.info("call boarddetail");
         String healer_nickname = (String) session.getAttribute("loginedHealer");
-        PostDTO dto = boardPostService.findByPostNo(postNo,healer_nickname);
+        PostDTO dto = boardPostService.findByPostNo(postNo, healer_nickname);
         List<CommentDTO> comment = boardCommentService.findAll(postNo);
-        model.addAttribute("dto",dto);
-        model.addAttribute("comment",comment);
+        model.addAttribute("dto", dto);
+        model.addAttribute("comment", comment);
         return "postdetail";
     }
 
     @PostMapping("board/post/write")
-    public String postwrite(PostDTO dto){
+    public String postwrite(PostDTO dto) {
         String write = boardPostService.write(dto);
         return "redirect:/board/post/list";
     }
 
     @PostMapping("/board/post/modify")
-    public String postModify(PostDTO dto){
+    public String postModify(PostDTO dto) {
         String modify = boardPostService.modify(dto);
         return "postdetail";
     }
 
     @PostMapping("/board/post/like")
     @ResponseBody
-    public ResponseEntity<Object> post_like(@RequestParam("post_no") Long post_no,HttpSession session){
-        log.info("call post_like post_no : {}",post_no);
+    public ResponseEntity<Object> post_like(@RequestParam("post_no") Long post_no, HttpSession session) {
+        log.info("call post_like post_no : {}", post_no);
         String healer_nickname = (String) session.getAttribute("loginedHealer");
-        String like = boardPostService.like(post_no,healer_nickname);
-        return ResponseEntity.status(HttpStatus.OK).body(like);
+        String like = boardPostService.like(post_no, healer_nickname);
+        if (like == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(like);
+        }
     }
 }

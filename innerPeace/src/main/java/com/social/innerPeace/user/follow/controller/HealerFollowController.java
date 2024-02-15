@@ -2,7 +2,11 @@ package com.social.innerPeace.user.follow.controller;
 
 import com.social.innerPeace.dto.FollowDTO;
 import com.social.innerPeace.dto.HealerDTO;
+import com.social.innerPeace.entity.Follow;
+import com.social.innerPeace.repository.FollowRepository;
+import com.social.innerPeace.user.follow.service.HealerFollowService;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +20,11 @@ import java.util.stream.IntStream;
 
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/user")
 public class HealerFollowController {
+
+    private final HealerFollowService healerFollowService;
 
     @GetMapping("/{healer_nickname}/following")
     public String following(Model model, @PathVariable(name = "healer_nickname") String healer_nickname) {
@@ -113,10 +120,17 @@ public class HealerFollowController {
         return ResponseEntity.status(HttpStatus.OK).body(dtoList);
     }
 
-    @PostMapping("/{healer_nickname}/follow")
+    @PostMapping("/follow")
     @ResponseBody
-    public ResponseEntity<Object> follow(@PathVariable(name = "healer_nickname") String healer_nickname, HttpSession session) {
-        log.info("follow call follow_no : {}", healer_nickname);
-        return ResponseEntity.status(HttpStatus.OK).body("팔로우 성공");
+    public ResponseEntity<Object> follow(@RequestParam(name = "healer_nickname") String follower, HttpSession session) {
+        log.info("follow call follow_no : {}", follower);
+        String healer_nickname = (String) session.getAttribute("loginedHealer");
+        String follow = healerFollowService.follow(follower, healer_nickname);
+        if(follow != null){
+            return ResponseEntity.status(HttpStatus.OK).body(follow);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("팔로우 실패");
+        }
     }
 }

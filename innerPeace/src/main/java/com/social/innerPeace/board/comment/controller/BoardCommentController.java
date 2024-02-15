@@ -30,7 +30,7 @@ public class BoardCommentController {
             return null;
         }
         commentDTO.setNickName(healer);
-        Long saveResult = boardCommentService.save(commentDTO);
+        Long saveResult = boardCommentService.write(commentDTO);
         if (saveResult != null) {
             return ResponseEntity.ok(saveResult);
         } else {

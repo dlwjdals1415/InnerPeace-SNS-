@@ -24,6 +24,6 @@ public class HealerDTO {
     private List<String> ad_agree;
     private String follow_status;
     private Integer post_count;
-    private Integer healer_follower;
-    private Integer healer_follow;
+    private Integer healer_follower_count;
+    private Integer healer_follow_count;
 }

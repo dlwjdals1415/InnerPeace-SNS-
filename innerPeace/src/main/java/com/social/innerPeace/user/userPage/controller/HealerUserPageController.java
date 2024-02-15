@@ -36,8 +36,8 @@ public class HealerUserPageController {
                 .healer_nickname("123")
                 .healer_statusmessage("안녕하세요 할로입니다 잘부탁드려요")
                 .follow_status("팔로우")
-                .healer_follower(100)
-                .healer_follow(80)
+                .healer_follower_count(100)
+                .healer_follow_count(80)
                 .post_count(120)
                 .build();
         model.addAttribute("dtoList", dtoList);

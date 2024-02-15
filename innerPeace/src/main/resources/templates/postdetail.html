@@ -62,8 +62,7 @@
                 <section class="row w90 h30p mt10">
                     <form class="row w100 hauto">
                         <article class="w80 h100 row_cc">
-                            <input class="w100 h80 text_input" type="text" id="modify_post_tag" readonly
-                                   th:value="${tagString}">
+                            <span class="w100 h80 text_input overflow_y" id="modify_post_tag" th:text="${tagString}"></span>
                         </article>
                         <article class="w20 h100 ml10 row_cc">
                             <input class="nomal_btn w90 hauto" type="button" id="tag_reset" value="지우기">
@@ -150,6 +149,7 @@
     <input type="hidden" id="map_lng" th:value="${dto.post_map_lng}">
     <input type="hidden" id="map_lat" th:value="${dto.post_map_lat}">
     <input type="hidden" id="loginedHealer" th:value="${session.loginedHealer}">
+    <input type="hidden" id="healer_nickname" th:value="${dto.healer_nickname}">
     <header class="f_g1 bg_f4">
     </header>
     <main class="bg_f4 f_g6 col_cc gap20">
@@ -167,10 +167,8 @@
                             </a>
                             <label for="detail_map" class="text_hover ml10 mr10" id="de_map_address"></label>
                         </div>
-                        <th:block
-                                th:if="${session.loginedHealer != null and dto.healer_nickname != session.loginedHealer}">
-                            <button class="ml10 mr10 h80 e0_btn">
-                                <span id="follow_button" th:text="${dto.followstat}">팔로우</span>
+                        <th:block th:if="${session.loginedHealer != null and dto.healer_nickname != session.loginedHealer}">
+                            <button class="ml10 mr10 h80 gray_btn" id="follow_btn" th:text="${dto.followstat}">
                             </button>
                         </th:block>
                     </article>
@@ -459,6 +457,7 @@
 
     $('#like_btn').click(function () {
         let post_no = $('#post_no').val();
+        console.log(post_no);
         $.ajax({
             type: "POST",
             url: "/board/post/like",
@@ -466,12 +465,27 @@
                 "post_no": post_no
             },
             success: function (response) {
-                if (response.result == 1) {
-                    $('#like_btn').text(response.msg);
-                }
+                $('#like_btn').text(response);
             },
             error: function (error) {
-                // 에러 처리
+                alert('좋아요 실패');
+            }
+        });
+    });
+
+    $('#follow_btn').click(function () {
+        let healer_nickname = $('#healer_nickname').val();
+        $.ajax({
+            type: "POST",
+            url: "/user/follow",
+            data: {
+                "healer_nickname": healer_nickname
+            },
+            success: function (response) {
+                $('#follow_btn').text(response);
+            },
+            error: function (error) {
+                alert(error);
             }
         });
     });

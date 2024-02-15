@@ -12,22 +12,4 @@ import java.util.List;
 @SpringBootTest
 @Slf4j
 class InnerPeaceApplicationTests {
-	@Autowired
-	private BoardCommentService boardCommentService;
-	@Test
-	void contextLoads() {
-
-	}
-
-	@Test
-	void commentInsertTest(){
-		CommentDTO commentDTO  = CommentDTO.builder().post_no(1L).nickName("123")
-						.comment_content("댓글 테스트")
-								.build();
-
-		boardCommentService.save(commentDTO);
-		List<CommentDTO> commentDTOList = boardCommentService.findAll(commentDTO.getPost_no());
-log.info(commentDTOList.toString());
-	}
-
 }

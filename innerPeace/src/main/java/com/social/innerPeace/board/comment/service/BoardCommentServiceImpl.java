@@ -36,7 +36,7 @@ public class BoardCommentServiceImpl implements BoardCommentService {
     private final PostRepository postRepository;
     private final HealerRepository healerRepository;
 
-    public Long save(CommentDTO commentDTO) {
+    public Long write(CommentDTO commentDTO) {
         Optional<Post> optionalPost = postRepository.findById(commentDTO.getPost_no());
         if (optionalPost.isPresent()) {
             Post post = optionalPost.get();
@@ -52,7 +52,7 @@ public class BoardCommentServiceImpl implements BoardCommentService {
 
     @Transactional
     public List<CommentDTO> findAll(Long postNo) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "comment_no");
+        Sort sort = Sort.by(Sort.Direction.DESC, "commentNo");
 
 // 최대 36개까지 가져오도록 설정
         Pageable pageable = PageRequest.of(0, 36, sort);

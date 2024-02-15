@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public interface BoardCommentService {
 
-    Long save(CommentDTO commentDTO);
+    Long write(CommentDTO commentDTO);
 
     List<CommentDTO>findAll(Long postID);
     default Comment dtoToEntity(CommentDTO dto){
