@@ -92,7 +92,7 @@ public class BoardPostController {
 
     @PostMapping("/board/post/modify")
     public String postModify(PostDTO dto) {
-        String modify = boardPostService.modify(dto);
+        PostDTO postDTO = boardPostService.modify(dto);
         return "postdetail";
     }
 

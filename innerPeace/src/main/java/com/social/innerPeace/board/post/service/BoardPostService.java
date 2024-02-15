@@ -18,7 +18,7 @@ public interface BoardPostService {
 
     PostDTO findByPostNo(Long postNo,String healerNickName);
 
-    String modify(PostDTO dto);
+    PostDTO modify(PostDTO dto);
     String like(Long postNo, String healerNickname);
 
     default Post dtoToEntity(PostDTO dto){

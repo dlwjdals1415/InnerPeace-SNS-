@@ -180,25 +180,37 @@ public class BoardPostServiceImpl implements BoardPostService {
     }
 
     @Override
-    public String modify(PostDTO dto) {
-        Post post;
-        String oldImage = dto.getPost_image();
-        if (dto.getPost_image().equals(dto.getPost_image())) {
-
+    public PostDTO modify(PostDTO dto) {
+        Optional<Post> optionalPost = postRepository.findById(dto.getPost_no());
+        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(dto.getHealer_nickname());
+        Healer healer = null;
+        if(optionalHealer.isPresent()){
+            healer = optionalHealer.get();
         }
-        try {
-            dto = fileStore.storeFile(dto);
-            post = dtoToEntity(dto);
+        if (optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+            // 게시물을 찾은 경우
+            if (dto.getPost_image_thumbnail() != null) {
+                // 이미지 해시값이 변경된 경우
+                try {
+                    dto = fileStore.storeFile(dto); // 파일 저장
+                    post.setPostImage(dto.getPost_image_thumbnail()+"png");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
             if (!dto.getPost_map_lat().isEmpty() && dto.getPost_map_lat() != null) {
                 post.setPostMapLat(Float.parseFloat(dto.getPost_map_lat()));
                 post.setPostMapLng(Float.parseFloat(dto.getPost_map_lng()));
             }
+            post.setPostContent(dto.getPost_content());
             post.setTags(splitAndClean(dto.getPost_tags()));
+            post.setHealer(healer);
             post = postRepository.save(post);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            return entityToDto(post);
         }
-        return post.getPostImage();
+        return null;
     }
 
     @Override
