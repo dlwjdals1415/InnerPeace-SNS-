@@ -16,6 +16,8 @@ public interface BoardPostService {
 
     List<PostDTO> findAllPostsWithBase64Thumbnail();
 
+    List<PostDTO> findAllHealerPostsWithBase64Thumbnail(String healerNickname);
+
     PostDTO findByPostNo(Long postNo,String healerNickName);
 
     PostDTO modify(PostDTO dto, String loginHealer);
@@ -43,5 +45,4 @@ public interface BoardPostService {
                 .build();
         return dto;
     }
-
 }

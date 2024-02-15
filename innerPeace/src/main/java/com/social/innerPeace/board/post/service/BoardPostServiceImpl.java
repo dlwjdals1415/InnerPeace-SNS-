@@ -2,12 +2,17 @@ package com.social.innerPeace.board.post.service;
 
 import com.social.innerPeace.board.post.component.FileStore;
 import com.social.innerPeace.detail.HealerDetails;
+import com.social.innerPeace.dto.CommentDTO;
 import com.social.innerPeace.dto.PostDTO;
 import com.social.innerPeace.entity.*;
 import com.social.innerPeace.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -96,6 +101,31 @@ public class BoardPostServiceImpl implements BoardPostService {
     @Override
     public List<PostDTO> findAllPostsWithBase64Thumbnail() {
         List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "postNo")).stream().limit(36).collect(Collectors.toList());
+        List<PostDTO> dtoList = new ArrayList<>();
+
+        for (Post post : posts) {
+            String image = findImagename(post.getPostNo()).getPost_image();
+            String imagePath = thumbnail_dir + image;
+            String base64String = null;
+            try {
+                byte[] fileBytes = readBytesFromFile(imagePath);
+                base64String = encodeBytesToBase64(fileBytes);
+            } catch (IOException e) {
+                // 예외 처리
+            }
+            PostDTO dto = PostDTO
+                    .builder()
+                    .post_no(post.getPostNo())
+                    .post_image_thumbnail("data:image/png;base64," + base64String)
+                    .build();
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
+
+    @Override
+    public List<PostDTO> findAllHealerPostsWithBase64Thumbnail(String healerNickname) {
+        List<Post> posts = postRepository.findByHealerNickname(healerNickname, Sort.by(Sort.Direction.DESC, "postNo")).stream().limit(36).collect(Collectors.toList());
         List<PostDTO> dtoList = new ArrayList<>();
 
         for (Post post : posts) {
