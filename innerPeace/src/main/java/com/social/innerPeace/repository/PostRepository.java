@@ -22,4 +22,8 @@ public interface PostRepository extends JpaRepository<Post,Long> {
 
     @Query("SELECT p FROM Post p WHERE p.postContent LIKE %:content% ORDER BY p.postNo DESC")
     Page<Post> findByContentContaining(@Param("content") String content, Pageable pageable);
+
+    @Query("SELECT p FROM Post p WHERE p.postNo < :postNo ORDER BY p.postNo DESC")
+    Page<Post> findByPostNoLessThanOrderByPostNoDesc(@Param("postNo") Long postNo, Pageable pageable);
 }
+

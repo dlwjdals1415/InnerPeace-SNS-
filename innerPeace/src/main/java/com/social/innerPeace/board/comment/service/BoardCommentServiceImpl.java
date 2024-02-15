@@ -1,5 +1,6 @@
 package com.social.innerPeace.board.comment.service;
 
+import com.social.innerPeace.dto.CommentListDTO;
 import com.social.innerPeace.dto.PostDTO;
 import com.social.innerPeace.dto.CommentDTO;
 import com.social.innerPeace.entity.Comment;
@@ -58,7 +59,8 @@ public class BoardCommentServiceImpl implements BoardCommentService {
         }
         Comment comment = optionalComment.get();
         comment.setCommentContent(commentDTO.getComment_content());
-        return commentRepository.save(comment).getCommentNo();
+        commentRepository.save(comment);
+        return 1L;
     }
 
     @Override
@@ -77,9 +79,36 @@ public class BoardCommentServiceImpl implements BoardCommentService {
 
 // 최대 36개까지 가져오도록 설정
         Pageable pageable = PageRequest.of(0, 36, sort);
-        Page<Comment> postEntityList = commentRepository.findAllByPostNoOrderByCommentNoDesc(postNo,pageable);
-        if (postEntityList != null && postEntityList.isEmpty() == false) {
-            List<CommentDTO> commentDTOList = toList(postEntityList);
+        Page<Comment> commentList = commentRepository.findAllByPostNoOrderByCommentNoDesc(postNo,pageable);
+        return listCommentToDTOList(commentList);
+    }
+
+    @Override
+    public List<CommentDTO> scroll(Long postNo, Long commentNo) {
+        // 서비스 레이어 또는 컨트롤러에서
+        Pageable pageable = PageRequest.of(0, 36, Sort.by("commentNo").descending());
+        Page<Comment> comments = commentRepository.findByPostNoAndCommentNoLessThanOrderByCommentNoDesc(postNo, commentNo, pageable);
+        return listCommentToDTOList(comments);
+    }
+
+    private static byte[] readBytesFromFile(String filePath) throws IOException {
+        File file = new File(filePath);
+        byte[] fileBytes = new byte[(int) file.length()];
+
+        try (FileInputStream fis = new FileInputStream(file)) {
+            fis.read(fileBytes);
+        }
+
+        return fileBytes;
+    }
+
+    private static String encodeBytesToBase64(byte[] bytes) {
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+
+    private List<CommentDTO> listCommentToDTOList(Page<Comment> commentList) {
+        if (!commentList.isEmpty() && commentList != null) {
+            List<CommentDTO> commentDTOList = toList(commentList);
             try {
                 for (CommentDTO commentDTO : commentDTOList) {
                     String profileImagePath = profile_dir + commentDTO.getHealer_profile_image();
@@ -98,19 +127,5 @@ public class BoardCommentServiceImpl implements BoardCommentService {
         return null;
     }
 
-    private static byte[] readBytesFromFile(String filePath) throws IOException {
-        File file = new File(filePath);
-        byte[] fileBytes = new byte[(int) file.length()];
-
-        try (FileInputStream fis = new FileInputStream(file)) {
-            fis.read(fileBytes);
-        }
-
-        return fileBytes;
-    }
-
-    private static String encodeBytesToBase64(byte[] bytes) {
-        return Base64.getEncoder().encodeToString(bytes);
-    }
 
 }

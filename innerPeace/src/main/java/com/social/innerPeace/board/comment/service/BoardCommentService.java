@@ -1,6 +1,7 @@
 package com.social.innerPeace.board.comment.service;
 
 import com.social.innerPeace.dto.CommentDTO;
+import com.social.innerPeace.dto.CommentListDTO;
 import com.social.innerPeace.entity.Comment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -19,8 +20,8 @@ public interface BoardCommentService {
     Long write(CommentDTO commentDTO);
     Long modify(CommentDTO commentDTO);
     Long delete(CommentDTO commentDTO);
-
     List<CommentDTO>findAll(Long postID);
+    List<CommentDTO> scroll(Long postNo, Long commentNo);
     default Comment dtoToEntity(CommentDTO dto){
         Comment entity = Comment.builder()
                 .commentContent(dto.getComment_content())

@@ -30,14 +30,16 @@ public class BoardCommentServiceTest {
         List<Post> postList = postRepository.findAll();
 
         postList.forEach(post -> {
-            healerList.forEach(healer -> {
-                CommentDTO commentDTO = CommentDTO.builder()
-                        .post_no(post.getPostNo())
-                        .nickName(healer.getHealerNickName())
-                        .comment_content("hello my name is " + healer.getHealerName() + " and I'm healer")
-                        .build();
-                boardCommentService.write(commentDTO);
-            });
+            for (int i = 0; i < 10; i++) {
+                healerList.forEach(healer -> {
+                    CommentDTO commentDTO = CommentDTO.builder()
+                            .post_no(post.getPostNo())
+                            .nickName(healer.getHealerNickName())
+                            .comment_content("hello my name is " + healer.getHealerName() + " and I'm healer")
+                            .build();
+                    boardCommentService.write(commentDTO);
+                });
+            }
         });
     }
 }

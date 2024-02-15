@@ -50,7 +50,7 @@
                     </a>
                 </div>
             </article>
-        <article class="col_cc hauto w100" id="loading">
+        <article class="col_cc hauto w100 op" id="loading">
             <div class="loadingio-spinner-reload-zv6cq6zfifd">
                 <div class="ldio-dg926s5a60v">
                     <div>
@@ -88,6 +88,7 @@
                 // 2초 지연 후의 로직을 여기에 추가
                 setTimeout(function() {
                     var post_no = $('#last_post_no').val();
+                    $('#loading').css('opacity', '1');
 
                     $.ajax({
                         url: '/board/post/list_scroll',
@@ -131,8 +132,10 @@
                         error: function(error) {
                             // 에러 처리
                         },
+                    }).always(function () {
+                        $('#loading').css('opacity', '0');
                     });
-                }, 2000); // 20초 지연
+                }, 1000); // 20초 지연
             }
         }, 1000); // 스크롤 이벤트의 1초 지연
     });

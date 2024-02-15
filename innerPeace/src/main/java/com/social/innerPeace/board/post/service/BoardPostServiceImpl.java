@@ -86,6 +86,43 @@ public class BoardPostServiceImpl implements BoardPostService {
         return listEntityToDto(posts);
     }
 
+    @Override
+    public List<PostDTO> scrollList(Long postNo) {
+        Pageable pageable = PageRequest.of(0, 36, Sort.by("postNo").descending());
+        Page<Post> posts = postRepository.findByPostNoLessThanOrderByPostNoDesc(postNo, pageable);
+        List<Post> postList = posts.getContent(); // 실제 Post 목록을 얻음
+        return listEntityToDto(postList);
+    }
+
+    @Override
+    public List<PostDTO> search(String searchkey) {
+        if (searchkey == null) {
+            return null; // searchKey가 null인 경우, null을 반환
+        }
+
+        String modifiedSearchKey = searchkey.trim(); // 앞뒤 공백 제거
+
+        // searchKey가 "#"으로 시작하는 경우
+        if (modifiedSearchKey.startsWith("#")) {
+            modifiedSearchKey = modifiedSearchKey.substring(1); // "#" 제거
+            Pageable pageable = PageRequest.of(0, 36, Sort.by("postNo").descending());
+            Page<Post> posts = postRepository.findByTagContaining(modifiedSearchKey, pageable);
+            List<Post> postList = posts.getContent(); // 실제 Post 목록을 얻음
+            return listEntityToDto(postList);
+        }
+        // searchKey가 "@"으로 시작하는 경우
+        else if (modifiedSearchKey.startsWith("@")) {
+            modifiedSearchKey = modifiedSearchKey.substring(1); // "@" 제거
+            Pageable pageable = PageRequest.of(0, 36, Sort.by("postNo").descending());
+            Page<Post> posts = postRepository.findByHealerNickNameContaining(modifiedSearchKey, pageable);
+            List<Post> postList = posts.getContent(); // 실제 Post 목록을 얻음
+            return listEntityToDto(postList);
+        }
+        Pageable pageable = PageRequest.of(0, 36, Sort.by("postNo").descending());
+        Page<Post> posts = postRepository.findByContentContaining(searchkey, pageable);
+        List<Post> postList = posts.getContent(); // 실제 Post 목록을 얻음
+        return listEntityToDto(postList);
+    }
 
     @Override
     public PostDTO detail(Long postNo, String healerNickName) {
@@ -140,7 +177,7 @@ public class BoardPostServiceImpl implements BoardPostService {
     public PostDTO modify(PostDTO dto, String loginHealer) {
         Optional<Post> optionalPost = postRepository.findById(dto.getPost_no());
         Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(loginHealer);
-        if(!optionalHealer.get().getHealerEmail().equals(optionalPost.get().getHealer().getHealerEmail())){
+        if (!optionalHealer.get().getHealerEmail().equals(optionalPost.get().getHealer().getHealerEmail())) {
             return null;
         }
         if (optionalPost.isPresent()) {
@@ -167,43 +204,14 @@ public class BoardPostServiceImpl implements BoardPostService {
         return null;
     }
 
-    @Override
-    public List<PostDTO> search(String searchkey) {
-        if (searchkey == null) {
-            return null; // searchKey가 null인 경우, null을 반환
-        }
-
-        String modifiedSearchKey = searchkey.trim(); // 앞뒤 공백 제거
-
-        // searchKey가 "#"으로 시작하는 경우
-        if (modifiedSearchKey.startsWith("#")) {
-            modifiedSearchKey = modifiedSearchKey.substring(1); // "#" 제거
-            Pageable pageable = PageRequest.of(0, 36, Sort.by("postNo").descending());
-            Page<Post> posts = postRepository.findByTagContaining(modifiedSearchKey, pageable);
-            List<Post> postList = posts.getContent(); // 실제 Post 목록을 얻음
-            return listEntityToDto(postList);
-        }
-        // searchKey가 "@"으로 시작하는 경우
-        else if (modifiedSearchKey.startsWith("@")) {
-            modifiedSearchKey = modifiedSearchKey.substring(1); // "@" 제거
-            Pageable pageable = PageRequest.of(0, 36, Sort.by("postNo").descending());
-            Page<Post> posts = postRepository.findByHealerNickNameContaining(modifiedSearchKey, pageable);
-            List<Post> postList = posts.getContent(); // 실제 Post 목록을 얻음
-            return listEntityToDto(postList);
-        }
-        Pageable pageable = PageRequest.of(0, 36, Sort.by("postNo").descending());
-        Page<Post> posts = postRepository.findByContentContaining(searchkey, pageable);
-        List<Post> postList = posts.getContent(); // 실제 Post 목록을 얻음
-        return listEntityToDto(postList);
-    }
 
     @Override
     public int deletePost(PostDTO postDTO) {
         int result = 0;
-        try{
+        try {
             postRepository.deleteById(postDTO.getPost_no());
             result = 1;
-        }catch (Exception e){
+        } catch (Exception e) {
             log.debug(e.getMessage());
         }
         return result;

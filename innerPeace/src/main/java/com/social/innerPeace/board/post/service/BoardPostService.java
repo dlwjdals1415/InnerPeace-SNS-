@@ -16,15 +16,19 @@ public interface BoardPostService {
 
     List<PostDTO> list();
 
-    PostDTO detail(Long postNo,String healerNickName);
+    List<PostDTO> scrollList(Long postNo);
+
+    List<PostDTO> search(String searchkey);
+
+    PostDTO detail(Long postNo, String healerNickName);
 
     PostDTO modify(PostDTO dto, String loginHealer);
-    List<PostDTO> search(String searchkey);
+
     String like(Long postNo, String healerNickname);
 
     int deletePost(PostDTO postDTO);
 
-    default Post dtoToEntity(PostDTO dto){
+    default Post dtoToEntity(PostDTO dto) {
         Post entity = Post.builder()
                 .postImage(dto.getPost_image())
                 .postContent(dto.getPost_content())
@@ -32,7 +36,7 @@ public interface BoardPostService {
         return entity;
     }
 
-    default PostDTO entityToDto(Post entity){
+    default PostDTO entityToDto(Post entity) {
         PostDTO dto = PostDTO.builder()
                 .post_no(entity.getPostNo())
                 .post_map_lng(String.valueOf(entity.getPostMapLng()))

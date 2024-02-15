@@ -28,7 +28,7 @@ public class HealerFollowServiceImpl implements HealerFollowService{
         if (healer.isEmpty()){
             return null;
         }
-        Optional<Follow> followOptional = followRepository.findByFollowerHealerEmailAndFollowingHealerEmail(healer.get().getHealerEmail(),follow.get().getHealerEmail());
+        Optional<Follow> followOptional = followRepository.findByFollowerHealerEmailAndFollowingHealerEmail(follow.get().getHealerEmail(),healer.get().getHealerEmail());
         if(followOptional.isPresent()){
             followRepository.delete(followOptional.get());
             return "팔로우";
