@@ -2,9 +2,11 @@ package com.social.innerPeace.board.post.service;
 
 import com.social.innerPeace.board.post.component.FileStore;
 import com.social.innerPeace.detail.HealerDetails;
+import com.social.innerPeace.dto.CommentDTO;
 import com.social.innerPeace.dto.PostDTO;
 import com.social.innerPeace.entity.*;
 import com.social.innerPeace.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
