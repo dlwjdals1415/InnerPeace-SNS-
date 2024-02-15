@@ -20,10 +20,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,6 +41,8 @@ public class BoardPostServiceImpl implements BoardPostService {
     private LikeRepository likeRepository;
     @Autowired
     private FileStore fileStore;
+
+    private final Map<String, String> imageCache = new HashMap<>();
 
     @Override
     public String write(PostDTO dto) {
@@ -96,10 +95,6 @@ public class BoardPostServiceImpl implements BoardPostService {
 
     @Override
     public List<PostDTO> search(String searchkey) {
-        if (searchkey == null) {
-            return null; // searchKey가 null인 경우, null을 반환
-        }
-
         String modifiedSearchKey = searchkey.trim(); // 앞뒤 공백 제거
 
         // searchKey가 "#"으로 시작하는 경우
@@ -119,7 +114,33 @@ public class BoardPostServiceImpl implements BoardPostService {
             return listEntityToDto(postList);
         }
         Pageable pageable = PageRequest.of(0, 36, Sort.by("postNo").descending());
-        Page<Post> posts = postRepository.findByContentContaining(searchkey, pageable);
+        Page<Post> posts = postRepository.findByContentContaining(modifiedSearchKey, pageable);
+        List<Post> postList = posts.getContent(); // 실제 Post 목록을 얻음
+        return listEntityToDto(postList);
+    }
+
+    @Override
+    public List<PostDTO> searchScrollList(Long postNo, String search) {
+        String modifiedSearchKey = search.trim(); // 앞뒤 공백 제거
+
+        // searchKey가 "#"으로 시작하는 경우
+        if (modifiedSearchKey.startsWith("#")) {
+            modifiedSearchKey = modifiedSearchKey.substring(1); // "#" 제거
+            Pageable pageable = PageRequest.of(0, 36, Sort.by("postNo").descending());
+            Page<Post> posts = postRepository.findByTagContainingAndPostNoLessThan(modifiedSearchKey, postNo, pageable);
+            List<Post> postList = posts.getContent(); // 실제 Post 목록을 얻음
+            return listEntityToDto(postList);
+        }
+        // searchKey가 "@"으로 시작하는 경우
+        else if (modifiedSearchKey.startsWith("@")) {
+            modifiedSearchKey = modifiedSearchKey.substring(1); // "@" 제거
+            Pageable pageable = PageRequest.of(0, 36, Sort.by("postNo").descending());
+            Page<Post> posts = postRepository.findByHealerNickNameContainingAndPostNoLessThan(modifiedSearchKey, postNo, pageable);
+            List<Post> postList = posts.getContent(); // 실제 Post 목록을 얻음
+            return listEntityToDto(postList);
+        }
+        Pageable pageable = PageRequest.of(0, 36, Sort.by("postNo").descending());
+        Page<Post> posts = postRepository.findByContentContainingAndPostNoLessThan(modifiedSearchKey, postNo, pageable);
         List<Post> postList = posts.getContent(); // 실제 Post 목록을 얻음
         return listEntityToDto(postList);
     }
@@ -127,7 +148,6 @@ public class BoardPostServiceImpl implements BoardPostService {
     @Override
     public PostDTO detail(Long postNo, String healerNickName) {
         Post post = postRepository.findByPostNoWithHealer(postNo);
-        String base64String = null;
         if (post != null) {
             List<Post_Like> likeList = likeRepository.findByPostPostNo(postNo);
             List<Follow> followerList = healerRepository.findFollowersByHealerEmail(post.getHealer().getHealerEmail());
@@ -153,14 +173,28 @@ public class BoardPostServiceImpl implements BoardPostService {
                 }
             }
             try {
-                byte[] fileBytes = readBytesFromFile(postimagePath);
-                base64String = encodeBytesToBase64(fileBytes);
+                String base64String = imageCache.get(postimagePath);
+                if (base64String == null) {
+                    byte[] fileBytes = readBytesFromFile(postimagePath);
+                    base64String = encodeBytesToBase64(fileBytes);
+                    imageCache.put(postimagePath, base64String);
+                }
                 postDTO.setPost_image("data:image/png;base64," + base64String);
-                fileBytes = readBytesFromFile(thumbnailImagePath);
-                base64String = encodeBytesToBase64(fileBytes);
+
+                base64String = imageCache.get(thumbnailImagePath);
+                if (base64String == null) {
+                    byte[] fileBytes = readBytesFromFile(thumbnailImagePath);
+                    base64String = encodeBytesToBase64(fileBytes);
+                    imageCache.put(thumbnailImagePath, base64String);
+                }
                 postDTO.setPost_image_thumbnail("data:image/png;base64," + base64String);
-                fileBytes = readBytesFromFile(profileImagePath);
-                base64String = encodeBytesToBase64(fileBytes);
+
+                base64String = imageCache.get(profileImagePath);
+                if (base64String == null) {
+                    byte[] fileBytes = readBytesFromFile(profileImagePath);
+                    base64String = encodeBytesToBase64(fileBytes);
+                    imageCache.put(profileImagePath, base64String);
+                }
                 postDTO.setHealer_profile_image("data:image/png;base64," + base64String);
 
             } catch (IOException e) {
@@ -206,15 +240,14 @@ public class BoardPostServiceImpl implements BoardPostService {
 
 
     @Override
-    public int deletePost(PostDTO postDTO) {
-        int result = 0;
-        try {
+    public int deletePost(PostDTO postDTO,String loginHealer) {
+        Optional<Post> optionalPost = postRepository.findById(postDTO.getPost_no());
+        if (!optionalPost.get().getHealer().getHealerNickName().equals(loginHealer)) {
+            return 0;
+        }else{
             postRepository.deleteById(postDTO.getPost_no());
-            result = 1;
-        } catch (Exception e) {
-            log.debug(e.getMessage());
+            return 1;
         }
-        return result;
     }
 
     @Override
@@ -245,12 +278,15 @@ public class BoardPostServiceImpl implements BoardPostService {
         for (Post post : posts) {
             String image = findImagename(post.getPostNo()).getPost_image();
             String imagePath = thumbnail_dir + image;
-            String base64String = null;
-            try {
-                byte[] fileBytes = readBytesFromFile(imagePath);
-                base64String = encodeBytesToBase64(fileBytes);
-            } catch (IOException e) {
-                // 예외 처리
+            String base64String = imageCache.get(imagePath);
+            if (base64String == null) {
+                try {
+                    byte[] fileBytes = readBytesFromFile(imagePath);
+                    base64String = encodeBytesToBase64(fileBytes);
+                    imageCache.put(imagePath, base64String);
+                } catch (IOException e) {
+                    // 예외 처리
+                }
             }
             PostDTO dto = PostDTO
                     .builder()
@@ -280,20 +316,11 @@ public class BoardPostServiceImpl implements BoardPostService {
 
     //태그를 나눠서 리스트에 추가하는 메소드
     public static List<String> splitAndClean(String input) {
-        List<String> words = new ArrayList<>();
-
-        // '#'을 기준으로 문자열을 분리
-        String[] splitWords = input.split("#");
-
-        // 분리된 각 단어에서 공백을 제거하여 리스트에 추가
-        for (String word : splitWords) {
-            String cleanWord = word.trim(); // 공백 제거
-            if (!cleanWord.isEmpty()) { // 빈 문자열이 아니면 리스트에 추가
-                words.add("#" + cleanWord);
-            }
-        }
-
-        return words;
+        return Arrays.stream(input.split("#"))
+                .map(String::trim)
+                .filter(word -> !word.isEmpty())
+                .map(word -> "#" + word)
+                .collect(Collectors.toList());
     }
 
 

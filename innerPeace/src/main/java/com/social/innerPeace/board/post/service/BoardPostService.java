@@ -20,13 +20,15 @@ public interface BoardPostService {
 
     List<PostDTO> search(String searchkey);
 
+    List<PostDTO> searchScrollList(Long postNo, String search);
+
     PostDTO detail(Long postNo, String healerNickName);
 
     PostDTO modify(PostDTO dto, String loginHealer);
 
     String like(Long postNo, String healerNickname);
 
-    int deletePost(PostDTO postDTO);
+    int deletePost(PostDTO postDTO,String loginHealer);
 
     default Post dtoToEntity(PostDTO dto) {
         Post entity = Post.builder()

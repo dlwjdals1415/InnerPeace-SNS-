@@ -21,9 +21,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +34,8 @@ public class BoardCommentServiceImpl implements BoardCommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final HealerRepository healerRepository;
+
+    private final Map<String, String> imageCache = new HashMap<>();
 
     public Long write(CommentDTO commentDTO) {
         Optional<Post> optionalPost = postRepository.findById(commentDTO.getPost_no());
@@ -91,30 +91,19 @@ public class BoardCommentServiceImpl implements BoardCommentService {
         return listCommentToDTOList(comments);
     }
 
-    private static byte[] readBytesFromFile(String filePath) throws IOException {
-        File file = new File(filePath);
-        byte[] fileBytes = new byte[(int) file.length()];
-
-        try (FileInputStream fis = new FileInputStream(file)) {
-            fis.read(fileBytes);
-        }
-
-        return fileBytes;
-    }
-
-    private static String encodeBytesToBase64(byte[] bytes) {
-        return Base64.getEncoder().encodeToString(bytes);
-    }
 
     private List<CommentDTO> listCommentToDTOList(Page<Comment> commentList) {
-        if (!commentList.isEmpty() && commentList != null) {
+        if (!commentList.isEmpty()) {
             List<CommentDTO> commentDTOList = toList(commentList);
             try {
                 for (CommentDTO commentDTO : commentDTOList) {
                     String profileImagePath = profile_dir + commentDTO.getHealer_profile_image();
-                    String base64String = null;
-                    byte[] fileBytes = readBytesFromFile(profileImagePath);
-                    base64String = encodeBytesToBase64(fileBytes);
+                    String base64String = imageCache.get(profileImagePath);
+                    if (base64String == null) {
+                        byte[] fileBytes = readBytesFromFile(profileImagePath);
+                        base64String = encodeBytesToBase64(fileBytes);
+                        imageCache.put(profileImagePath, base64String);
+                    }
                     commentDTO.setHealer_profile_image("data:image/png;base64," + base64String);
                 }
 

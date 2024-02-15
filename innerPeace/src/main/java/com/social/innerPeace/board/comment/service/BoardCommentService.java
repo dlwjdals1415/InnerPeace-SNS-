@@ -45,7 +45,7 @@ public interface BoardCommentService {
         return commentList.stream().map(entity->entityToDto(entity)).collect(Collectors.toList());
     }
 
-    private static byte[] readBytesFromFile(String filePath) throws IOException {
+    default byte[] readBytesFromFile(String filePath) throws IOException {
         File file = new File(filePath);
         byte[] fileBytes = new byte[(int) file.length()];
 
@@ -56,7 +56,7 @@ public interface BoardCommentService {
         return fileBytes;
     }
 
-    private static String encodeBytesToBase64(byte[] bytes) {
+    default String encodeBytesToBase64(byte[] bytes) {
         return Base64.getEncoder().encodeToString(bytes);
     }
 

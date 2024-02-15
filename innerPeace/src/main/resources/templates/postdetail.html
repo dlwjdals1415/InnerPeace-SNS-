@@ -308,82 +308,88 @@
     marker.setMap(map);
 </script>
 <script th:inline="javascript">
-    $(document).ready(function () {
+    // DOM 요소 선택자를 변수로 선언
+    var detailContent = document.getElementById('detail_content');
+    var commentMenuButton = document.getElementById('comment_menu_button');
+    var commentModifyCancel = document.getElementById('comment_modify_cancel');
+    var commentModifySubmit = document.getElementById('comment_modify_submit');
+    var likeBtn = document.getElementById('like_btn');
+    var followBtn = document.getElementById('follow_btn');
+
+    // jQuery 코드를 Vanilla JavaScript로 변경
+    document.addEventListener('DOMContentLoaded', function () {
         // 게시 버튼 클릭 시 이벤트
-        $("#comment_submit").click(function () {
+        document.getElementById("comment_submit").addEventListener('click', function () {
             // comment_area에서 입력된 데이터 가져오기
-            let commentData = $("#comment_area").val();
-            let postNo = $("#post_no").val();
+            let commentData = document.getElementById("comment_area").value;
+            let postNo = document.getElementById("post_no").value;
             // AJAX를 사용하여 서버로 데이터 전송
-            $.ajax({
-                type: "POST",
-                url: "/board/comment/write", // 적절한 URL로 변경
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({
+            fetch("/board/comment/write", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                body: JSON.stringify({
                     comment_content: commentData,
                     post_no: postNo
                 }), // JSON
-                success: function (response) {
-                    // 성공적으로 응답 받았을 때의 처리
-                    console.log("서버 응답:", response);
-                    // 받은 데이터를 이용하여 추가적인 작업 수행 가능
-                    $("#comment_area").val('');
-
-                },
-                error: function (error) {
-                    // 오류 발생 시의 처리
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("서버 응답:", data);
+                    document.getElementById("comment_area").value = '';
+                })
+                .catch((error) => {
                     console.error("에러 발생:", error);
-                    $("#comment_area").val('');
-                }
-            });
+                    document.getElementById("comment_area").value = '';
+                });
         });
 
-        $('#modify_form').submit(function (e) {
+        document.getElementById('modify_form').addEventListener('submit', function (e) {
             e.preventDefault(); // 기본 동작 막기
 
             var formData = new FormData(this);
-            let postNo = $("#post_no").val();
-            $.ajax({
-                url: '/board/post/modify',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    window.location.replace(response);
-                },
-                error: function (xhr, status, error) {
-                    // 오류 발생 시 수행할 작업
+            let postNo = document.getElementById("post_no").value;
+            fetch('/board/post/modify', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.replace(data);
+                })
+                .catch((error) => {
                     console.error('실패');
-                }
-            });
+                });
         });
     });
-</script>
-<script th:inline="javascript">
+
     function del(post_no) {
         if (!confirm('삭제하시겠습니까?')) {
             return;
         }
         let jsonObj = {'post_no': post_no};
         let jsonStr = JSON.stringify(jsonObj);
-        $.ajax({
-            type: "POST",
-            url: "/board/post/delete",
-            contentType: "application/json; charset=utf-8",
-            data: jsonStr,
-            success: function (data, status, xhr) {
+        fetch("/board/post/delete", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            body: jsonStr,
+        })
+            .then(response => response.json())
+            .then(data => {
                 if (data != null && data != undefined && data.result == 1) {
                     alert(data.msg);
                     window.location.replace('/board/post/list');
                 } else {
-                    alert('삭제를하지못했습니다');
+                    alert('삭제를 완료했습니다');
+                    window.location.reload();
                 }
-            },
-            error: function (xhr, status, error) {
+            })
+            .catch((error) => {
                 alert('삭제를하지못했습니다');
-            }
-        });
+            });
     }
 
     function comment_menu(comment_no, comment_content, healer_id) {
@@ -406,12 +412,11 @@
         }
 
     }
-</script>
-<script>
+
     function comment_menu_out() {
-        $('#commentmenu-container').css({'z-index': '0', 'opacity': '0'});
-        $('#comment_modify_section').css({'z-index': '0', 'opacity': '0'});
-        $('#comment_modify_area').val('');
+        document.getElementById('commentmenu-container').style = {'z-index': '0', 'opacity': '0'};
+        document.getElementById('comment_modify_section').style = {'z-index': '0', 'opacity': '0'};
+        document.getElementById('comment_modify_area').value = '';
     }
 
     $('#comment_menu_button').on('click', '#comment_modify', function () {
@@ -419,106 +424,111 @@
         $('#comment_modify_area').val($('#commentmenu_comment_content').val());
     });
 
-    $('#comment_modify_cancel').click(function () {
-        $('#comment_modify_section').css({'z-index': '0', 'opacity': '0'});
-        $('#comment_modify_area').val('');
+    commentModifyCancel.addEventListener('click', function () {
+        document.getElementById('comment_modify_section').style = {'z-index': '0', 'opacity': '0'};
+        document.getElementById('comment_modify_area').value = '';
     });
 
-    $('#comment_menu_button').on('click', '#comment_delete', function () {
-        // 삭제 버튼에 대한 이벤트 핸들러 로직
-        if (!confirm('삭제하시겠습니까?')) {
-            return;
-        }
-        let comment_no = $('#commentmenu_comment_no').val();
-        let jsonObj = {'comment_no': comment_no};
-        let jsonStr = JSON.stringify(jsonObj);
-        $.ajax({
-            type: "POST",
-            url: "/board/comment/delete",
-            contentType: "application/json; charset=utf-8",
-            data: jsonStr,
-            success: function (data, status, xhr) {
-                if (data != null && data != undefined && data.result == 1) {
-                    alert(data.msg);
-                    window.location.reload();
-                } else {
-                    alert('삭제를 완료했습니다.');
-                    window.location.reload();
-                }
-            },
-            error: function (xhr, status, error) {
-                alert('삭제를하지못했습니다');
+    commentMenuButton.addEventListener('click', function (event) {
+        if (event.target.id === 'comment_delete') {
+            // 삭제 버튼에 대한 이벤트 핸들러 로직
+            if (!confirm('삭제하시겠습니까?')) {
+                return;
             }
-        });
+            let comment_no = document.getElementById('commentmenu_comment_no').value;
+            let jsonObj = {'comment_no': comment_no};
+            let jsonStr = JSON.stringify(jsonObj);
+            fetch("/board/comment/delete", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                body: jsonStr,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data != null && data != undefined && data.result == 1) {
+                        alert(data.msg);
+                        window.location.reload();
+                    } else {
+                        alert('삭제를 완료했습니다');
+                        window.location.reload();
+                    }
+                })
+                .catch((error) => {
+                    alert('삭제를하지못했습니다');
+                });
+        }
     });
 
-    $('#comment_menu_button').on('click', '#comment_report', function () {
-        // 신고 버튼에 대한 이벤트 핸들러 로직
+    commentMenuButton.addEventListener('click', function (event) {
+        if (event.target.id === 'comment_report') {
+            // 신고 버튼에 대한 이벤트 핸들러 로직
+        }
     });
 
-    $('#comment_modify_submit').click(function () {
-        let comment_no = $('#commentmenu_comment_no').val();
-        let comment_content = $('#comment_modify_area').val();
+    commentModifySubmit.addEventListener('click', function () {
+        let comment_no = document.getElementById('commentmenu_comment_no').value;
+        let comment_content = document.getElementById('comment_modify_area').value;
         let jsonObj = {'comment_no': comment_no, 'comment_content': comment_content};
         let jsonStr = JSON.stringify(jsonObj);
-        $.ajax({
-            type: "POST",
-            url: "/board/comment/modify",
-            contentType: "application/json; charset=utf-8",
-            data: jsonStr,
-            success: function (data, status, xhr) {
+        fetch("/board/comment/modify", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            body: jsonStr,
+        })
+            .then(response => response.json())
+            .then(data => {
                 alert('수정 완료하였습니다');
                 window.location.reload();
-            },
-            error: function (xhr, status, error) {
+            })
+            .catch((error) => {
                 alert('수정을하지못했습니다');
-            }
-        });
+            });
     });
 
-    $('#like_btn').click(function () {
-        let post_no = $('#post_no').val();
-        console.log(post_no);
-        $.ajax({
-            type: "POST",
-            url: "/board/post/like",
-            data: {
-                "post_no": post_no
+    likeBtn.addEventListener('click', function () {
+        let post_no = document.getElementById('post_no').value;
+        fetch("/board/post/like", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
             },
-            success: function (response) {
-                $('#like_btn').text(response);
-            },
-            error: function (error) {
+            body: "post_no=" + post_no,
+        })
+            .then(response => response.text())
+            .then(data => {
+                likeBtn.innerText = data;
+            })
+            .catch((error) => {
                 alert('좋아요 실패');
-            }
-        });
+            });
     });
 
-    $('#follow_btn').click(function () {
-        let healer_nickname = $('#healer_nickname').val();
-        $.ajax({
-            type: "POST",
-            url: "/user/follow",
-            data: {
-                "healer_nickname": healer_nickname
+    followBtn.addEventListener('click', function () {
+        let healer_nickname = document.getElementById('healer_nickname').value;
+        fetch("/user/follow", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
             },
-            success: function (response) {
-                $('#follow_btn').text(response);
-            },
-            error: function (error) {
+            body: "healer_nickname=" + healer_nickname,
+        })
+            .then(response => response.text())
+            .then(data => {
+                followBtn.innerText = data;
+            })
+            .catch((error) => {
                 alert(error);
-            }
-        });
+            });
     });
 
-
-</script>
-<script th:inline="javascript">
-    var scrollTimeout; // 타이머를 저장할 변수
-
-    $('#detail_content').scroll(function () {
-        var element = $(this);
-        $('.square').css('opacity', '1');
+    detailContent.addEventListener('scroll', function () {
+        var element = this;
+        var square = document.querySelector('.square');
+        square.style.opacity = '1';
 
         // 이미 설정된 타이머가 있으면 초기화
         if (scrollTimeout) {
@@ -527,34 +537,35 @@
 
         // 새로운 타이머 설정
         scrollTimeout = setTimeout(function () {
-            if (element.scrollTop() + element.innerHeight() >= element[0].scrollHeight - 30) {
-                element.scrollTop(element.prop("scrollHeight"));
+            if (element.scrollTop + element.offsetHeight >= element.scrollHeight - 30) {
+                element.scrollTop = element.scrollHeight;
                 // 2초 지연 후의 로직을 여기에 추가
                 setTimeout(function () {
-                    var comment_no = $('#last_comment_no').val();
-                    var post_no = $('#post_no').val();
-                    $.ajax({
-                        url: '/board/comment/scroll',
-                        type: 'POST',
-                        data: {
-                            "comment_no": comment_no,
-                            "post_no": post_no
+                    var comment_no = document.getElementById('last_comment_no').value;
+                    var post_no = document.getElementById('post_no').value;
+                    fetch('/board/comment/scroll', {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
                         },
-                        success: function (response) {
-                            response.forEach(function (item) {
-                                $('#comment_content').append(item.commentHtml);
+                        body: "comment_no=" + comment_no + "&post_no=" + post_no,
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(function (item) {
+                                document.getElementById('comment_content').innerHTML += item.commentHtml;
                             });
-                            if (response.length > 0) {
-                                var lastCommentNo = response[response.length - 1].comment_no;
-                                $('#last_comment_no').val(lastCommentNo);
+                            if (data.length > 0) {
+                                var lastCommentNo = data[data.length - 1].comment_no;
+                                document.getElementById('last_comment_no').value = lastCommentNo;
                             }
-                        },
-                        error: function (error) {
+                        })
+                        .catch((error) => {
                             // 에러 처리
-                        }
-                    }).always(function () {
-                        $('.square').css('opacity', '0');
-                    });
+                        })
+                        .finally(() => {
+                            square.style.opacity = '0';
+                        });
                 }, 1000); // 2초 지연
             }
         }, 1000); // 스크롤 이벤트의 1초 지연
