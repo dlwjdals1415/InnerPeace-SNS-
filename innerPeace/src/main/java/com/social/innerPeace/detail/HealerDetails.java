@@ -11,46 +11,50 @@ import java.util.Collection;
 import java.util.List;
 
 public class HealerDetails implements UserDetails {
-    @Autowired
-    private Healer healer;
+    private final Healer healer;
 
-    public HealerDetails(Healer healer){
+    public HealerDetails(Healer healer) {
         this.healer = healer;
     }
-    @Override public Collection<? extends GrantedAuthority> getAuthorities() {
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(healer.getRole().value()));
         return authorities;
     }
 
-    @Override public String getPassword() {
+    @Override
+    public String getPassword() {
         return healer.getHealerPw();
     }
-    @Override public String getUsername() {
+
+    @Override
+    public String getUsername() {
         return healer.getHealerEmail();
     }
 
-    public String getHealer_nickname(){
+    public String getHealer_nickname() {
         return healer.getHealerNickName();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return false;
     }
 }

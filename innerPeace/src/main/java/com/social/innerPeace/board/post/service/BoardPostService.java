@@ -22,6 +22,8 @@ public interface BoardPostService {
 
     List<PostDTO> searchScrollList(Long postNo, String search);
 
+    List<PostDTO> listByHealerNickname(String healerNickname);
+
     PostDTO detail(Long postNo, String healerNickName);
 
     PostDTO modify(PostDTO dto, String loginHealer);

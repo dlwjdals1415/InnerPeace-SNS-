@@ -32,11 +32,15 @@ public class Healer extends BaseEntity{
     @Builder.Default
     private boolean healerStatus = true;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean emailVerified = true;
+
     private String haelerProfileImage;
 
     private String healerRandomcode;
 
-    @Column(length = 30, nullable = false, name = "healerNickName")
+    @Column(length = 30, nullable = false, name = "healerNickName", unique = true)
     private String healerNickName;
 
     @Column(length = 1)

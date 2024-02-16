@@ -148,6 +148,12 @@ public class BoardPostServiceImpl implements BoardPostService {
     }
 
     @Override
+    public List<PostDTO> listByHealerNickname(String healerNickname) {
+        List<Post> posts = postRepository.findByHealerNickname(healerNickname, Sort.by(Sort.Direction.DESC, "postNo")).stream().limit(36).collect(Collectors.toList());
+        return listEntityToDto(posts);
+    }
+
+    @Override
     public PostDTO detail(Long postNo, String healerNickName) {
         Post post = postRepository.findByPostNoWithHealer(postNo);
         if (post != null) {
