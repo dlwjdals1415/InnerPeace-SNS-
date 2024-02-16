@@ -4,11 +4,13 @@ import com.social.innerPeace.ip_enum.Role;
 import com.social.innerPeace.dto.HealerDTO;
 import com.social.innerPeace.rest.service.ConfirmationTokenService;
 import com.social.innerPeace.user.account.service.UserAccountService;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,22 +59,38 @@ public class UserAccountController {
         return "redirect:/login";
     }
 
-    @PostMapping("/profile")
-    public String profile(HealerDTO dto){
-        log.info("profile nickname : {}", dto.getHealer_nickname());
+    @GetMapping("/profile")
+    public String profile(Model model, HttpSession session){
+        String loginedHealer = (String) session.getAttribute("loginedHealer");
+        log.info("profile nickname : {}", loginedHealer);
+        HealerDTO dto = userAccountService.findHealerProfile(loginedHealer);
+        model.addAttribute("dto", dto);
         return "profile";
     }
 
-    @PostMapping("/myinfo")
+    @PostMapping("/profile/modify")
+    public String profileModify(HealerDTO healerDTO, HttpSession session){
+        String loginedHealer = (String) session.getAttribute("loginedHealer");
+        if (loginedHealer != null) {
+            HealerDTO dto = userAccountService.modifyProfile(loginedHealer, healerDTO);
+            session.setAttribute("loginedHealer", dto.getHealer_nickname());
+        }
+        return "redirect:/user/account/profile";
+    }
+
+    @PostMapping("/myinfo/modify")
     public String myinfo(HealerDTO dto){
         log.info("profile nickname : {}", dto.getHealer_nickname());
+
         return "myinfo";
     }
 
     @PostMapping("/profile/img")
-    public String profileImg(HealerDTO dto){
+    public String profileImg(HealerDTO dto, HttpSession session){
         log.info("profile nickname : {}", dto.getHealer_nickname());
-        return "profile";
+        String loginedHealer = (String) session.getAttribute("loginedHealer");
+        HealerDTO healerDTO = userAccountService.modifyProfileImage(loginedHealer, dto);
+        return "redirect:/user/account/profile";
     }
 
 }

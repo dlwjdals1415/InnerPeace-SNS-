@@ -39,4 +39,10 @@ public interface UserAccountService {
     }
 
     HealerDTO compareByEmail(String email);
+
+    HealerDTO findHealerProfile(String loginedHealer);
+
+    HealerDTO modifyProfileImage(String loginedHealer, HealerDTO dto);
+
+    HealerDTO modifyProfile(String loginedHealer, HealerDTO dto);
 }

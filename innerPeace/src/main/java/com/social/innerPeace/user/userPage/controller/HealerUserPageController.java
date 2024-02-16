@@ -33,7 +33,7 @@ public class HealerUserPageController {
         String healer_nickname = (String) session.getAttribute("loginedHealer");
         List<PostDTO> dtoList = boardPostService.listByHealerNickname(healerNickname);
 
-        HealerDTO dto = healerUserPageService.findHealer(healer_nickname);
+        HealerDTO dto = healerUserPageService.findHealer(healerNickname, loginedHealer);
         model.addAttribute("dtoList", dtoList);
         model.addAttribute("dto",dto);
         return "userpage";
