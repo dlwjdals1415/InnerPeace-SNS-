@@ -4,7 +4,7 @@ import com.social.innerPeace.dto.HealerDTO;
 import com.social.innerPeace.entity.Healer;
 
 public interface HealerUserPageService {
-    HealerDTO findHealer(String healerNickname);
+    HealerDTO findHealer(String healerNickname, String loginedHealer);
 
 
     default HealerDTO entityToDto(Healer healer){
@@ -14,4 +14,5 @@ public interface HealerUserPageService {
                 .build();
         return dto;
     }
+
 }

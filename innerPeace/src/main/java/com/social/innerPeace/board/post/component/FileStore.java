@@ -1,6 +1,7 @@
 package com.social.innerPeace.board.post.component;
 
 
+import com.social.innerPeace.dto.HealerDTO;
 import com.social.innerPeace.dto.PostDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,8 @@ public class FileStore {
     @Value("${thumbnail.dir}")
     private String fileDir2;
 
+    @Value("${profile.dir}")
+    private String profile_dir;
 
     public PostDTO storeFile(PostDTO postDTO) throws IOException{
         if (postDTO == null) {
@@ -40,6 +43,35 @@ public class FileStore {
         }
         return postDTO;
     }
+
+    public HealerDTO profileImage(HealerDTO healerDTO){
+        // DTO에서 Base64로 인코딩된 프로필 이미지 가져오기
+        String base64EncodedImage = healerDTO.getHaeler_profile_image();
+
+        // UUID 생성
+        String uuid = UUID.randomUUID().toString();
+
+        // 파일 이름 생성
+        String filename = uuid + ".png";
+
+        try {
+            // Base64 디코딩하여 이미지 바이트 배열 얻기
+            byte[] imageBytes = Base64.getDecoder().decode(base64EncodedImage);
+
+            // 이미지 바이트 배열을 파일로 저장
+            try (FileOutputStream fos = new FileOutputStream(profile_dir + filename)) {
+                fos.write(imageBytes);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // DTO에 파일 이름 저장
+        healerDTO.setHaeler_profile_image(filename);
+
+        return healerDTO;
+    }
+
 
     private String createStoreFileName(String originalFilename,String uuid) {
         return uuid +"."+ extractExt(originalFilename);

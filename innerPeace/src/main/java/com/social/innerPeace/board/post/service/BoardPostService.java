@@ -51,4 +51,5 @@ public interface BoardPostService {
         return dto;
     }
 
+    List<PostDTO> listByHealerNickname(String healerNickname);
 }

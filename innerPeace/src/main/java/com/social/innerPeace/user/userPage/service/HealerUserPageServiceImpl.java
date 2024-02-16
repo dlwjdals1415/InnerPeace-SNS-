@@ -14,7 +14,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class HealerUserPageServiceImpl implements HealerUserPageService{
@@ -28,13 +30,23 @@ public class HealerUserPageServiceImpl implements HealerUserPageService{
     PostRepository postRepository;
 
     @Override
-    public HealerDTO findHealer(String healerNickname) {
+    public HealerDTO findHealer(String healerNickname, String loginedHealer) {
         Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(healerNickname);
-        Healer healer = null;
-        if(optionalHealer.isPresent()){
-            healer = optionalHealer.get();
+        Optional<Healer> optionalloginedHealer = healerRepository.findByHealerNickName(loginedHealer);
+        if(!optionalHealer.isPresent()){
+           return null;
         }
+        Healer healer = optionalHealer.get();
         HealerDTO dto = entityToDto(healer);
+        if (optionalloginedHealer.isPresent()) {
+            List<Follow> followerList = healerRepository.findFollowersByHealerEmail(healer.getHealerEmail());
+            Optional<Follow> follow = followerList.stream().filter(f -> f.getFollowing().getHealerNickName().equals(optionalloginedHealer.get().getHealerNickName())).findFirst();
+            if (follow.isPresent()) {
+                dto.setFollow_status("팔로우 취소");
+            } else {
+                dto.setFollow_status("팔로우");
+            }
+        }
         String image = healer.getHaelerProfileImage();
         String imagePath = profile_dir + image;
         String base64String = null;

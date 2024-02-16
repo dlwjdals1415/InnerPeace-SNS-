@@ -39,7 +39,7 @@ public class Healer extends BaseEntity{
     @Column(length = 30, nullable = false, name = "healerNickName")
     private String healerNickName;
 
-    @Column(length = 1)
+    @Column(length = 8)
     private String healerGender;
 
     private LocalDate healerBitrh;
