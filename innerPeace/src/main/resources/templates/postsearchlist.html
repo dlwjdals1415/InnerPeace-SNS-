@@ -43,7 +43,8 @@
             <h2>followLIst</h2>
         </article>
         <article class="post_contentList">
-            <input type="hidden" id="last_post_no" th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].post_no : ''}">
+            <input type="hidden" id="last_post_no"
+                   th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].post_no : ''}">
             <input type="hidden" id="searchvalue" th:value="${search}">
             <div class="post" th:each="item, status : ${dtoList}">
                 <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
@@ -51,7 +52,7 @@
                 </a>
             </div>
         </article>
-        <article class="col_cc hauto w100" id="loading">
+        <article class="col_cc hauto w100 op" id="loading">
             <div class="loadingio-spinner-reload-zv6cq6zfifd">
                 <div class="ldio-dg926s5a60v">
                     <div>
@@ -74,8 +75,9 @@
 <script th:inline="javascript">
     var scrollTimeout; // 타이머를 저장할 변수
 
-    $('#postList').scroll(function() {
-        var element = $(this);
+    document.getElementById('postList').addEventListener('scroll', function () {
+        var element = this;
+        document.getElementById('loading').style.opacity = '1';
 
         // 이미 설정된 타이머가 있으면 초기화
         if (scrollTimeout) {
@@ -83,59 +85,55 @@
         }
 
         // 새로운 타이머 설정
-        scrollTimeout = setTimeout(function() {
-            if (element.scrollTop() + element.innerHeight() >= element[0].scrollHeight - 30) {
-                element.scrollTop(element.prop("scrollHeight"));
+        scrollTimeout = setTimeout(function () {
+            if (element.scrollTop + element.clientHeight >= element.scrollHeight - 30) {
+                element.scrollTop = element.scrollHeight;
                 // 2초 지연 후의 로직을 여기에 추가
-                setTimeout(function() {
-                    var post_no = $('#last_post_no').val();
-                    var search = $('#searchvalue').val();
+                setTimeout(function () {
+                    var post_no = document.getElementById('last_post_no').value;
+                    var search = document.getElementById('searchvalue').value;
 
-                    $.ajax({
-                        url: '/board/post/search_scroll',
-                        type: 'POST',
-                        data: {
+                    fetch('/board/post/search_scroll', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
                             "post_no": post_no,
                             "search": search
-                        },
-                        success: function(response) {
-                            // 성공적으로 데이터를 받아온 후 할 작업
-                            // 여기에 데이터 처리 로직 추가
-                            response.forEach(function(item) {
-                                // 각 항목에 대해 수행할 작업
-                                // 예를 들어, 받아온 데이터를 이용하여 리스트 아이템을 생성하고 페이지에 추가
+                        }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(function (item) {
                                 var postDetailUrl = '/board/post/detail/' + item.post_no;
-                                // 이미지 태그 생성
-                                var imgTag = $('<img>', {
-                                    "src": item.post_image_thumbnail,
-                                    "alt": "Post " + item.post_no,
-                                    "loading": "lazy",
-                                });
-                                // a 태그 생성 및 href 속성 설정
-                                var aTag = $('<a>', {
-                                    "href": postDetailUrl
-                                }).append(imgTag); // 이미지 태그를 a 태그 안에 넣기
+                                var imgTag = document.createElement('img');
+                                imgTag.src = item.post_image_thumbnail;
+                                imgTag.alt = "Post " + item.post_no;
+                                imgTag.loading = "lazy";
 
-                                // div 태그 생성 및 a 태그 포함
-                                var divTag = $('<div>', {
-                                    "class": "post" // div에 클래스 추가
-                                }).append(aTag); // a 태그를 div 태그 안에 넣기
+                                var aTag = document.createElement('a');
+                                aTag.href = postDetailUrl;
+                                aTag.appendChild(imgTag);
 
-                                // 생성된 div 태그를 페이지의 특정 요소에 추가
-                                $('.post_contentList').append(divTag);
+                                var divTag = document.createElement('div');
+                                divTag.className = "post";
+                                divTag.appendChild(aTag);
+
+                                document.querySelector('.post_contentList').appendChild(divTag);
                             });
 
-                            // 모든 데이터를 페이지에 추가한 후, post_no 값을 업데이트(다음 요청을 위해)
-                            if(response.length > 0) {
-                                var lastPostNo = response[response.length - 1].post_no;
-                                $('#last_post_no').val(lastPostNo);
+                            if (data.length > 0) {
+                                var lastPostNo = data[data.length - 1].post_no;
+                                document.getElementById('last_post_no').value = lastPostNo;
                             }
-                        },
-                        error: function(error) {
-                            // 에러 처리
-                        },
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        }).finally(() => {
+                        document.getElementById('loading').style.opacity = '0';
                     });
-                }, 2000); // 20초 지연
+                }, 2000); // 2초 지연
             }
         }, 1000); // 스크롤 이벤트의 1초 지연
     });

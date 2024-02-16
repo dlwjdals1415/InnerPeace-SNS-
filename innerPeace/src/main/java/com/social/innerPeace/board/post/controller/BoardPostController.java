@@ -52,9 +52,9 @@ public class BoardPostController {
 
     @PostMapping("board/post/list_scroll")
     @ResponseBody
-    public ResponseEntity<Object> postlistscroll(@RequestParam("post_no") Long post_no) {
-        log.info("call postlistscroll post_no : " + post_no);
-        List<PostDTO> dtoList = boardPostService.scrollList(post_no);
+    public ResponseEntity<Object> postlistscroll(@RequestBody PostDTO dto) {
+        log.info("call postlistscroll post_no : " + dto.getPost_no());
+        List<PostDTO> dtoList = boardPostService.scrollList(dto.getPost_no());
         return ResponseEntity.status(HttpStatus.OK).body(dtoList);
     }
 

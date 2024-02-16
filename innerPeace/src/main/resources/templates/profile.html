@@ -62,7 +62,7 @@
             <h2 class="mb50">프로필 편집</h2>
             <div></div>
             <section class="w50 hauto col_cc bor_rad10">
-                <img class="w100p h100p mt20" src="" alt="프로필">
+                <img class="w100p h100p mt20" th:src="dto.haeler_profile_image" alt="프로필">
                 <button class="gray_btn w90 h30p" type="button" id="profile_img_btn"
                         onclick="document.getElementById('profile_img_input').click()">프로필 사진 변경
                 </button>
@@ -70,14 +70,14 @@
             </section>
             <form class="w100 hauto col_c0" action="/user/account/profile/modify" method="post" id="profile_modify">
                 <label for="nickname"><h3>닉네임</h3></label>
-                <input type="text" id="nickname" class="w50 h30p bor_rad10" name="healer_nickname">
+                <input type="text" id="nickname" class="w50 h30p bor_rad10" name="healer_nickname" th:value="dto.healer_nickname">
                 <label for="statusmessage"><h3>상태메시지</h3></label>
-                <textarea id="statusmessage" class="profile_textarea bor_rad10" name="healer_statusmessage"></textarea>
+                <textarea id="statusmessage" class="profile_textarea bor_rad10" name="healer_statusmessage">[[${dto.healer_statusmessage}]]</textarea>
                 <label for="gender"><h3>상태메시지</h3></label>
                 <select id="gender" class="w50 h30p bor_rad10" name="healer_gender">
-                    <option value="남자">남자</option>
-                    <option value="여자">여자</option>
-                    <option value="비공개">비공개</option>
+                    <option value="남자" th:selected="${dto.healer_gender == '남자'}">남자</option>
+                    <option value="여자" th:selected="${dto.healer_gender == '여자'}">여자</option>
+                    <option value="비공개" th:selected="${dto.healer_gender == '비공개'}">비공개</option>
                 </select>
                 <input type="submit" class="w50 h50p mt20 green_btn" value="프로필 수정">
             </form>
