@@ -1,5 +1,6 @@
 package com.social.innerPeace.user.follow.controller;
 
+import com.social.innerPeace.dto.CommentDTO;
 import com.social.innerPeace.dto.FollowDTO;
 import com.social.innerPeace.dto.HealerDTO;
 import com.social.innerPeace.entity.Follow;
@@ -27,8 +28,10 @@ public class HealerFollowController {
     private final HealerFollowService healerFollowService;
 
     @GetMapping("/{healer_nickname}/following")
-    public String following(Model model, @PathVariable(name = "healer_nickname") String healer_nickname) {
+    public String following(Model model, @PathVariable(name = "healer_nickname") String healer_nickname, HttpSession session) {
         log.info("follow call");
+        String loginedHealer = (String) session.getAttribute("loginedHealer");
+        List<HealerDTO> followingList = healerFollowService.findAll(healer_nickname);
         List<FollowDTO> dtoList = new ArrayList<>();
         IntStream.rangeClosed(1, 100).forEach(i -> {
             HealerDTO healer = HealerDTO
