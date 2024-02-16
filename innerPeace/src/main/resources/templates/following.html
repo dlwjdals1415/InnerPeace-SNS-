@@ -61,8 +61,8 @@
                         </article>
                     </th:block>
                 </section>
-            </section>
-            <div class="square_2">
+            </section>ㄹ
+            <div class="square_2 op">
                 <div class="spin_2"></div>
             </div>
         </section>
@@ -77,65 +77,74 @@
 <script src="/js/writeMap.js"></script>
 <script src="/js/write.js"></script>
 <script>
-    var scrollTimeout; // 타이머를 저장할 변수
+    var followSection = document.getElementById('follow_section');
+    var lastFollowNo = document.getElementById('last_follow_no');
+    var healerNickname = document.getElementById('healer_nickname');
 
-    $('#follow_section').scroll(function () {
-        var element = $(this);
+    var square2 = document.querySelector('.square_2');
 
-        // 이미 설정된 타이머가 있으면 초기화
-        if (scrollTimeout) {
-            clearTimeout(scrollTimeout);
+    followSection.addEventListener('scroll', function () {
+        if (followSection.scrollTop + followSection.clientHeight >= followSection.scrollHeight - 30) {
+            followSection.scrollTop = followSection.scrollHeight;
+
+            // 통신 전에 opacity를 1로 설정
+            square2.style.opacity = 1;
+
+            fetch('/user/' + healerNickname.value + '/following/scroll', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'follow_no=' + lastFollowNo.value
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // 통신이 완료되면 opacity를 0으로 설정
+                    square2.style.opacity = 0;
+                    appendDataToPage(data);
+                });
         }
-
-        // 새로운 타이머 설정
-        scrollTimeout = setTimeout(function () {
-            if (element.scrollTop() + element.innerHeight() >= element[0].scrollHeight - 30) {
-                element.scrollTop(element.prop("scrollHeight"));
-                // 2초 지연 후의 로직을 여기에 추가
-                setTimeout(function () {
-                    var follow_no = $('#last_follow_no').val();
-                    var healer_nickname = $('#healer_nickname').val();
-                    $.ajax({
-                        url: '/user/' + healer_nickname + '/following/scroll',
-                        type: 'POST',
-                        data: {
-                            "follow_no": follow_no,
-                        },
-                        success: function (response) {
-                            appendDataToPage(response);
-                        },
-                        error: function (error) {
-                            // 에러 처리
-                        },
-                    });
-                }, 2000); // 20초 지연
-            }
-        }, 1000); // 스크롤 이벤트의 1초 지연
     });
 
     function appendDataToPage(data) {
-        const container = document.querySelector('#follow_content'); // HTML을 추가할 컨테이너 선택
+        var followContent = document.getElementById('follow_content');
 
-        data.forEach(item => {
-            // 각 아이템에 대한 HTML 요소 생성
-            const itemHTML = `
-      <section class="ml20 w90 h50p row_cc">
-        <article class="w20 hauto">
-          <img class="h40p wauto" src="${item.follow.healer_profile_image}" alt="">
-        </article>
-        <article class="w65 hauto col ml20">
-          <a href="/user/userpage/${item.follow.healer_nickname}">
-            <span class="healer_id">${item.follow.healer_nickname}</span>
-          </a>
-        </article>
-        ${item.followstatus != null ? `
-        <article class="w10 hauto row_cc ml20">
-          <button class="nomal_btn w100 h30p" type="button">${item.followstatus}</button>
-        </article>` : ''}
-      </section>
-    `;
-            // 컨테이너에 HTML 추가
-            container.innerHTML += itemHTML;
+        data.forEach(function (item) {
+            var section = document.createElement('section');
+            section.className = 'ml20 w90 h50p row_cc';
+
+            var article1 = document.createElement('article');
+            article1.className = 'w20 hauto';
+            var img = document.createElement('img');
+            img.className = 'h40p wauto';
+            img.src = item.follow.healer_profile_image;
+            article1.appendChild(img);
+
+            var article2 = document.createElement('article');
+            article2.className = 'w65 hauto col ml20';
+            var a = document.createElement('a');
+            a.href = '/user/userpage/' + item.follow.healer_nickname;
+            var span = document.createElement('span');
+            span.className = 'healer_id';
+            span.textContent = item.follow.healer_nickname;
+            a.appendChild(span);
+            article2.appendChild(a);
+
+            section.appendChild(article1);
+            section.appendChild(article2);
+
+            if (item.followstatus != null) {
+                var article3 = document.createElement('article');
+                article3.className = 'w10 hauto row_cc ml20';
+                var button = document.createElement('button');
+                button.className = 'nomal_btn w100 h30p';
+                button.type = 'button';
+                button.textContent = item.followstatus;
+                article3.appendChild(button);
+                section.appendChild(article3);
+            }
+
+            followContent.appendChild(section);
         });
     }
 </script>

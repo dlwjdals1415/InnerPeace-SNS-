@@ -111,80 +111,69 @@
 <script src="/js/writeMap.js"></script>
 <script src="/js/write.js"></script>
 <script th:inline="javascript">
-    $(document).ready(function () {
-        var scrollTimeout; // 타이머를 저장할 변수
-        $(window).scroll(function () {
+    var scrollTimeout; // 타이머를 저장할 변수
 
-            if (scrollTimeout) {
-                clearTimeout(scrollTimeout);
+    document.getElementById('postList').addEventListener('scroll', function () {
+        var element = this;
+        document.getElementById('loading').style.opacity = '1';
+
+        // 이미 설정된 타이머가 있으면 초기화
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+        }
+
+        // 새로운 타이머 설정
+        scrollTimeout = setTimeout(function () {
+            if (element.scrollTop + element.clientHeight >= element.scrollHeight - 30) {
+                element.scrollTop = element.scrollHeight;
+                // 2초 지연 후의 로직을 여기에 추가
+                setTimeout(function () {
+                    var post_no = document.getElementById('last_post_no').value;
+                    var search = document.getElementById('healer_nickname').value;
+
+                    fetch('/board/post/search_scroll', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            "post_no": post_no,
+                            "search": "@" + search
+                        }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(function (item) {
+                                var postDetailUrl = '/board/post/detail/' + item.post_no;
+                                var imgTag = document.createElement('img');
+                                imgTag.src = item.post_image_thumbnail;
+                                imgTag.alt = "Post " + item.post_no;
+                                imgTag.loading = "lazy";
+
+                                var aTag = document.createElement('a');
+                                aTag.href = postDetailUrl;
+                                aTag.appendChild(imgTag);
+
+                                var divTag = document.createElement('div');
+                                divTag.className = "post";
+                                divTag.appendChild(aTag);
+
+                                document.querySelector('.post_contentList').appendChild(divTag);
+                            });
+
+                            if (data.length > 0) {
+                                var lastPostNo = data[data.length - 1].post_no;
+                                document.getElementById('last_post_no').value = lastPostNo;
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        }).finally(() => {
+                        document.getElementById('loading').style.opacity = '0';
+                    });
+                }, 2000); // 2초 지연
             }
-            // 문서의 전체 높이
-            var documentHeight = $(document).height();
-
-            // 윈도우(브라우저 창)의 높이와 스크롤된 높이를 더한 값
-            var scrollPosition = $(window).height() + $(window).scrollTop();
-
-            // 스크롤이 페이지 바닥에 도달했는지 확인
-            scrollTimeout = setTimeout(function () {
-                if (scrollPosition >= documentHeight - 30) {
-                    // 페이지 바닥에 도달했을 때의 처리
-                    if (scrollTimeout) {
-                        clearTimeout(scrollTimeout);
-                    }
-                    setTimeout(function () {
-                        var post_no = $('#last_post_no').val();
-                        var search = $('#healer_nickname').val();
-                        console.log(search);
-                        $.ajax({
-                            url: '/board/post/search_scroll',
-                            type: 'POST',
-                            data: {
-                                "post_no": post_no,
-                                "search": search
-                            },
-                            success: function (response) {
-                                // 성공적으로 데이터를 받아온 후 할 작업
-                                // 여기에 데이터 처리 로직 추가
-                                response.forEach(function (item) {
-                                    // 각 항목에 대해 수행할 작업
-                                    // 예를 들어, 받아온 데이터를 이용하여 리스트 아이템을 생성하고 페이지에 추가
-                                    var postDetailUrl = '/board/post/detail/' + item.post_no;
-                                    // 이미지 태그 생성
-                                    var imgTag = $('<img>', {
-                                        "src": item.post_image_thumbnail,
-                                        "alt": "Post " + item.post_no,
-                                        "loading": "lazy",
-                                    });
-                                    // a 태그 생성 및 href 속성 설정
-                                    var aTag = $('<a>', {
-                                        "href": postDetailUrl
-                                    }).append(imgTag); // 이미지 태그를 a 태그 안에 넣기
-
-                                    // div 태그 생성 및 a 태그 포함
-                                    var divTag = $('<div>', {
-                                        "class": "post" // div에 클래스 추가
-                                    }).append(aTag); // a 태그를 div 태그 안에 넣기
-
-                                    // 생성된 div 태그를 페이지의 특정 요소에 추가
-                                    $('.post_contentList').append(divTag);
-                                });
-
-                                // 모든 데이터를 페이지에 추가한 후, post_no 값을 업데이트(다음 요청을 위해)
-                                if (response.length > 0) {
-                                    var lastPostNo = response[response.length - 1].post_no;
-                                    $('#last_post_no').val(lastPostNo);
-                                }
-                            },
-                            error: function (error) {
-                                // 에러 처리
-                            },
-                        });
-                    }, 2000); // 20초 지연
-                }
-            }, 1000); // 스크롤 이벤트의 1초 지연
-            // 여기에 추가적인 로직을 작성할 수 있습니다. (예: 추가 데이터 로드 등)
-
-        });
+        }, 1000); // 스크롤 이벤트의 1초 지연
     });
 </script>
 </body>

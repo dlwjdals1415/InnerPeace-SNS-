@@ -1,5 +1,6 @@
 package com.social.innerPeace.board.comment.service;
 
+import com.social.innerPeace.dto.CommentListDTO;
 import com.social.innerPeace.dto.PostDTO;
 import com.social.innerPeace.dto.CommentDTO;
 import com.social.innerPeace.entity.Comment;
@@ -20,9 +21,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +34,8 @@ public class BoardCommentServiceImpl implements BoardCommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final HealerRepository healerRepository;
+
+    private final Map<String, String> imageCache = new HashMap<>();
 
     public Long write(CommentDTO commentDTO) {
         Optional<Post> optionalPost = postRepository.findById(commentDTO.getPost_no());
@@ -58,7 +59,8 @@ public class BoardCommentServiceImpl implements BoardCommentService {
         }
         Comment comment = optionalComment.get();
         comment.setCommentContent(commentDTO.getComment_content());
-        return commentRepository.save(comment).getCommentNo();
+        commentRepository.save(comment);
+        return 1L;
     }
 
     @Override
@@ -77,15 +79,31 @@ public class BoardCommentServiceImpl implements BoardCommentService {
 
 // 최대 36개까지 가져오도록 설정
         Pageable pageable = PageRequest.of(0, 36, sort);
-        Page<Comment> postEntityList = commentRepository.findAllByPostNoOrderByCommentNoDesc(postNo,pageable);
-        if (postEntityList != null && postEntityList.isEmpty() == false) {
-            List<CommentDTO> commentDTOList = toList(postEntityList);
+        Page<Comment> commentList = commentRepository.findAllByPostNoOrderByCommentNoDesc(postNo,pageable);
+        return listCommentToDTOList(commentList);
+    }
+
+    @Override
+    public List<CommentDTO> scroll(Long postNo, Long commentNo) {
+        // 서비스 레이어 또는 컨트롤러에서
+        Pageable pageable = PageRequest.of(0, 36, Sort.by("commentNo").descending());
+        Page<Comment> comments = commentRepository.findByPostNoAndCommentNoLessThanOrderByCommentNoDesc(postNo, commentNo, pageable);
+        return listCommentToDTOList(comments);
+    }
+
+
+    private List<CommentDTO> listCommentToDTOList(Page<Comment> commentList) {
+        if (!commentList.isEmpty()) {
+            List<CommentDTO> commentDTOList = toList(commentList);
             try {
                 for (CommentDTO commentDTO : commentDTOList) {
                     String profileImagePath = profile_dir + commentDTO.getHealer_profile_image();
-                    String base64String = null;
-                    byte[] fileBytes = readBytesFromFile(profileImagePath);
-                    base64String = encodeBytesToBase64(fileBytes);
+                    String base64String = imageCache.get(profileImagePath);
+                    if (base64String == null) {
+                        byte[] fileBytes = readBytesFromFile(profileImagePath);
+                        base64String = encodeBytesToBase64(fileBytes);
+                        imageCache.put(profileImagePath, base64String);
+                    }
                     commentDTO.setHealer_profile_image("data:image/png;base64," + base64String);
                 }
 
@@ -98,19 +116,5 @@ public class BoardCommentServiceImpl implements BoardCommentService {
         return null;
     }
 
-    private static byte[] readBytesFromFile(String filePath) throws IOException {
-        File file = new File(filePath);
-        byte[] fileBytes = new byte[(int) file.length()];
-
-        try (FileInputStream fis = new FileInputStream(file)) {
-            fis.read(fileBytes);
-        }
-
-        return fileBytes;
-    }
-
-    private static String encodeBytesToBase64(byte[] bytes) {
-        return Base64.getEncoder().encodeToString(bytes);
-    }
 
 }
