@@ -30,7 +30,7 @@ public class HealerUserPageController {
     @GetMapping("/{healer_nickname}")
     public String userpage(Model model, @PathVariable("healer_nickname") String healerNickname, HttpSession session) {
         log.info("userpage call");
-        String healer_nickname = (String) session.getAttribute("loginedHealer");
+        String loginedHealer = (String) session.getAttribute("loginedHealer");
         List<PostDTO> dtoList = boardPostService.listByHealerNickname(healerNickname);
 
         HealerDTO dto = healerUserPageService.findHealer(healerNickname, loginedHealer);

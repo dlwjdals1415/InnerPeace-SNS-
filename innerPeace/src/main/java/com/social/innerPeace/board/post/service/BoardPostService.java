@@ -52,6 +52,4 @@ public interface BoardPostService {
                 .build();
         return dto;
     }
-
-    List<PostDTO> listByHealerNickname(String healerNickname);
 }

@@ -7,12 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,29 +20,15 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    @Autowired
-    private UserDetailsService userDetailsService;
-
     @Bean
-    PasswordEncoder passwordEncoder() {
+    PasswordEncoder encryptPassword() {
         return new BCryptPasswordEncoder();
     }
 
     @Autowired
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
-
-    @Bean
-    public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
-        return new CustomAuthenticationSuccessHandler();
-    }
-
-    @Bean
-    public CustomAuthenticationFailureHandler customAuthenticationFailureHandler() {
-        return new CustomAuthenticationFailureHandler();
-    }
-
+    CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    @Autowired
+    CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
     @Autowired
     @Lazy
     private CustomAuthenticationProvider customAuthenticationProvider;
@@ -55,14 +39,16 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authorize ->
                         authorize
-                                .anyRequest().permitAll())
+                                .requestMatchers("/css/**", "/js/**", "/user/account/**", "/user/**", "/board/**", "/comment/**").permitAll()
+                                .requestMatchers("/admin/help/**").hasRole("ADMIN")
+                                .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/user/account/signin")
                         .usernameParameter("healer_id")
                         .passwordParameter("healer_pw")
                         .loginProcessingUrl("/user/account/signin")
-                        .successHandler(customAuthenticationSuccessHandler())
-                        .failureHandler(customAuthenticationFailureHandler()))
+                        .successHandler(new CustomAuthenticationSuccessHandler())
+                        .failureHandler(new CustomAuthenticationFailureHandler()))
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/user/account/signout"))
                         .logoutSuccessUrl("/board/post/list")

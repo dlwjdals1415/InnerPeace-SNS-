@@ -71,31 +71,6 @@ public class BoardPostServiceImpl implements BoardPostService {
     }
 
     @Override
-    public List<PostDTO> listByHealerNickname(String healerNickname) {
-        List<Post> posts = postRepository.findByHealerNickname(healerNickname, Sort.by(Sort.Direction.DESC, "postNo")).stream().limit(36).collect(Collectors.toList());
-        List<PostDTO> dtoList = new ArrayList<>();
-
-        for (Post post : posts) {
-            String image = findImagename(post.getPostNo()).getPost_image();
-            String imagePath = thumbnail_dir + image;
-            String base64String = null;
-            try {
-                byte[] fileBytes = readBytesFromFile(imagePath);
-                base64String = encodeBytesToBase64(fileBytes);
-            } catch (IOException e) {
-                // 예외 처리
-            }
-            PostDTO dto = PostDTO
-                    .builder()
-                    .post_no(post.getPostNo())
-                    .post_image_thumbnail("data:image/png;base64," + base64String)
-                    .build();
-            dtoList.add(dto);
-        }
-        return dtoList;
-    }
-
-    @Override
     public PostDTO findImagename(Long post_no) {
         Post post = postRepository.findById(post_no).orElse(null);
         assert post != null;
