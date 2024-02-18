@@ -51,4 +51,8 @@ public interface UserAccountService {
     boolean modifyPassword(String token, String email, String healerPw);
 
     String delete(String loginedHealer, HealerDTO dto);
+
+    HealerDTO modifyMyinfo(String loginedHealer, HealerDTO healerDTO);
+
+    HealerDTO findHealerInfo(String loginedHealer);
 }

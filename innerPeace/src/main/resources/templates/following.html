@@ -45,23 +45,22 @@
                 <input type="hidden" id="healer_nickname"
                        th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].healer_nickname : ''}">
                 <input type="hidden" id="">
-                <section class="ml20 w90 h50p row_cc" th:each="item,status : ${dtoList}">
+                <section class="ml20 w90 h50p row_cc" th:each="item, status : ${dtoList}">
                     <article class="w20 hauto">
-                        <img class="h40p wauto" th:src="${item.follow.haeler_profile_image}" alt="">
+                        <img class="h40p wauto" th:src="${item.healer_profile_image}" alt="">
                     </article>
                     <article class="w65 hauto col ml20">
-                        <a th:href="@{/user/userpage/{healer_id}(healer_id=${item.follow.healer_nickname})}">
-                            <span class="healer_id" th:text="${item.follow.healer_nickname}"></span>
+                        <a th:href="@{/user/userpage/{healer_id}(healer_id=${item.healer_nickname})}">
+                            <span class="healer_id" th:text="${item.healer_nickname}"></span>
                         </a>
                     </article>
                     <th:block th:if="${session.loginedHealer != null}">
                         <article class="w10 hauto row_cc ml20">
-                            <button class="nomal_btn w100 h30p" type="button"
-                                    th:text="${item.getFollowstatus}"></button>
+                            <button class="nomal_btn w100 h30p" id="follow_btn" th:text="${item.followstatus}" th:data-nickname="${item.healer_nickname}"></button>
                         </article>
                     </th:block>
                 </section>
-            </section>ㄹ
+            </section>
             <div class="square_2 op">
                 <div class="spin_2"></div>
             </div>
@@ -82,6 +81,32 @@
     var healerNickname = document.getElementById('healer_nickname');
 
     var square2 = document.querySelector('.square_2');
+
+    // 모든 팔로우 버튼을 선택합니다.
+    var followButtons = document.querySelectorAll('.nomal_btn');
+
+    // 각각의 팔로우 버튼에 대해 클릭 이벤트 리스너를 추가합니다.
+    followButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            // 해당 팔로우 버튼이 클릭되었을 때 실행할 동작을 여기에 추가합니다.
+            let healer_nickname = button.dataset.nickname;
+            fetch("/user/follow", {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: "healer_nickname=" + healer_nickname,
+            })
+            .then(response => response.text())
+            .then(data => {
+                button.innerText = data;
+            })
+            .catch((error) => {
+                alert(error);
+            });
+        });
+    });
+
 
     followSection.addEventListener('scroll', function () {
         if (followSection.scrollTop + followSection.clientHeight >= followSection.scrollHeight - 30) {

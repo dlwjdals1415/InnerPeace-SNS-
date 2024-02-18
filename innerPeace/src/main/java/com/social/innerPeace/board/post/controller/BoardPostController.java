@@ -44,8 +44,7 @@ public class BoardPostController {
     @GetMapping("board/post/list")
     public String postlist(Model model) {
         log.info("call postlist");
-        List<PostDTO> dtoList = new ArrayList<>();
-        dtoList = boardPostService.list();
+        List<PostDTO> dtoList = boardPostService.list();
         model.addAttribute("dtoList", dtoList);
         return "postlist";
     }

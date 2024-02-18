@@ -71,7 +71,6 @@ public class UserAccountController {
         log.info("login");
         return "signin";
     }
-
     @GetMapping("/loginError")
     public String loginError(@RequestParam(name = "msg") String msg, RedirectAttributes attributes) {
         log.info("loginError : {}", msg);
@@ -111,11 +110,6 @@ public class UserAccountController {
         String loginedHealer = (String) session.getAttribute("loginedHealer");
         HealerDTO healerDTO = userAccountService.modifyProfileImage(loginedHealer, dto);
         return "redirect:/user/account/profile";
-    }
-
-    @GetMapping("/myinfo")
-    public String myinfo() {
-        return "myinfo";
     }
 
     @PostMapping("/pwmodify")
@@ -176,6 +170,25 @@ public class UserAccountController {
             }
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원탈퇴작업을 실패하였습니다.");
+    }
+
+    @GetMapping("/myinfo")
+    public String myinfo(Model model, HttpSession session){
+        String loginedHealer = (String) session.getAttribute("loginedHealer");
+        log.info("profile nickname : {}", loginedHealer);
+        HealerDTO dto = userAccountService.findHealerInfo(loginedHealer);
+        model.addAttribute("dto", dto);
+        return "myinfo";
+    }
+
+    @PostMapping("/myinfo/modify")
+    public String myinfo(HealerDTO healerDTO, HttpSession session){
+        String loginedHealer = (String) session.getAttribute("loginedHealer");
+        if (loginedHealer != null) {
+            HealerDTO dto = userAccountService.modifyMyinfo(loginedHealer, healerDTO);
+            session.setAttribute("loginedHealer", dto.getHealer_nickname());
+        }
+        return "redirect:/user/account/myinfo";
     }
 
 }
