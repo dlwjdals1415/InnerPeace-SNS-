@@ -38,10 +38,10 @@ public class HealerFollowController {
     }
 
     @GetMapping("/{healer_nickname}/follower")
-    public String follower(Model model, @PathVariable(name = "healer_nickname") String healer_nickname) {
+    public String follower(Model model, @PathVariable(name = "healer_nickname") String healer_nickname, HttpSession session) {
         log.info("follower call");
-        List<FollowDTO> dtoList = new ArrayList<>();
-
+        String loginedHealer = (String) session.getAttribute("loginedHealer");
+        List<FollowDTO> dtoList = healerFollowService.findFollower(healer_nickname);
         model.addAttribute("dtoList", dtoList);
         return "follower";
     }

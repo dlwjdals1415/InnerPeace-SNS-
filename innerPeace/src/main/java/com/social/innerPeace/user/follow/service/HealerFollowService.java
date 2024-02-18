@@ -13,4 +13,6 @@ public interface HealerFollowService {
     String follow(String follower, String healerNickname);
 
     List<FollowDTO> findFollowing(String healerNickname);
+
+    List<FollowDTO> findFollower(String healerNickname);
 }

@@ -91,6 +91,39 @@ public class HealerFollowServiceImpl implements HealerFollowService{
         return null;
     }
 
+    @Override
+    public List<FollowDTO> findFollower(String healerNickname) {
+        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(healerNickname);
+        if (optionalHealer.isPresent()) {
+            Healer healer = optionalHealer.get();
+            Sort sort = Sort.by(Sort.Direction.DESC, "followNo");
+
+            Pageable pageable = PageRequest.of(0, 36, sort);
+            List<Follow> followList = healerRepository.findByFollowerHealerEmail(healer.getHealerEmail(), pageable);
+
+            // Follow 엔티티를 FollowDTO로 변환
+            List<FollowDTO> followDTOList = followList.stream()
+                    .map(follow -> FollowDTO.builder()
+                            .follow_no(follow.getFollowNo())
+                            .follow(follow.getFollowing().getHealerEmail())
+                            .healer_nickname(follow.getFollowing().getHealerNickName())
+                            .healer_profile_image(findProfileImageBase64(follow.getFollowing().getHaelerProfileImage()))
+                            .build())
+                    .collect(Collectors.toList());
+            for(FollowDTO followDTO : followDTOList){
+                Optional<Follow> follow = followList.stream().filter(f -> f.getFollowing().getHealerNickName().equals(healer.getHealerNickName())).findFirst();
+                if (follow.isPresent()) {
+                    followDTO.setFollowstatus("팔로우 취소");
+                } else {
+                    followDTO.setFollowstatus("팔로우");
+                }
+            }
+            return followDTOList;
+        }
+
+        return null;
+    }
+
     private String findProfileImageBase64(String profileImagePath) {
         String imagePath = profile_dir + profileImagePath;
         String base64String = imageCache.get(imagePath);
