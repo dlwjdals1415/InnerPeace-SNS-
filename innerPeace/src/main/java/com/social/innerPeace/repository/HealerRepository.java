@@ -25,7 +25,8 @@ public interface HealerRepository extends JpaRepository<Healer,String> {
     @Query("SELECT h.postList FROM Healer h WHERE h.healerEmail = :healerEmail")
     List<Post> findPostByHealerEmail(@Param("healerEmail") String healerEmail);
 
-    @Query("SELECT f FROM Follow f WHERE f.following = :following ORDER BY f.followNo DESC")
-    Page<Follow> findByFollower(@Param("following") Healer following, Pageable pageable);
+    @Query("SELECT f FROM Follow f WHERE f.following.healerEmail = :healerEmail ORDER BY f.followNo DESC")
+    List<Follow> findByFollowingHealerEmail(@Param("healerEmail") String healerEmail, Pageable pageable);
+
 
 }

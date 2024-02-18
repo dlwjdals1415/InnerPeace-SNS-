@@ -1,8 +1,11 @@
 package com.social.innerPeace.user.follow.service;
 
+import com.social.innerPeace.dto.FollowDTO;
 import com.social.innerPeace.dto.HealerDTO;
+import com.social.innerPeace.dto.PostDTO;
 import com.social.innerPeace.entity.Follow;
 import com.social.innerPeace.entity.Healer;
+import com.social.innerPeace.entity.Post;
 import com.social.innerPeace.repository.FollowRepository;
 import com.social.innerPeace.repository.HealerRepository;
 import jakarta.transaction.Transactional;
@@ -18,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class HealerFollowServiceImpl implements HealerFollowService{
@@ -54,47 +58,64 @@ public class HealerFollowServiceImpl implements HealerFollowService{
         }
     }
 
-    @Transactional
-    public List<HealerDTO> findAll(String followingHealer) {
-        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(followingHealer);
-        Sort sort = Sort.by(Sort.Direction.DESC, "followNo");
+    @Override
+    public List<FollowDTO> findFollowing(String healerNickname) {
+        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(healerNickname);
+        if (optionalHealer.isPresent()) {
+            Healer healer = optionalHealer.get();
+            Sort sort = Sort.by(Sort.Direction.DESC, "followNo");
 
-        Pageable pageable = PageRequest.of(0, 36, sort);
-        Page<Follow> healerList = healerRepository.findByFollower(optionalHealer.get(), pageable);
-        return listHealerToDTOList(healerList);
-    }
+            Pageable pageable = PageRequest.of(0, 36, sort);
+            List<Follow> followList = healerRepository.findByFollowingHealerEmail(healer.getHealerEmail(), pageable);
 
-    public List<HealerDTO> listHealerToDTOList(Page<Follow> healerList) {
-        if (!healerList.isEmpty()) {
-            List<HealerDTO> healerDTOList = toList(healerList);
-
-            try {
-                for (HealerDTO healerDTO : healerDTOList) {
-                    String profileImagePath = profile_dir + healerDTO.getHaeler_profile_image();
-                    String base64String = imageCache.get(profileImagePath);
-                    if (base64String == null) {
-                        byte[] fileBytes = readBytesFromFile(profileImagePath);
-                        base64String = encodeBytesToBase64(fileBytes);
-                        imageCache.put(profileImagePath, base64String);
-                    }
-                    healerDTO.setHaeler_profile_image("data:image/png;base64," + base64String);
+            // Follow 엔티티를 FollowDTO로 변환
+            List<FollowDTO> followDTOList = followList.stream()
+                    .map(follow -> FollowDTO.builder()
+                            .follow_no(follow.getFollowNo())
+                            .follow(follow.getFollower().getHealerEmail())
+                            .healer_nickname(follow.getFollower().getHealerNickName())
+                            .healer_profile_image(findProfileImageBase64(follow.getFollower().getHaelerProfileImage()))
+                            .build())
+                    .collect(Collectors.toList());
+            for(FollowDTO followDTO : followDTOList){
+                Optional<Follow> follow = followList.stream().filter(f -> f.getFollowing().getHealerNickName().equals(healer.getHealerNickName())).findFirst();
+                if (follow.isPresent()) {
+                    followDTO.setFollowstatus("팔로우 취소");
+                } else {
+                    followDTO.setFollowstatus("팔로우");
                 }
-            } catch (IOException e) {
-                // 예외 처리
             }
-
-            return healerDTOList;
+            return followDTOList;
         }
+
         return null;
     }
 
+    private String findProfileImageBase64(String profileImagePath) {
+        String imagePath = profile_dir + profileImagePath;
+        String base64String = imageCache.get(imagePath);
+        if (base64String == null) {
+            try {
+                byte[] fileBytes = readBytesFromFile(imagePath);
+                base64String = encodeBytesToBase64(fileBytes);
+                imageCache.put(imagePath, base64String);
+            } catch (IOException e) {
+                // 예외 처리
+            }
+        }
+        return "data:image/png;base64," + base64String;
+    }
 
-    private HealerDTO healerToDTO(Healer healer) {
-        return HealerDTO.builder()
-                .healer_nickname(healer.getHealerNickName())
+
+    public HealerDTO findProfileImagename(String healerEmail) {
+        Healer healer = healerRepository.findByHealerNickName(healerEmail).orElse(null);
+        assert healer != null;
+        HealerDTO dto = HealerDTO.builder()
                 .haeler_profile_image(healer.getHaelerProfileImage())
                 .build();
+        return dto;
     }
+
 
     byte[] readBytesFromFile(String filePath) throws IOException {
         File file = new File(filePath);

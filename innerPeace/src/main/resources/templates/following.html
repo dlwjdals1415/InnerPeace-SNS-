@@ -45,13 +45,13 @@
                 <input type="hidden" id="healer_nickname"
                        th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].healer_nickname : ''}">
                 <input type="hidden" id="">
-                <section class="ml20 w90 h50p row_cc" th:each="item,status : ${dtoList}">
+                <section class="ml20 w90 h50p row_cc" th:each="item, status : ${dtoList}">
                     <article class="w20 hauto">
-                        <img class="h40p wauto" th:src="${item.follow.haeler_profile_image}" alt="">
+                        <img class="h40p wauto" th:src="${item.healer_profile_image}" alt="">
                     </article>
                     <article class="w65 hauto col ml20">
-                        <a th:href="@{/user/userpage/{healer_id}(healer_id=${item.follow.healer_nickname})}">
-                            <span class="healer_id" th:text="${item.follow.healer_nickname}"></span>
+                        <a th:href="@{/user/userpage/{healer_id}(healer_id=${item.healer_nickname})}">
+                            <span class="healer_id" th:text="${item.healer_nickname}"></span>
                         </a>
                     </article>
                     <th:block th:if="${session.loginedHealer != null}">
@@ -61,7 +61,7 @@
                         </article>
                     </th:block>
                 </section>
-            </section>ㄹ
+            </section>
             <div class="square_2 op">
                 <div class="spin_2"></div>
             </div>
