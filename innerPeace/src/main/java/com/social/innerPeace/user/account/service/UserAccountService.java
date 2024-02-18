@@ -45,4 +45,8 @@ public interface UserAccountService {
     HealerDTO modifyProfileImage(String loginedHealer, HealerDTO dto);
 
     HealerDTO modifyProfile(String loginedHealer, HealerDTO dto);
+
+    HealerDTO modifyMyinfo(String loginedHealer, HealerDTO healerDTO);
+
+    HealerDTO findHealerInfo(String loginedHealer);
 }

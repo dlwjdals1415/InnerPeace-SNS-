@@ -75,13 +75,6 @@ public class UserAccountController {
         return "redirect:/user/account/profile";
     }
 
-    @PostMapping("/myinfo/modify")
-    public String myinfo(HealerDTO dto){
-        log.info("profile nickname : {}", dto.getHealer_nickname());
-
-        return "myinfo";
-    }
-
     @PostMapping("/profile/img")
     public String profileImg(HealerDTO dto, HttpSession session){
         log.info("profile nickname : {}", dto.getHealer_nickname());
@@ -89,4 +82,24 @@ public class UserAccountController {
         HealerDTO healerDTO = userAccountService.modifyProfileImage(loginedHealer, dto);
         return "redirect:/user/account/profile";
     }
+
+    @GetMapping("/myinfo")
+    public String myinfo(Model model, HttpSession session){
+        String loginedHealer = (String) session.getAttribute("loginedHealer");
+        log.info("profile nickname : {}", loginedHealer);
+        HealerDTO dto = userAccountService.findHealerInfo(loginedHealer);
+        model.addAttribute("dto", dto);
+        return "myinfo";
+    }
+
+    @PostMapping("/myinfo/modify")
+    public String myinfo(HealerDTO healerDTO, HttpSession session){
+        String loginedHealer = (String) session.getAttribute("loginedHealer");
+        if (loginedHealer != null) {
+            HealerDTO dto = userAccountService.modifyMyinfo(loginedHealer, healerDTO);
+            session.setAttribute("loginedHealer", dto.getHealer_nickname());
+        }
+        return "redirect:/user/account/myinfo";
+    }
+
 }

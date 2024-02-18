@@ -38,7 +38,17 @@
     <header class="f_g3 bg_f4">
     </header>
     <main class="f_g5 main1000 col_cc">
-        
+        <section class="w70 h80 col_c0">
+            <h2 class="mb50">내 정보 수정</h2>
+            <div></div>
+            <form class="w100 hauto col_c0" action="/user/account/myinfo/modify" method="post" id="myinfo_modify">
+                <label for="name"><h3>이름</h3></label>
+                <input type="text" id="name" class="w50 h30p bor_rad10" name="healer_name" th:value="${dto.healer_name}">
+                <label for="birth"><h3>생일</h3></label>
+                <input type="date" id="birth" class="w50 h30p bor_rad10" name="healer_birth" th:value="${dto.healer_birth}">
+                <input type="submit" class="w50 h50p mt20 green_btn" value="내 정보 수정">
+            </form>
+        </section>
     </main>
     <footer class="f_g2 bg_f4">
         <span>© 2024 INNER-PEACE</span>
@@ -51,3 +61,19 @@
 <script src="/js/write.js"></script>
 </body>
 </html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var form = document.getElementById('myinfo_modify');
+
+    form.addEventListener('submit', function(event) {
+        // 사용자에게 수정을 확인
+        var isConfirmed = confirm('수정하시겟습니까?');
+        if (!isConfirmed) {
+            // 사용자가 'Cancel'을 클릭한 경우, 폼 제출 중단
+            event.preventDefault();
+        }
+    });
+});
+
+</script>

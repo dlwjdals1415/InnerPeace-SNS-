@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
@@ -120,6 +122,47 @@ public class UserAccountServiceImpl implements UserAccountService{
             healer = healerRepository.save(healer);
 
             return entityToDto(healer);
+        }
+        return null;
+    }
+
+    @Override
+    public HealerDTO findHealerInfo(String loginedHealer) {
+        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(loginedHealer);
+        if(optionalHealer.isPresent()){
+            Healer healer = optionalHealer.get();
+            HealerDTO healerDTO = HealerDTO.builder()
+                    .healer_name(healer.getHealerName())
+                    .healer_birth(healer.getHealerBitrh().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .build();
+            return healerDTO;
+        }
+        return null;
+    }
+
+    @Override
+    public HealerDTO modifyMyinfo(String loginedHealer, HealerDTO healerDTO) {
+        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(loginedHealer);
+        if (optionalHealer.isPresent() && healerDTO != null) {
+            Healer healer = optionalHealer.get();
+
+            if (healerDTO.getHealer_name() != null) {
+                healer.setHealerName(healerDTO.getHealer_name());
+            }
+
+            if (healerDTO.getHealer_birth() != null) {
+                healer.setHealerBitrh(LocalDate.parse(healerDTO.getHealer_birth()));
+            }
+
+            healer = healerRepository.save(healer);
+
+            if (healer != null) {
+                return HealerDTO.builder()
+                        .healer_nickname(healer.getHealerNickName())
+                        .healer_name(healer.getHealerName())
+                        .healer_birth(String.valueOf(healer.getHealerBitrh()))
+                        .build();
+            }
         }
         return null;
     }
