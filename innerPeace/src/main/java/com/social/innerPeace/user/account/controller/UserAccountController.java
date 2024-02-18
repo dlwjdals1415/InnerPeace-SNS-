@@ -97,13 +97,6 @@ public class UserAccountController {
         return "redirect:/user/account/profile";
     }
 
-    @PostMapping("/myinfo/modify")
-    public String myinfo(HealerDTO dto) {
-        log.info("profile nickname : {}", dto.getHealer_nickname());
-
-        return "myinfo";
-    }
-
     @PostMapping("/profile/img")
     public String profileImg(HealerDTO dto, HttpSession session) {
         log.info("profile nickname : {}", dto.getHealer_nickname());

@@ -54,7 +54,7 @@
                             <span class="healer_id" th:text="${item.healer_nickname}"></span>
                         </a>
                     </article>
-                    <th:block th:if="${session.loginedHealer != null}">
+                    <th:block th:if="${session.loginedHealer != null and session.loginedHealer != item.healer_nickname}">
                         <article class="w10 hauto row_cc ml20">
                             <button class="nomal_btn w100 h30p" id="follow_btn" th:text="${item.followstatus}" th:data-nickname="${item.healer_nickname}"></button>
                         </article>
