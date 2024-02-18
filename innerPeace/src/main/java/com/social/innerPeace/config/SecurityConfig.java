@@ -39,9 +39,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/css/**", "/js/**", "/user/account/**", "/user/**", "/board/**", "/comment/**").permitAll()
-                                .requestMatchers("/admin/help/**").hasRole("ADMIN")
-                                .anyRequest().authenticated())
+                                .anyRequest().permitAll())
                 .formLogin(login -> login
                         .loginPage("/user/account/signin")
                         .usernameParameter("healer_id")

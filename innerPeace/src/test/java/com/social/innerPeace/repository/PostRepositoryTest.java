@@ -30,7 +30,7 @@ public class PostRepositoryTest {
                         .postContent("test" + i)
                         .postImage("test" + i+".jpg")
                         .healer(healer)
-                        .tags(List.of(healer.getHealerName() + i,healer.getHealerNickName() + i))
+                        .tags(List.of("#"+healer.getHealerName() + i,"#"+healer.getHealerNickName() + i))
                         .postMapLat(35.8999F)
                         .postMapLng(128.847F)
                         .build();

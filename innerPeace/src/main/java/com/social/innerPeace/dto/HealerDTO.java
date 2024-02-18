@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HealerDTO {
+public class  HealerDTO {
     private String healer_email;
     private String healer_pw;
     private String healer_name;

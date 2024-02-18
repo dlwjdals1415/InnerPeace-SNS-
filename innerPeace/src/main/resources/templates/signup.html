@@ -18,6 +18,9 @@
 </article>
 <article class="menubar" th:replace="~{fragment/menu :: user_menu}">
 </article>
+<section class="po_ab w100 h100 bg_008 col_cc z_i0 op" id="loader">
+    <div class="custom-loader"></div>
+</section>
 <section class="po_ab w100 h100 bg_f4 row z_i1">
     <header class="f_g3 bg_f4">
     </header>
@@ -41,7 +44,7 @@
                     <input class="w80 h30p mt10 text_input pad10" type="text" name="healer_name" id="healer_name"
                            placeholder="이름" required>
                     <input class="w80 h30p mt10 text_input pad10" type="text" name="healer_phone" id="healer_phone"
-                           placeholder="전화번호" required>
+                           placeholder="전화번호(***-****-****)" required>
                     <div class="birthinfo">생년월일</div>
                     <input class="w80 h30p mt10 text_input pad10" type="date" name="healer_birth" id="healer_birth"
                            required>
@@ -92,9 +95,23 @@
             document.getElementById('checkbox_ad_agreement').checked = this.checked;
         });
 
-        document.getElementById('registForm').addEventListener('submit', function (event) {
+        var loader = document.getElementById('loader');
+
+        var form = document.getElementById('registForm');
+        form.addEventListener('submit', function (event) {
             // Prevent the form from submitting normally
             event.preventDefault();
+
+            var password = document.getElementById('healer_pw').value;
+            var passwordConfirm = document.getElementById('password_confirm').value;
+
+            if (password !== passwordConfirm) {
+                alert('비밀번호와 비밀번호 확인이 같지 않습니다.');
+                return;  // 폼 제출 중단
+            }
+
+            loader.style.zIndex = '5';
+            loader.style.opacity = '1';
 
             // Get form
             var form = event.target;
@@ -107,13 +124,25 @@
                 method: form.method,
                 body: formData
             })
-                .then(response => response.text())
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(error => {
+                            throw new Error(error);
+                        });
+                    }
+                    return response.text();
+                })
                 .then(data => {
-                    alert('회원가입에 성공하셨습니다. 로그인하시기전에 입력하실 이메일로 인증URL을 보내드렷습니다. 확인해주세요.');
+                    alert('회원가입에 성공하셨습니다.\n 로그인하시기전에 입력하실 이메일로 인증URL을 보내드렷습니다. 확인해주세요.');
                     window.location.href = '/user/account/signin';
                 })
                 .catch(error => {
                     alert('Error: ' + error.message);
+                })
+                .finally(() => {
+                    // Reset the loader's CSS properties
+                    loader.style.zIndex = '0';
+                    loader.style.opacity = '0';
                 });
         });
     });

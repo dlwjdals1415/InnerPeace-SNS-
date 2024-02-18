@@ -525,6 +525,8 @@
             });
     });
 
+    var scrollTimeout; // 타이머를 저장할 변수
+
     detailContent.addEventListener('scroll', function () {
         var element = this;
         var square = document.querySelector('.square');

@@ -16,6 +16,7 @@
 <section class="sidebar" th:replace="~{fragment/sidebar::user_sidebar}"></section>
 <article class="searchbar" th:replace="~{fragment/searchbar :: searchbar}"></article>
 <article class="menubar" th:replace="~{fragment/menu :: user_menu}"></article>
+<input type="hidden" id="serverMessage" th:value="${msg}">
 <section class="po_ab w100 h100 bg_f4 row z_i1">
     <header class="f_g3 bg_f4">
     </header>
@@ -55,6 +56,14 @@
     </footer>
 </section>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:inline="javascript">
+    window.onload = function() {
+        var msg = document.getElementById('serverMessage').value;
+        if (msg) {
+            alert(msg);
+        }
+    };
+</script>
 </body>
 
 </html>

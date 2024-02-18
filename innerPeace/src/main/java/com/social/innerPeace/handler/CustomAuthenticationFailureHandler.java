@@ -22,12 +22,19 @@ import java.net.URLEncoder;
 public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        HttpSession session = request.getSession();
-
-        session.setAttribute("loginErrorMessage",exception.getMessage());
-
-        setDefaultFailureUrl("/user/account/login?error=true&t=h");
-
-        super.onAuthenticationFailure(request, response, exception);
+        String errorMsg;
+        if(exception instanceof BadCredentialsException) {
+            errorMsg = exception.getMessage();
+        } else if (exception instanceof InternalAuthenticationServiceException) {
+            errorMsg = "내부 시스템 문제로 로그인 요청을 처리할 수 없습니다. 관리자에게 문의하세요. ";
+        } else if (exception instanceof UsernameNotFoundException) {
+            errorMsg = "존재하지 않는 계정입니다. 회원가입 후 로그인해주세요.";
+        } else if (exception instanceof AuthenticationCredentialsNotFoundException) {
+            errorMsg = "인증 요청이 거부되었습니다. 관리자에게 문의하세요.";
+        } else {
+            errorMsg = "알 수 없는 오류로 로그인 요청을 처리할 수 없습니다. 관리자에게 문의하세요.";
+        }
+        errorMsg = URLEncoder.encode(errorMsg, "UTF-8"); /* 한글 인코딩 깨진 문제 방지 */
+        response.sendRedirect("/user/account/loginError?msg="+errorMsg);
     }
 }

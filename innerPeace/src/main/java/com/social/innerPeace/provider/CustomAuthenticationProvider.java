@@ -42,6 +42,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("아이디 또는 비밀번호가 일치하지 않습니다");
         }
 
+        if(!healerDetails.isEnabled()){
+            throw new BadCredentialsException("이메일 인증을 완료해주세요");
+        }
+
+        if(!healerDetails.isAccountNonLocked()){
+            throw new BadCredentialsException("계정이 잠겼습니다. 관리자에게 문의해주세요");
+        }
+
         return new UsernamePasswordAuthenticationToken(healerDetails,null,healerDetails.getAuthorities());
     }
 

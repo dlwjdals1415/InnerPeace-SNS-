@@ -337,7 +337,7 @@ body {
     height: 100px;
 }
 
-.h500p{
+.h500p {
     height: 500px;
 }
 
@@ -345,6 +345,7 @@ body {
 .wauto {
     width: auto;
 }
+
 .w30p {
     width: 30px;
 }
@@ -353,7 +354,7 @@ body {
     width: 100px;
 }
 
-.w500p{
+.w500p {
     width: 500px;
 }
 
@@ -828,7 +829,43 @@ body {
     /* textarea의 크기 조절을 금지합니다 */
 }
 
-.obj-fit{
+.obj-fit {
     max-width: 100%;
     max-height: 100%;
+}
+
+.custom-loader {
+    width: 100px;
+    height: 100px;
+    display: grid;
+    border: 8px solid #0000;
+    border-radius: 50%;
+    border-color: #CDEDAC #0000;
+    animation: s6 2s infinite linear;
+}
+
+.custom-loader::before,
+.custom-loader::after {
+    content: "";
+    grid-area: 1/1;
+    margin: 4px;
+    border: inherit;
+    border-radius: 50%;
+}
+
+.custom-loader::before {
+    border-color: #31F458 #0000;
+    animation: inherit;
+    animation-duration: 1s;
+    animation-direction: reverse;
+}
+
+.custom-loader::after {
+    margin: 16px;
+}
+
+@keyframes s6 {
+    100% {
+        transform: rotate(1turn)
+    }
 }
