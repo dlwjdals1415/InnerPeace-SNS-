@@ -1,0 +1,27 @@
+.comment_area {
+  width: 80% !important;
+  height: 100% !important;
+  resize: none;
+  /* textarea의 크기 조절을 금지합니다 */
+}
+
+.modify_comment_area{
+  width: 80% !important;
+  height: 200px !important;
+  resize: none;
+  /* textarea의 크기 조절을 금지합니다 */
+}
+
+.postmenu-container {
+  background-color: rgba(0, 0, 0, 0.8);
+  transition: opacity 0.5s ease-in-out;
+}
+
+.postmenu_label{
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+#postmenu:checked~#postmenu-container {
+  z-index: 10;
+  opacity: 1;
+}

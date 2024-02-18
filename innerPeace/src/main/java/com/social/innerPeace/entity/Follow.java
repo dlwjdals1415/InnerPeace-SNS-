@@ -9,11 +9,14 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"follower","following"})
-public class Follow extends BaseEntity{
+@ToString(exclude = {"follower", "following"})
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"follower", "following"})
+})
+public class Follow extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long follow_no;
+    private Long followNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower")

@@ -9,20 +9,20 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = "fnq_writer")
+@ToString(exclude = "admin")
 public class FNQ extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long fnq_no;
+    private Long fnqNo;
 
     @Column(length = 100,nullable = false)
-    private String fnq_title;
+    private String fnqTitle;
 
     @Column(length = 2000,nullable = false)
-    private String fnq_content;
+    private String fnqContent;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_id")
-    private Admin fnq_writer;
+    @JoinColumn(name = "adminId")
+    private Admin admin;
 
 }

@@ -9,27 +9,27 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"reporter","report_post","report_comment"})
+@ToString(exclude = {"healer","post","comment"})
 public class Report extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long report_no;
+    private Long reportNo;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "healer_id")
-    private Healer reporter;
+    @JoinColumn(name = "healerEmail")
+    private Healer healer;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "post_no")
-    private Post report_post;
+    @JoinColumn(name = "postNo")
+    private Post post;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "comment_no")
-    private Comment report_comment;
+    @JoinColumn(name = "commentNo")
+    private Comment comment;
 
     @Column(length = 100,nullable = false)
-    private String report_reason;
+    private String reportReason;
 
     @Builder.Default
-    private boolean report_status = false;
+    private boolean reportStatus = false;
 }

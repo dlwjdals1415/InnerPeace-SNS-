@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="kr">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Inner Peace</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/base.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/write.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/sidebar.css'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+    <style>
+        #profile_article{
+            width: 600px;
+            height: 700px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<input type="checkbox" class="checkbox" id="create">
+<input type="checkbox" class="checkbox" id="search">
+<input type="checkbox" class="checkbox" id="more">
+<th:block th:if="${session.loginedHealer != null}">
+    <section class="write-container" th:replace="~{fragment/write::write}"></section>
+</th:block>
+<th:block th:if="${session.loginedHealer != null}">
+    <section class="sidebar" th:replace="~{fragment/sidebar::healer_sidebar}"></section>
+</th:block>
+<th:block th:unless="${session.loginedHealer != null}">
+    <section class="sidebar" th:replace="~{fragment/sidebar::user_sidebar}"></section>
+</th:block>
+<article class="searchbar" th:replace="~{fragment/searchbar::searchbar}">
+</article>
+<th:block th:if="${session.loginedHealer != null}">
+    <section class="map-section" th:replace="~{fragment/writeMap::map-section}"></section>
+</th:block>
+<th:block th:if="${session.loginedHealer != null}">
+    <article class="menubar" th:replace="~{fragment/menu::healer_menu}"></article>
+</th:block>
+<th:block th:unless="${session.loginedHealer != null}">
+    <article class="menubar" th:replace="~{fragment/menu::user_menu}"></article>
+</th:block>
+<section class="po_ab w100 h100 op row_cc" id="profile_modify_section">
+    <article class="po_ab w100 h100 z_i0 bg_008" onclick="profile_out()"></article>
+    <article class="po_ab bg_f4 z_i1 col_cc" id="profile_article">
+        <h1 class="bor_bt h50p">프로필 수정</h1>
+        <img class="w500p h500p" src="" alt="uploadImg" id="profile_preview">
+        <button class="gray_btn w90 h50p" type="button" id="profile_cutbtn">자르기</button>
+        <form class="w100 hauto col_cc" action="/user/account/profile/img" method="post" id="profile_img_modify">
+            <input type="hidden" id="profile_img" name="haeler_profile_image">
+            <input type="hidden" name="healer_nickname" value="123">
+            <input type="submit" class="gray_btn w90 h50p dis_none" id="profile_subbtn" value="확인">
+        </form>
+    </article>
+</section>
+<section class="po_ab w100 h100 bg_f4 row z_i1">
+    <header class="f_g3 bg_f4">
+    </header>
+    <main class="f_g5 main1000 col_cc">
+        <section class="w70 h80 col_c0">
+            <h2 class="mb50">프로필 편집</h2>
+            <div></div>
+            <section class="w50 hauto col_cc bor_rad10">
+                <img class="w100p h100p mt20" th:src="${dto.haeler_profile_image}" alt="프로필">
+                <button class="gray_btn w90 h30p" type="button" id="profile_img_btn"
+                        onclick="document.getElementById('profile_img_input').click()">프로필 사진 변경
+                </button>
+                <input class="dis_none" type="file" id="profile_img_input" accept="image/*">
+            </section>
+            <form class="w100 hauto col_c0" action="/user/account/profile/modify" method="post" id="profile_modify">
+                <label for="nickname"><h3>닉네임</h3></label>
+                <input type="text" id="nickname" class="w50 h30p bor_rad10" name="healer_nickname" th:value="${dto.healer_nickname}">
+                <label for="statusmessage"><h3>상태메시지</h3></label>
+                <textarea id="statusmessage" class="profile_textarea bor_rad10" name="healer_statusmessage">[[${dto.healer_statusmessage}]]</textarea>
+                <label for="gender"><h3>성별</h3></label>
+                <select id="gender" class="w50 h30p bor_rad10" name="healer_gender">
+                    <option value="남자" th:selected="${dto.healer_gender == '남자'}">남자</option>
+                    <option value="여자" th:selected="${dto.healer_gender == '여자'}">여자</option>
+                    <option value="비공개" th:selected="${dto.healer_gender == null}">비공개</option>
+                </select>
+                <input type="submit" class="w50 h50p mt20 green_btn" value="프로필 수정">
+            </form>
+        </section>
+    </main>
+    <footer class="f_g2 bg_f4 col_c0">
+        <span class="mt100">© 2024 INNER-PEACE</span>
+    </footer>
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9cf7f221de3543e0bd1ed40d14a3a704&libraries=services"></script>
+<script src="/js/writeMap.js"></script>
+<script src="/js/write.js"></script>
+<script>
+    var cropper;
+    $(document).ready(function () {
+
+        // 파일 입력 필드가 변경되었을 때
+        $('#profile_img_input').change(function () {
+            // Button state change
+            $('#profile_modify_section').css({'display': 'flex', 'opacity': '1', 'z-index': '5'});
+
+            readFileInput(this);
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                if (cropper) {
+                    cropper.destroy();
+                }
+
+                // Set up image write_preview
+                $('#profile_preview').attr('src', e.target.result).on('load', function () {
+                    // Set image height
+                    var uploadHeight = $('#profile_article').height();
+                    $(this).height(uploadHeight * 5 / 7);
+                    $('#profile_preview').addClass('circular-cropper');
+
+                    cropper = new Cropper(document.getElementById('profile_preview'), {
+                        aspectRatio: 1,
+                        viewMode: 1, // 크롭 박스가 캔버스 밖으로 나가지 않도록 설정
+                        ready: function () {
+                            // Cropper 준비가 완료되었을 때 원형 스타일 적용
+                            $('.cropper-view-box').css('border-radius', '50%');
+                            // 초기 크롭 박스 데이터 설정 (예시)
+                            this.cropper.setCropBoxData({width: 500, height: 500});
+                        }
+                    });
+                });
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
+
+        // 자르기 버튼 클릭 시
+        $('#profile_cutbtn').click(function () {
+            if (cropper) {
+                var croppedCanvas = cropper.getCroppedCanvas({
+                    width: 800, // 크롭된 이미지의 출력 너비
+                    height: 800, // 크롭된 이미지의 출력 높이
+                    fillColor: '#fff', // 배경 색상
+                    imageSmoothingEnabled: true, // 이미지 스무딩 활성화
+                    imageSmoothingQuality: 'high' // 이미지 스무딩 품질 설정
+                });
+                var finalCanvas = document.createElement('canvas');
+                var ctx = finalCanvas.getContext('2d');
+                finalCanvas.width = 200; // 원하는 최종 이미지 크기
+                finalCanvas.height = 200;
+
+                // 원형 클리핑 경로 생성
+                ctx.beginPath();
+                ctx.arc(finalCanvas.width / 2, finalCanvas.height / 2, finalCanvas.width / 2, 0, 2 * Math.PI);
+                ctx.clip();
+
+                // 크롭된 이미지를 원형으로 채움
+                ctx.drawImage(croppedCanvas, 0, 0, finalCanvas.width, finalCanvas.height);
+
+                var finalImageDataURL = finalCanvas.toDataURL('image/png');
+                $('#profile_preview').attr('src', finalImageDataURL);
+                $('#profile_img').val(finalImageDataURL.split(',')[1]);
+
+                // Cropper 인스턴스 파괴
+                cropper.destroy();
+                cropper = null; // 참조 제거
+                $('#profile_preview').off('load');
+                $('.cropper-view-box').css({
+                    'border-radius': '' // 스타일 제거
+                });
+                $('#profile_cutbtn').css('display', 'none');
+                $('#profile_subbtn').css('display', 'block');
+            }
+        });
+
+        function readFileInput(inputElement) {
+            var file = inputElement.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#profile_preview').attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+
+    });
+
+    function profile_out() {
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+
+        // 프로필 수정 섹션 숨기기
+        $('#profile_modify_section').css({'display': 'none', 'opacity': '0', 'z-index': '0'});
+
+        // 필요한 경우 #profile_preview의 src를 초기화
+        $('#profile_preview').removeAttr('src').removeClass('circular-cropper');
+
+        // input 필드 리셋
+        $('#profile_img_input').val('');
+
+        // 스타일 초기화
+        $('.cropper-view-box').css('border-radius', '');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.getElementById('profile_modify');
+
+        form.addEventListener('submit', function(event) {
+            // 사용자에게 삭제를 확인
+            var isConfirmed = confirm('수정하시겟습니까?');
+            if (!isConfirmed) {
+                // 사용자가 'Cancel'을 클릭한 경우, 폼 제출 중단
+                event.preventDefault();
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.getElementById('profile_img_modify');
+
+        form.addEventListener('submit', function(event) {
+            // 사용자에게 삭제를 확인
+            var isConfirmed = confirm('수정하시겟습니까?');
+            if (!isConfirmed) {
+                // 사용자가 'Cancel'을 클릭한 경우, 폼 제출 중단
+                event.preventDefault();
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

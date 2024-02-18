@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="kr">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Inner Peace</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+
+<body>
+<section class="sidebar po_fi h100 w10 bg_e0 z_i3 col box_sha555" th:fragment="healer_sidebar">
+    <article class="f_g1 row_cc">
+        <a th:href="@{/}">
+            <p class="logo">InnerPeace</p>
+        </a>
+    </article>
+    <section class="f_g15 col_cc">
+        <article class="w100 h100p">
+            <a th:href="@{/board/post/list}">
+                <button class="e0_btn w100 h100 font_s20" type="button">홈</button>
+            </a>
+        </article>
+        <article class="w100 h100p">
+            <label for="search" class="e0_btn w100 h100 font_s20">
+                검색
+            </label>
+        </article>
+        <article class="w100 h100p">
+            <a th:href="@{user/message}">
+                <button class="e0_btn w100 h100 font_s20" type="button">메시지</button>
+            </a>
+        </article>
+        <article class="w100 h100p">
+            <label for="create" class="e0_btn w100 h100 font_s20">
+                만들기
+            </label>
+        </article>
+        <article class="w100 h100p">
+            <a th:href="@{/user/userpage/{healer_nickname}(healer_nickname=${session.loginedHealer})}">
+                <button class="e0_btn w100 h100 font_s20" type="button">마이페이지</button>
+            </a>
+        </article>
+    </section>
+    <article class="f_g1 row_cc">
+        <label class="e0_btn w100 h50p font_s20" for="more">더보기</label>
+    </article>
+</section>
+
+<section class="sidebar po_fi h100 w10 bg_e0 z_i3 col box_sha555" th:fragment="user_sidebar">
+    <article class="f_g1 row_cc">
+        <a th:href="@{/}">
+            <p class="logo">InnerPeace</p>
+        </a>
+    </article>
+    <section class="f_g15 col_cc">
+        <article class="w100 h100p">
+            <a th:href="@{/board/post/list}">
+                <button class="e0_btn w100 h100 font_s20" type="button">홈</button>
+            </a>
+        </article>
+        <article class="w100 h100p">
+            <label for="search" class="e0_btn w100 h100 font_s20">
+                검색
+            </label>
+        </article>
+        <article class="w100 h100p">
+            <a th:href="@{/user/account/signin}">
+                <button class="e0_btn w100 h100 font_s20" type="button">로그인</button>
+            </a>
+        </article>
+    </section>
+    <article class="f_g1 row_cc">
+        <label class="e0_btn w100 h50p font_s20" for="more">더보기</label>
+    </article>
+</section>
+</body>
+
+</html>

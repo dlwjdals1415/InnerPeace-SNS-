@@ -1,0 +1,26 @@
+.searchbar {
+  left: -10%;
+  transition: left 0.3s ease, opacity 0.3s ease;
+}
+
+.menubar {
+  position: fixed;
+  height: 5%;
+  width: 10%;
+  bottom: 11%;
+  left :-10%;
+  background-color: #f4f4f4;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  transition: left 0.3s ease, opacity 0.3s ease;
+}
+
+.logo {
+  width: 80%;
+  height: auto;
+  font-weight: bold;
+  color: #000000;
+  font-size: 30px;
+}
+

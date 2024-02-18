@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <title>Inner Peace</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/base.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/write.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/modify.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/sidebar.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/postdetail.css'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+</head>
+<body>
+<input type="checkbox" class="checkbox" id="create">
+<input type="checkbox" class="checkbox" id="search">
+<input type="checkbox" class="checkbox" id="more">
+<input type="checkbox" class="checkbox" id="postmenu">
+<input type="checkbox" class="checkbox" id="modify">
+<input type="checkbox" class="checkbox" id="detail_map">
+<section class="po_ab w100 h100 row_cc op z_i0" id="postmenu-container">
+    <label class="po_ab w100 h100 z_i0 postmenu_label" for="postmenu"></label>
+    <input type="checkbox" class="checkbox" id="report">
+    <section class="w10 hauto bor_rad20 bg_f4 z_i5 col_cc">
+        <th:block th:if="${session.loginedHealer != null}">
+            <th:block th:if="${dto.healer_nickname != session.loginedHealer}">
+                <label for="report" class="e0_btn w80 h40p">신고</label>
+            </th:block>
+            <th:block th:unless="${dto.healer_nickname != session.loginedHealer}">
+                <label for="modify" class="e0_btn w80 h40p">수정</label>
+                <button id="post_delete" type="button" class="e0_btn w80 h40p" th:onclick="del([[${dto.post_no}]])">삭제
+                </button>
+            </th:block>
+        </th:block>
+    </section>
+</section>
+<section class="po_ab w100 h100 op row_cc z_i0 bg_008" id="modify-container">
+    <label class="po_ab w100 h100 z_i0" for="modify"></label>
+    <input type="checkbox" class="checkbox" id="modify_confirm">
+    <article class="po_ab bg_f4 z_i1 col_cc" id="modify_article">
+        <h1 class="bor_bt h50p">게시물 수정하기</h1>
+        <img th:src="${dto.post_image}" alt="uploadImg" id="modify_preview">
+        <button class="gray_btn w90 h50p" type="button" id="modify_fileButton"
+                onclick="document.getElementById('modify_file_input').click()">파일 선택
+        </button>
+        <button class="gray_btn w90 h50p dis_none" type="button" id="modify_cutButton">자르기</button>
+        <label class="gray_btn w90 h50p row_cc" for="modify_confirm" id="modify_submitButton"><span>확인</span></label>
+    </article>
+    <article class="po_ab z_i0 bg_f4 col_c0 op" id="post_modify"
+             th:with="tagString=${#strings.listJoin(dto.tags, ' ')}">
+        <div class="f_g1 w90 h50p row_cc bor_bt">
+            <h1>게시물 수정하기</h1>
+        </div>
+        <div class="row_cc w90 f_g13 modify-main">
+            <div class="f_g5 row_cc">
+                <img class="ml10 w100 h100"
+                     th:src="${dto.post_image_thumbnail}"
+                     alt="uploadImg" id="post_img">
+            </div>
+            <div class="col_cc f_g3">
+                <textarea id="modify_post_textarea" required placeholder="내용입력">[[${dto.post_content}]]</textarea>
+                <section class="row w90 h30p mt10">
+                    <form class="row w100 hauto">
+                        <article class="w80 h100 row_cc">
+                            <span class="w100 h80 text_input overflow_y" id="modify_post_tag"
+                                  th:text="${tagString}"></span>
+                        </article>
+                        <article class="w20 h100 ml10 row_cc">
+                            <input class="nomal_btn w90 hauto" type="button" id="tag_reset" value="지우기">
+                        </article>
+                    </form>
+                </section>
+                <section class="row w90 h30p mt10">
+                    <article class="w80 h100 row_cc">
+                        <input class="w100 h80 text_input" type="text" id="modify_tag" placeholder="태그 입력">
+                    </article>
+                    <article class="w20 h100 ml10 row_cc">
+                        <button class="nomal_btn w90 hauto" type="button" id="modify_tag_btn">추가</button>
+                    </article>
+                </section>
+                <p class="ml20 w90 h10p row_cc">위치추가</p>
+                <section class="row w90 h30p mt10">
+                    <article class="w80 h100 row_cc">
+                        <input class="w100 h80 text_input" type="text" name="map-search" id="map-search"
+                               placeholder="검색할곳">
+                    </article>
+                    <article class="w20 h100 ml10 row_cc">
+                        <button class="nomal_btn w90 hauto" type="button" id="map-search-btn">검색</button>
+                    </article>
+                </section>
+                <div class="map" id="modify_address"></div>
+                <form id="modify_form" class="w100 hauto row_cc mt20" th:action="@{/board/post/modify}" method="post"
+                      enctype="multipart/form-data">
+                    <input type="hidden" name="post_no" th:value="${dto.post_no}">
+                    <input type="hidden" id="modify_post_tags_hidden" name="post_tags" th:value="${tagString}">
+                    <input type="hidden" id="modify_post_content_hidden" name="post_content"
+                           th:value="${dto.post_content}">
+                    <input type="hidden" name="post_writer" th:value="${session.loginedHealer}">
+                    <input type="hidden" id="post_map_lat" name="post_map_lat" th:value="${dto.post_map_lat}">
+                    <input type="hidden" id="post_map_lng" name="post_map_lng" th:value="${dto.post_map_lng}">
+                    <input class="dis_none" type="file" id="modify_file_input" name="post_image_file" accept="image/*">
+                    <input type="hidden" id="post_img_hidden" name="post_image_thumbnail" value="">
+                    <input class="green_btn w90 h50p" type="submit" value="수정하기">
+                </form>
+            </div>
+        </div>
+
+    </article>
+</section>
+<section class="po_ab w100 h100 row_cc op z_i0" id="commentmenu-container">
+    <article class="po_ab w100 h100 z_i0 bg_008" onclick="comment_menu_out()"></article>
+    <input type="hidden" id="commentmenu_comment_no" value="">
+    <input type="hidden" id="commentmenu_comment_content" value="">
+    <section class="po_ab w10 hauto bor_rad20 bg_f4 z_i5 col_cc" id="comment_menu_button">
+    </section>
+    <section class="po_ab w20 hauto bor_rad20 bg_f4 z_i0 op col_cc" id="comment_modify_section">
+        <textarea class="modify_comment_area mb20 mt20" id="comment_modify_area" placeholder="댓글입력"></textarea>
+        <article class="row_cc w80 hauto">
+            <button class="w20 h50p gray_btn mr20" id="comment_modify_cancel">취소</button>
+            <button class="w20 h50p green_btn ml20" id="comment_modify_submit">수정</button>
+        </article>
+    </section>
+</section>
+<th:block th:if="${session.loginedHealer != null}">
+    <section th:replace="~{fragment/write::write}"></section>
+</th:block>
+<th:block th:if="${session.loginedHealer != null}">
+    <section th:replace="~{fragment/sidebar::healer_sidebar}"></section>
+</th:block>
+<th:block th:unless="${session.loginedHealer != null}">
+    <section th:replace="~{fragment/sidebar::user_sidebar}"></section>
+</th:block>
+<article th:replace="~{fragment/searchbar::searchbar}">
+</article>
+<th:block th:if="${session.loginedHealer != null}">
+    <section class="map-section" th:replace="~{fragment/writeMap::map-section}"></section>
+</th:block>
+<section class="w100 h100 po_fi z_i0 col_cc op bg_008" th:fragment="map-section" id="detailMap">
+    <label class="po_ab w100 h100 z_i0" for="detail_map"></label>
+    <div class="w50 h50" id="de_map"></div>
+</section>
+<th:block th:if="${session.loginedHealer != null}">
+    <article th:replace="~{fragment/menu::healer_menu}"></article>
+</th:block>
+<th:block th:unless="${session.loginedHealer != null}">
+    <article th:replace="~{fragment/menu::user_menu}"></article>
+</th:block>
+<section class="po_ab w100 h100 bg_f4 row z_i1">
+    <input type="hidden" id="post_no" th:value="${dto.post_no}"/>
+    <input type="hidden" id="map_lng" th:value="${dto.post_map_lng}">
+    <input type="hidden" id="map_lat" th:value="${dto.post_map_lat}">
+    <input type="hidden" id="loginedHealer" th:value="${session.loginedHealer}">
+    <input type="hidden" id="healer_nickname" th:value="${dto.healer_nickname}">
+    <header class="f_g1 bg_f4">
+    </header>
+    <main class="bg_f4 f_g6 col_cc gap20">
+        <section class="w80 h80 row_c0 bor_rad10 box_sha555">
+            <article class="w65 h100 row_cc pad20">
+                <img class="wauto hauto obj-fit" th:src="${dto.post_image}" alt="">
+            </article>
+            <section class="w30 h90 col bg_e0 box_sha555 bor_rad10 gap10">
+                <section class="w100 h10 row_c0">
+                    <article class="row_c0 w90">
+                        <img class="ml10 mr10 w30p hauto" th:src="${dto.healer_profile_image}" alt="profile">
+                        <div class="col">
+                            <a th:href="@{/user/userpage/{healer_nickname}(healer_nickname=${dto.healer_nickname})}">
+                                <span class="ml10 mr10 font_s15 text_hover" th:text="${dto.healer_nickname}">닉네임</span>
+                            </a>
+                            <label for="detail_map" class="text_hover ml10 mr10" id="de_map_address"></label>
+                        </div>
+                        <th:block
+                                th:if="${session.loginedHealer != null and dto.healer_nickname != session.loginedHealer}">
+                            <button class="ml10 mr10 h80 gray_btn" id="follow_btn" th:text="${dto.followstat}">
+                            </button>
+                        </th:block>
+                    </article>
+                    <article class="row_c0 w10 text_hover">
+                        <th:block th:if="${session.loginedHealer != null}">
+                            <label class="hauto font_s30 bor_none" for="postmenu">···</label>
+                        </th:block>
+                    </article>
+                </section>
+                <section class="w100 h70 overflow_y col gap10 scrollbarnone" id="detail_content">
+                    <section>
+                        <section class="w100 pad10 row">
+                            <article class="w5">
+                                <img class="w30p hauto" th:src="${dto.healer_profile_image}" alt="프로필">
+                            </article>
+                            <article class="w95 hauto ml20 mr20 col">
+                                <span>
+                                    <a th:href="@{/user/userpage/{healerNickName}(healerNickName=${dto.healer_nickname})}">
+                                        <span class="text_hover bold" th:text="${dto.healer_nickname}"></span>
+                                    </a>
+                                    <span th:text="'  ' + ${dto.post_content}"></span>
+                                </span>
+                                <div class="row gap10 mt10 ">
+                                    <div th:each="item, status : ${dto.tags}">
+                                        <a th:href="@{/board/post/search(searchkey=${item})}">
+                                            <span class="text_hover" th:text="${item}"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <span class="mt10 font_s15"
+                                      th:text="${#temporals.format(dto.post_regday, 'yyyy/MM/dd HH:mm')}"></span>
+                            </article>
+                        </section>
+                    </section>
+                    <section>
+                        <section class="w100 pad10 row">
+                            <input type="hidden" id="last_comment_no"
+                                   th:value="${comment != null && !comment.isEmpty() ? comment[comment.size() - 1].comment_no : ''}">
+                            <section class="w95" id="comment_content">
+                                <section class="w100 pad10 row" th:each="item, status : ${comment}">
+                                    <article class="w5">
+                                        <img class="w30p hauto" th:src="${item.healer_profile_image}" alt="프로필">
+                                    </article>
+                                    <article class="w80 hauto ml20 mr20 col">
+                                        <span>
+                                            <a th:href="@{/user/userpage/{healer_id}(healer_id=${item.nickName})}">
+                                                <span class="text_hover" th:text="${item.nickName}"></span>
+                                            </a>
+                                            <span th:text="'  ' + ${item.comment_content}"></span>
+                                        </span>
+                                        <article class="mt10 font_s15 row_cb">
+                                            <span class="regday"
+                                                  th:text="${#temporals.format(item.comment_regday, 'yyyy/MM/dd HH:mm')}"></span>
+                                        </article>
+                                    </article>
+                                    <article class="w10 hauto">
+                                        <th:block th:if="${session.loginedHealer != null}">
+                                            <input class="bor_none bg_e0 text_hover font_s20" type="button" value="···"
+                                                   th:onclick="comment_menu([[${item.comment_no}]],[[${item.comment_content}]],[[${item.nickName}]])">
+                                        </th:block>
+                                    </article>
+                                </section>
+                            </section>
+                        </section>
+                        <div class="square op">
+                            <div class="spin"></div>
+                        </div>
+                    </section>
+                </section>
+                <section class="w100 h20 ">
+                    <article class="w100 h70 col">
+                        <th:block
+                                th:if="${session.loginedHealer != null and dto.healer_nickname != session.loginedHealer}">
+                            <article class="h40 w100 row_c0">
+                                <button class="ml10 w100p h40p bor_rad20 e0_btn" id="like_btn"
+                                        th:text="${dto.likeStatus}">
+                                </button>
+                            </article>
+                        </th:block>
+                        <article class="ml10 h30 w100 row_c0">
+                            <span id="likeCount" th:text="'좋아요 ' + ${dto.likes} + ' 개'"></span>
+                        </article>
+                        <article class="ml10 h30 w100 row_c0">
+                            <span th:text="${#temporals.format(dto.post_regday, 'yyyy/MM/dd HH:mm')}"></span>
+                        </article>
+                    </article>
+                    <th:block th:if="${session.loginedHealer != null}">
+                        <article class="w100 h30 row_c0">
+                            <textarea class="comment_area" id="comment_area" placeholder="댓글입력"></textarea>
+                            <button class="w20 h50 green_btn" id="comment_submit">게시</button>
+                        </article>
+                    </th:block>
+                </section>
+            </section>
+        </section>
+        <footer class="bg_f4 h10 w80">
+        </footer>
+    </main>
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9cf7f221de3543e0bd1ed40d14a3a704&libraries=services"></script>
+<script src="/js/writeMap.js"></script>
+<script src="/js/write.js"></script>
+<script src="/js/modify.js"></script>
+<script>
+    var map_lat = document.getElementById('map_lat').value;
+    var map_lng = document.getElementById('map_lng').value;
+    var coord = new kakao.maps.LatLng(map_lat, map_lng)
+    var mapContainer = document.getElementById('de_map'), // 지도를 표시할 div
+        mapOption = {
+            center: coord, // 지도의 중심좌표
+            level: 1 // 지도의 확대 레벨
+        };
+
+    // 지도를 생성합니다
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    // 마커를 생성합니다
+    var marker = new kakao.maps.Marker({
+        position: coord
+    });
+
+    var callback = function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+            document.getElementById('de_map_address').innerText = result[0].address.address_name;
+            document.getElementById('modify_address').innerText = result[0].address.address_name;
+        }
+    };
+
+    geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+
+    // 마커가 지도 위에 표시되도록 설정합니다
+    marker.setMap(map);
+</script>
+<script th:inline="javascript">
+    // DOM 요소 선택자를 변수로 선언
+    var detailContent = document.getElementById('detail_content');
+    var commentMenuButton = document.getElementById('comment_menu_button');
+    var commentModifyCancel = document.getElementById('comment_modify_cancel');
+    var commentModifySubmit = document.getElementById('comment_modify_submit');
+    var likeBtn = document.getElementById('like_btn');
+    var followBtn = document.getElementById('follow_btn');
+
+    // jQuery 코드를 Vanilla JavaScript로 변경
+    document.addEventListener('DOMContentLoaded', function () {
+        // 게시 버튼 클릭 시 이벤트
+        document.getElementById("comment_submit").addEventListener('click', function () {
+            // comment_area에서 입력된 데이터 가져오기
+            let commentData = document.getElementById("comment_area").value;
+            let postNo = document.getElementById("post_no").value;
+            // AJAX를 사용하여 서버로 데이터 전송
+            fetch("/board/comment/write", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                body: JSON.stringify({
+                    comment_content: commentData,
+                    post_no: postNo
+                }), // JSON
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("서버 응답:", data);
+                    document.getElementById("comment_area").value = ''
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.error("에러 발생:", error);
+                    document.getElementById("comment_area").value = '';
+                });
+        });
+
+        document.getElementById('modify_form').addEventListener('submit', function (e) {
+            e.preventDefault(); // 기본 동작 막기
+
+            var formData = new FormData(this);
+            let postNo = document.getElementById("post_no").value;
+            fetch('/board/post/modify', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.replace(data);
+                })
+                .catch((error) => {
+                    console.error('실패');
+                });
+        });
+    });
+
+    function del(post_no) {
+        if (!confirm('삭제하시겠습니까?')) {
+            return;
+        }
+        let jsonObj = {'post_no': post_no};
+        let jsonStr = JSON.stringify(jsonObj);
+        fetch("/board/post/delete", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            body: jsonStr,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data != null && data != undefined && data.result == 1) {
+                    alert(data.msg);
+                    window.location.replace('/board/post/list');
+                } else {
+                    alert('삭제를 완료했습니다');
+                    window.location.reload();
+                }
+            })
+            .catch((error) => {
+                alert('삭제를하지못했습니다');
+            });
+    }
+
+    function comment_menu(comment_no, comment_content, healer_id) {
+        $('#commentmenu-container').css({'z-index': '20', 'opacity': '1'});
+        $('#commentmenu_comment_no').val(comment_no);
+        $('#commentmenu_comment_content').val(comment_content);
+        const loginedHealer = $('#loginedHealer').val();
+
+        var buttonsContainer = $('#comment_menu_button');
+        buttonsContainer.empty(); // 기존 내용을 비웁니다.
+
+        // healer_id가 session.loginedHealer와 같은지 확인
+        if (healer_id === loginedHealer) {
+            // 수정 및 삭제 버튼 추가
+            buttonsContainer.append('<button class="e0_btn w80 h40p" id="comment_modify">수정</button>');
+            buttonsContainer.append('<button class="e0_btn w80 h40p" id="comment_delete">삭제</button>');
+        } else {
+            // 신고 버튼 추가
+            buttonsContainer.append('<button class="e0_btn w80 h40p" id="comment_report">신고</button>');
+        }
+
+    }
+
+    function comment_menu_out() {
+        document.getElementById('commentmenu-container').style = {'z-index': '0', 'opacity': '0'};
+        document.getElementById('comment_modify_section').style = {'z-index': '0', 'opacity': '0'};
+        document.getElementById('comment_modify_area').value = '';
+    }
+
+    $('#comment_menu_button').on('click', '#comment_modify', function () {
+        $('#comment_modify_section').css({'z-index': '20', 'opacity': '1'});
+        $('#comment_modify_area').val($('#commentmenu_comment_content').val());
+    });
+
+    commentModifyCancel.addEventListener('click', function () {
+        document.getElementById('comment_modify_section').style = {'z-index': '0', 'opacity': '0'};
+        document.getElementById('comment_modify_area').value = '';
+    });
+
+    commentMenuButton.addEventListener('click', function (event) {
+        if (event.target.id === 'comment_delete') {
+            // 삭제 버튼에 대한 이벤트 핸들러 로직
+            if (!confirm('삭제하시겠습니까?')) {
+                return;
+            }
+            let comment_no = document.getElementById('commentmenu_comment_no').value;
+            let jsonObj = {'comment_no': comment_no};
+            let jsonStr = JSON.stringify(jsonObj);
+            fetch("/board/comment/delete", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                body: jsonStr,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data != null && data != undefined && data.result == 1) {
+                        alert(data.msg);
+                        window.location.reload();
+                    } else {
+                        alert('삭제를 완료했습니다');
+                        window.location.reload();
+                    }
+                })
+                .catch((error) => {
+                    alert('삭제를하지못했습니다');
+                });
+        }
+    });
+
+    commentMenuButton.addEventListener('click', function (event) {
+        if (event.target.id === 'comment_report') {
+            // 신고 버튼에 대한 이벤트 핸들러 로직
+        }
+    });
+
+    commentModifySubmit.addEventListener('click', function () {
+        let comment_no = document.getElementById('commentmenu_comment_no').value;
+        let comment_content = document.getElementById('comment_modify_area').value;
+        let jsonObj = {'comment_no': comment_no, 'comment_content': comment_content};
+        let jsonStr = JSON.stringify(jsonObj);
+        fetch("/board/comment/modify", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            body: jsonStr,
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert('수정 완료하였습니다');
+                window.location.reload();
+            })
+            .catch((error) => {
+                alert('수정을하지못했습니다');
+            });
+    });
+
+    likeBtn.addEventListener('click', function () {
+        let post_no = document.getElementById('post_no').value;
+        fetch("/board/post/like", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: "post_no=" + post_no,
+        })
+            .then(response => response.json())
+            .then(data => {
+                // like와 likeCount를 추출합니다.
+                let like = data.like;
+                let likeCount = data.likeCount;
+
+                // like와 likeCount를 사용하여 필요한 작업을 수행합니다.
+                // 예를 들어, likeBtn의 텍스트를 설정합니다.
+                likeBtn.innerText = like;
+                document.getElementById('likeCount').innerText = "좋아요 " + likeCount + " 개";
+            })
+            .catch((error) => {
+                alert('좋아요 실패');
+            });
+    });
+
+    followBtn.addEventListener('click', function () {
+        let healer_nickname = document.getElementById('healer_nickname').value;
+        fetch("/user/follow", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: "healer_nickname=" + healer_nickname,
+        })
+            .then(response => response.text())
+            .then(data => {
+                followBtn.innerText = data;
+            })
+            .catch((error) => {
+                alert(error);
+            });
+    });
+
+    var scrollTimeout; // 타이머를 저장할 변수
+
+    detailContent.addEventListener('scroll', function () {
+        var element = this;
+        var square = document.querySelector('.square');
+        square.style.opacity = '1';
+
+        // 이미 설정된 타이머가 있으면 초기화
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+        }
+
+        // 새로운 타이머 설정
+        scrollTimeout = setTimeout(function () {
+            if (element.scrollTop + element.offsetHeight >= element.scrollHeight - 30) {
+                element.scrollTop = element.scrollHeight;
+                // 2초 지연 후의 로직을 여기에 추가
+                setTimeout(function () {
+                    var comment_no = document.getElementById('last_comment_no').value;
+                    var post_no = document.getElementById('post_no').value;
+                    fetch('/board/comment/scroll', {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                        body: "comment_no=" + comment_no + "&post_no=" + post_no,
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(function (item) {
+                                document.getElementById('comment_content').innerHTML += item.commentHtml;
+                            });
+                            if (data.length > 0) {
+                                var lastCommentNo = data[data.length - 1].comment_no;
+                                document.getElementById('last_comment_no').value = lastCommentNo;
+                            }
+                        })
+                        .catch((error) => {
+                            // 에러 처리
+                        })
+                        .finally(() => {
+                            square.style.opacity = '0';
+                        });
+                }, 1000); // 2초 지연
+            }
+        }, 1000); // 스크롤 이벤트의 1초 지연
+    });
+</script>
+</body>
+</html>

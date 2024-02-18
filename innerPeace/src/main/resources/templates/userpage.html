@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <title>Inner Peace</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/base.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/write.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/sidebar.css'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+</head>
+<body>
+<input type="checkbox" class="checkbox" id="create">
+<input type="checkbox" class="checkbox" id="search">
+<input type="checkbox" class="checkbox" id="more">
+<input type="checkbox" class="checkbox" id="userinfo">
+
+<section class="userinfo-container"></section>
+<th:block th:if="${session.loginedHealer != null}">
+    <section class="write-container" th:replace="~{fragment/write::write}"></section>
+</th:block>
+<th:block th:if="${session.loginedHealer != null}">
+    <section class="sidebar" th:replace="~{fragment/sidebar::healer_sidebar}"></section>
+</th:block>
+<th:block th:unless="${session.loginedHealer != null}">
+    <section class="sidebar" th:replace="~{fragment/sidebar::user_sidebar}"></section>
+</th:block>
+<article class="searchbar" th:replace="~{fragment/searchbar::searchbar}">
+</article>
+<th:block th:if="${session.loginedHealer != null}">
+    <section class="map-section" th:replace="~{fragment/writeMap::map-section}"></section>
+</th:block>
+<th:block th:if="${session.loginedHealer != null}">
+    <article class="menubar" th:replace="~{fragment/menu::healer_menu}"></article>
+</th:block>
+<th:block th:unless="${session.loginedHealer != null}">
+    <article class="menubar" th:replace="~{fragment/menu::user_menu}"></article>
+</th:block>
+<section class="po_ab w100 hauto bg_f4 row z_i1" id="userpage-container">
+    <header class="f_g1 bg_f4">
+    </header>
+    <main class="bg_f4 f_g6 col_cc gap20 hauto">
+        <input type="hidden" id="healer_nickname" th:value="${dto.healer_nickname}">
+        <section class="po_ab mt20 w70 hauto col_cs bor_rad10 box_sha555 top overflow_y">
+            <section class="w100 hauto row mh40">
+                <article class="w30 hauto row_sc">
+                    <img class="w60 hauto mt10" th:src="${dto.haeler_profile_image}" alt="profile">
+                </article>
+                <section class="ml20 w70 hauto col gap20">
+                    <article class="h25 row_c0 gap20">
+                        <label class="font_s20" for="userinfo" th:text="${dto.healer_nickname}"></label>
+                        <th:block th:if="${session.loginedHealer != null}">
+                            <th:block th:if="${session.loginedHealer != dto.healer_nickname}">
+                                <button type="button" th:text="${dto.follow_status}"></button>
+                                <button type="button">메시지보내기</button>
+                            </th:block>
+                            <th:block th:unless="${session.loginedHealer != dto.healer_nickname}">
+                                <form action="/user/account/profile" method="get">
+                                    <input class="gray_btn w100p h20p" type="submit" value="프로필 수정"/>
+                                </form>
+                                <form action="/user/account/myinfo" method="get">
+                                    <input class="gray_btn w100p h20p" type="submit" value="내정보 수정"/>
+                                </form>
+                            </th:block>
+                        </th:block>
+                    </article>
+                    <article class="h20 row_c0 gap20">
+                        <span th:text="'게시물 '+ ${dto.post_count}"></span>
+                        <a th:href="@{/user/{nickname}/follower(nickname=${dto.healer_nickname})}"><span th:text="'팔로워 ' + ${dto.healer_follower_count}"></span></a>
+                        <a th:href="@{/user/{nickname}/following(nickname=${dto.healer_nickname})}"><span th:text="'팔로잉 ' + ${dto.healer_follow_count}"></span></a>
+                    </article>
+                    <article class="hauto">
+                        <span th:text="${dto.healer_statusmessage}"></span>
+                    </article>
+                </section>
+            </section>
+            <article class="mt50 mb50 w100 row_cc bor_tp bor_bt">
+                <span>게시글</span>
+            </article>
+            <div class="w100 hauto ml10">
+                <section class="post_contentList">
+                    <input type="hidden" id="last_post_no" th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].post_no : ''}">
+                    <div class="post" th:each="item, status : ${dtoList}">
+                        <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
+                            <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
+                        </a>
+                    </div>
+                </section>
+                <article class="col_cc hauto w100 op" id="loading">
+                    <div class="loadingio-spinner-reload-zv6cq6zfifd">
+                        <div class="ldio-dg926s5a60v">
+                            <div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <footer class="bg_f4 h100p w80">
+            </footer>
+        </section>
+    </main>
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9cf7f221de3543e0bd1ed40d14a3a704&libraries=services"></script>
+<script src="/js/writeMap.js"></script>
+<script src="/js/write.js"></script>
+<script th:inline="javascript">
+    var scrollTimeout; // 타이머를 저장할 변수
+
+    document.getElementById('postList').addEventListener('scroll', function () {
+        var element = this;
+        document.getElementById('loading').style.opacity = '1';
+
+        // 이미 설정된 타이머가 있으면 초기화
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+        }
+
+        // 새로운 타이머 설정
+        scrollTimeout = setTimeout(function () {
+            if (element.scrollTop + element.clientHeight >= element.scrollHeight - 30) {
+                element.scrollTop = element.scrollHeight;
+                // 2초 지연 후의 로직을 여기에 추가
+                setTimeout(function () {
+                    var post_no = document.getElementById('last_post_no').value;
+                    var search = document.getElementById('healer_nickname').value;
+
+                    fetch('/board/post/search_scroll', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            "post_no": post_no,
+                            "search": "@" + search
+                        }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(function (item) {
+                                var postDetailUrl = '/board/post/detail/' + item.post_no;
+                                var imgTag = document.createElement('img');
+                                imgTag.src = item.post_image_thumbnail;
+                                imgTag.alt = "Post " + item.post_no;
+                                imgTag.loading = "lazy";
+
+                                var aTag = document.createElement('a');
+                                aTag.href = postDetailUrl;
+                                aTag.appendChild(imgTag);
+
+                                var divTag = document.createElement('div');
+                                divTag.className = "post";
+                                divTag.appendChild(aTag);
+
+                                document.querySelector('.post_contentList').appendChild(divTag);
+                            });
+
+                            if (data.length > 0) {
+                                var lastPostNo = data[data.length - 1].post_no;
+                                document.getElementById('last_post_no').value = lastPostNo;
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        }).finally(() => {
+                        document.getElementById('loading').style.opacity = '0';
+                    });
+                }, 2000); // 2초 지연
+            }
+        }, 1000); // 스크롤 이벤트의 1초 지연
+    });
+</script>
+</body>
+</html>

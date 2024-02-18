@@ -2,6 +2,9 @@ package com.social.innerPeace.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,25 +15,25 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"post_no","healer_nickname","reportList"})
+@ToString(exclude = {"post","healer","reportList"})
 public class Comment extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long comment_no;
+    private Long commentNo;
 
     @Column(length = 200,nullable = false)
-    private String comment_content;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "post_no")
-    private Post post_no;
+    private String commentContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "healer_nickname")
-    private Healer healer_nickname;
+    @JoinColumn(name = "postNo")
+    private Post post;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "healerNickname")
+    private Healer healer;
 
     @Builder.Default
-    @OneToMany(mappedBy = "report_comment",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "comment",cascade = CascadeType.ALL)
     private List<Report> reportList = new ArrayList<>();
 
 }

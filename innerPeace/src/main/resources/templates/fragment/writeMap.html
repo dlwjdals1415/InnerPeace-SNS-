@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <title>Inner Peace</title>
+</head>
+<body>
+<section class="w100 h100 po_fi z_i0 col_cc op bg_f4" th:fragment="map-section" id="map_section">
+    <span class="title">지도중심기준 행정동 주소정보</span>
+    <span id="centerAddr"></span>
+    <div class="w50 h50" id="map"></div>
+    <p><em>지도를 클릭하여 위치를 지정하고 확인버튼을 눌러주세요</em></p>
+    <div id="clickLatlng"></div>
+    <div class="w50 h50p row_0c gap20">
+        <button class="green_btn w30 h30p" type="button" id="map-cancel">취소</button>
+        <button class="green_btn w30 h30p" type="button" id="map-confirm">확인</button>
+    </div>
+</section>
+</body>
+</html>

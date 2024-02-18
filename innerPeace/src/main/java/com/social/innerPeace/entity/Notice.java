@@ -12,15 +12,15 @@ import lombok.*;
 public class Notice extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long notice_no;
+    private Long noticeNo;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_id")
-    private Admin notice_writer;
+    @JoinColumn(name = "adminId")
+    private Admin admin;
 
     @Column(length = 50,nullable = false)
-    private String notice_title;
+    private String noticeTitle;
 
     @Column(length = 2000,nullable = false)
-    private String notice_content;
+    private String noticeContent;
 }

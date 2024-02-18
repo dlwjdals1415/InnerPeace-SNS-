@@ -1,0 +1,33 @@
+#upload_article {
+  width: 600px;
+  height: 700px;
+  border-radius: 10px;
+}
+
+#post_write {
+  width: 900px;
+  height: 700px;
+  border-radius: 10px;
+}
+
+#post_textarea {
+  width: 300px !important;
+  height: 300px !important;
+  margin-left: 20px;
+  /* 왼쪽 마진 10px */
+  border: none;
+  resize: none;
+  /* textarea의 크기 조절을 금지합니다 */
+  border-radius: 10px;
+}
+
+#modify_post_textarea {
+  width: 300px !important;
+  height: 300px !important;
+  margin-left: 20px;
+  /* 왼쪽 마진 10px */
+  border: none;
+  resize: none;
+  /* textarea의 크기 조절을 금지합니다 */
+  border-radius: 10px;
+}

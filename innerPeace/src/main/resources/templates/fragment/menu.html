@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="kr">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Inner Peace</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+<body>
+<article class="menubar w10 bg_e0 z_i4 col po_fi " th:fragment="healer_menu">
+    <a th:href="@{/user/help}">
+        <button class="nomal_btn w100 h50p" type="button">고객센터</button>
+    </a>
+    <a th:href="@{/user/account/signout}">
+      <button class="nomal_btn w100 h50p" type="button">로그아웃</button>
+    </a>
+</article>
+<article class="menubar w10 bg_e0 z_i4 col" th:fragment="user_menu">
+    <a th:href="@{/user/signout}">
+        <button class="nomal_btn w100 h50p" type="button">고객센터</button>
+    </a>
+</article>
+</body>
+</html>

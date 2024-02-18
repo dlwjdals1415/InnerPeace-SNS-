@@ -2,9 +2,11 @@ package com.social.innerPeace.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -12,40 +14,39 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"post_writer","commentList","reportList"})
+@ToString(exclude = {"healer","commentList","reportList"})
 public class Post extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long post_no;
-
-    @Column(length = 50,nullable = false)
-    private String post_title;
+    private Long postNo;
 
     @Column(length = 1500,nullable = false)
-    private String post_content;
+    private String postContent;
 
-    private String post_image;
+    @Column(length = 512)
+    private String postImage;
 
-    private int map_point_lat;
+    private float postMapLat;
 
-    private int map_point_lng;
+    private float postMapLng;
 
     @ElementCollection(fetch = FetchType.LAZY)
     private List<String> tags;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "healer_nickname")
-    private Healer post_writer;
+    @JoinColumn(name = "healerEmail")
+    private Healer healer;
 
     @Builder.Default
-    @OneToMany(mappedBy = "post_no",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     private List<Comment> commentList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "report_post",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     private List<Report> reportList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "post_no",cascade = CascadeType.ALL)
-    private List<Like> likeList = new ArrayList<>();
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    private List<Post_Like> postLikeList = new ArrayList<>();
+
 }

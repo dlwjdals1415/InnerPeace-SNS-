@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="kr">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Inner Peace</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/base.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/sidebar.css'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+</head>
+<body>
+<input type="checkbox" class="checkbox" id="search">
+<input type="checkbox" class="checkbox" id="more">
+<section class="sidebar" th:replace="~{fragment/sidebar::user_sidebar}">
+</section>
+<article class="searchbar" th:replace="~{fragment/searchbar :: searchbar}">
+</article>
+<article class="menubar" th:replace="~{fragment/menu :: user_menu}">
+</article>
+<section class="po_ab w100 h100 bg_008 col_cc z_i0 op" id="loader">
+    <div class="custom-loader"></div>
+</section>
+<section class="po_ab w100 h100 bg_f4 row z_i1">
+    <header class="f_g3 bg_f4">
+    </header>
+    <main class="f_g5 bg_f4 col_cc main1000">
+        <section class="col w80 hauto bor_rad10 pad20 box_sha555">
+            <article class="w100 h50p col_cc mb20 font_s30">
+                <h1>
+                    <a th:href="@{board/post/list}">Inner Peace</a>
+                </h1>
+            </article>
+            <article class="w100 hauto col_c0 mb20">
+                <form class="w100 h100 col_c0" th:action="@{/user/account/signup}" method="post" id="registForm">
+                    <input class="w80 h30p mt10 text_input pad10" type="email" name="healer_email" id="healer_email"
+                           placeholder="이메일" required>
+                    <input class="w80 h30p mt10 text_input pad10" type="password" name="healer_pw" id="healer_pw"
+                           placeholder="비밀번호(특수문자,숫자,영어를 포함하는 12자이상)"
+                           required>
+                    <input class="w80 h30p mt10 text_input pad10" type="password" name="password_confirm"
+                           id="password_confirm"
+                           placeholder="비밀번호 확인" required>
+                    <input class="w80 h30p mt10 text_input pad10" type="text" name="healer_name" id="healer_name"
+                           placeholder="이름" required>
+                    <input class="w80 h30p mt10 text_input pad10" type="text" name="healer_phone" id="healer_phone"
+                           placeholder="전화번호(-를 제외하고 11자리)" required>
+                    <div class="birthinfo">생년월일</div>
+                    <input class="w80 h30p mt10 text_input pad10" type="date" name="healer_birth" id="healer_birth"
+                           required>
+                    <article class="w80 h20p row_c0 mb10 mt10">
+                        <input class="checkbox_style" id="checkbox_all" name="checkbox_all" type="checkbox">
+                        <label for="checkbox_all">이용약관, 개인정보 수집 및 이용, 광고성 정보 수신(선택)에 모두 동의합니다.</label>
+                    </article>
+                    <article class="w80 h20p row_c0 mb10">
+                        <input class="checkbox_style" id="checkbox_age" name="checkbox_age" type="checkbox" required>
+                        <label for="checkbox_age">만 14세 이상입니다 (필수)</label>
+                    </article>
+                    <article class="w80 h20p row_c0 mb10">
+                        <input class="checkbox_style" id="checkbox_terms" name="checkbox_terms" type="checkbox"
+                               required>
+                        <label for="checkbox_terms">이용약관 (필수)</label>
+                    </article>
+                    <article class="w80 h20p row_c0 mb10">
+                        <input class="checkbox_style" id="checkbox_privacy" name="checkbox_privacy" type="checkbox"
+                               required>
+                        <label for="checkbox_privacy">개인정보 수집 및 이용 동의 (필수)</label>
+                    </article>
+                    <article class="w80 h20p row_c0 mb10">
+                        <input class="checkbox_style" id="checkbox_ad_agreement" name="ad_agree" type="checkbox">
+                        <label for="checkbox_ad_agreement">광고성 정보 수신 동의 (선택)</label>
+                    </article>
+                    <input class="green_btn w90 h50p" name="submit" type="submit" value="회원가입">
+                </form>
+            </article>
+            <article class="w100 h20p row_cc gap10 font_s15">
+                <span>이미 아이디가 있으신가요?</span>
+                <a th:href="@{/user/account/signin}">로그인</a>
+            </article>
+        </section>
+    </main>
+    <footer class="f_g2 bg_f4">
+
+    </footer>
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('checkbox_all').addEventListener('change', function () {
+            // "이용약관, 개인정보 수집 및 이용, 광고성 정보 수신(선택)" 체크박스가 변경될 때
+            var checkboxes = document.querySelectorAll('[name^="checkbox_"]');
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = this.checked;
+            }
+            document.getElementById('checkbox_ad_agreement').checked = this.checked;
+        });
+
+        var loader = document.getElementById('loader');
+
+        var form = document.getElementById('registForm');
+        form.addEventListener('submit', function (event) {
+            // Prevent the form from submitting normally
+            event.preventDefault();
+
+            var password = document.getElementById('healer_pw').value;
+            var passwordConfirm = document.getElementById('password_confirm').value;
+
+            if (password !== passwordConfirm) {
+                alert('비밀번호와 비밀번호 확인이 같지 않습니다.');
+                return;  // 폼 제출 중단
+            }
+
+            loader.style.zIndex = '5';
+            loader.style.opacity = '1';
+
+            // Get form
+            var form = event.target;
+
+            // Create a FormData object, passing the form as a parameter
+            var formData = new FormData(form);
+
+            // Use fetch to send the form data
+            fetch(form.action, {
+                method: form.method,
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(error => {
+                            alert(error);
+                            throw new Error(error);
+                        });
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    alert('회원가입에 성공하셨습니다.\n 로그인하시기전에 입력하실 이메일로 인증URL을 보내드렷습니다. 확인해주세요.');
+                    window.location.href = '/user/account/signin';
+                })
+                .catch(error => {
+                    alert('Error: ' + error.message);
+                })
+                .finally(() => {
+                    // Reset the loader's CSS properties
+                    loader.style.zIndex = '0';
+                    loader.style.opacity = '0';
+                });
+        });
+    });
+</script>
+</body>
+</html>

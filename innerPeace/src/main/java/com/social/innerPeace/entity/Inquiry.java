@@ -9,23 +9,23 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"inquiry_writer","answer"})
+@ToString(exclude = {"healer","answer"})
 public class Inquiry extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long inquiry_no;
+    private Long inquiryNo;
 
     @Column(length = 50,nullable = false)
-    private String inquiry_title;
+    private String inquiryTitle;
 
     @Column(length = 2000,nullable = false)
-    private String inquiry_content;
+    private String inquiryContent;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "healer_email")
-    private Healer inquiry_writer;
+    @JoinColumn(name = "healerEmail")
+    private Healer healer;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "answer_no",referencedColumnName = "answer_no")
+    @JoinColumn(name = "answerNo",referencedColumnName = "answerNo")
     private Answer answer;
 }

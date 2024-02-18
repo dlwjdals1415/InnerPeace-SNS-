@@ -9,20 +9,20 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"answer_no","answer_writer"})
+@ToString(exclude = {"answerNo","admin"})
 public class Answer extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long answer_no;
+    private Long answerNo;
 
     @Builder.Default
     @OneToOne(mappedBy = "answer")
-    private Inquiry inquiry_no = new Inquiry();
+    private Inquiry inquiryNo = new Inquiry();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_no")
-    private Admin answer_writer;
+    @JoinColumn(name = "adminId")
+    private Admin admin;
 
     @Column(length = 2000,nullable = false)
-    private String answer_content;
+    private String answerContent;
 }

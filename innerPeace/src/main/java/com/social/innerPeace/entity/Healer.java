@@ -1,9 +1,10 @@
 package com.social.innerPeace.entity;
 
+import com.social.innerPeace.ip_enum.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,35 +17,45 @@ import java.util.List;
 @ToString(exclude = {"followerList","followingList","postList"})
 public class Healer extends BaseEntity{
     @Id
-    private String healer_email;
+    @Column(name = "healerEmail")
+    private String healerEmail;
 
-    @Column(length = 30,nullable = false)
-    private String healer_pw;
+    private String healerPw;
 
     @Column(length = 50,nullable = false)
-    private String healer_name;
+    private String healerName;
 
     @Column(length = 20,nullable = false)
-    private String healer_phone;
+    private String healerPhone;
 
     @Column(nullable = false)
     @Builder.Default
-    private boolean healer_status = true;
+    private boolean healerStatus = true;
 
-    private String haeler_profile_image;
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean emailVerified = true;
 
-    private String healer_randomcode;
+    private String haelerProfileImage;
 
-    @Column(length = 30, nullable = false)
-    private String healer_nickname;
+    private String healerRandomcode;
 
-    @Column(length = 1)
-    private String healer_gender;
+    @Column(length = 30, nullable = false, name = "healerNickName", unique = true)
+    private String healerNickName;
 
-    private LocalDateTime healer_bitrh;
+    @Column(length = 8)
+    private String healerGender;
+
+    private LocalDate healerBitrh;
 
     @Column(length = 400)
-    private String healer_statusmessage;
+    private String healerStatusmessage;
+
+    private boolean adAgree;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
     @Builder.Default
     @OneToMany(mappedBy = "follower",cascade = CascadeType.ALL)
@@ -55,10 +66,10 @@ public class Healer extends BaseEntity{
     private List<Follow> followingList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "post_writer",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "healer",cascade = CascadeType.ALL)
     private List<Post> postList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "healer_no",cascade = CascadeType.ALL)
-    private List<Like> likeList = new ArrayList<>();
+    @OneToMany(mappedBy = "healer",cascade = CascadeType.ALL)
+    private List<Post_Like> postLikeList = new ArrayList<>();
 }
