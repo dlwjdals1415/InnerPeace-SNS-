@@ -79,14 +79,14 @@
             </article>
             <div class="w100 hauto ml10">
                 <section class="post_contentList">
-                    <input type="hidden" id="last_post_no" th:value="${dtoList.get(dtoList.size() - 1).post_no}">
+                    <input type="hidden" id="last_post_no" th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].post_no : ''}">
                     <div class="post" th:each="item, status : ${dtoList}">
                         <a th:href="@{/board/post/detail/{postId}(postId=${item.post_no})}">
                             <img th:src="${item.post_image_thumbnail}" alt="Post 1" loading="lazy">
                         </a>
                     </div>
                 </section>
-                <article class="col_cc hauto w100" id="loading">
+                <article class="col_cc hauto w100 op" id="loading">
                     <div class="loadingio-spinner-reload-zv6cq6zfifd">
                         <div class="ldio-dg926s5a60v">
                             <div>

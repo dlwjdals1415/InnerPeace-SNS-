@@ -251,7 +251,7 @@
                             </article>
                         </th:block>
                         <article class="ml10 h30 w100 row_c0">
-                            <span th:text="'좋아요 ' + ${dto.likes} + ' 개'"></span>
+                            <span id="likeCount" th:text="'좋아요 ' + ${dto.likes} + ' 개'"></span>
                         </article>
                         <article class="ml10 h30 w100 row_c0">
                             <span th:text="${#temporals.format(dto.post_regday, 'yyyy/MM/dd HH:mm')}"></span>
@@ -337,7 +337,8 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log("서버 응답:", data);
-                    document.getElementById("comment_area").value = '';
+                    document.getElementById("comment_area").value = ''
+                    window.location.reload();
                 })
                 .catch((error) => {
                     console.error("에러 발생:", error);
@@ -498,9 +499,16 @@
             },
             body: "post_no=" + post_no,
         })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
-                likeBtn.innerText = data;
+                // like와 likeCount를 추출합니다.
+                let like = data.like;
+                let likeCount = data.likeCount;
+
+                // like와 likeCount를 사용하여 필요한 작업을 수행합니다.
+                // 예를 들어, likeBtn의 텍스트를 설정합니다.
+                likeBtn.innerText = like;
+                document.getElementById('likeCount').innerText = "좋아요 " + likeCount + " 개";
             })
             .catch((error) => {
                 alert('좋아요 실패');

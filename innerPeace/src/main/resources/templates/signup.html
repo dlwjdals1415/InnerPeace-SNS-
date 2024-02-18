@@ -36,7 +36,7 @@
                     <input class="w80 h30p mt10 text_input pad10" type="email" name="healer_email" id="healer_email"
                            placeholder="이메일" required>
                     <input class="w80 h30p mt10 text_input pad10" type="password" name="healer_pw" id="healer_pw"
-                           placeholder="비밀번호"
+                           placeholder="비밀번호(특수문자,숫자,영어를 포함하는 12자이상)"
                            required>
                     <input class="w80 h30p mt10 text_input pad10" type="password" name="password_confirm"
                            id="password_confirm"
@@ -44,7 +44,7 @@
                     <input class="w80 h30p mt10 text_input pad10" type="text" name="healer_name" id="healer_name"
                            placeholder="이름" required>
                     <input class="w80 h30p mt10 text_input pad10" type="text" name="healer_phone" id="healer_phone"
-                           placeholder="전화번호(***-****-****)" required>
+                           placeholder="전화번호(-를 제외하고 11자리)" required>
                     <div class="birthinfo">생년월일</div>
                     <input class="w80 h30p mt10 text_input pad10" type="date" name="healer_birth" id="healer_birth"
                            required>
@@ -127,6 +127,7 @@
                 .then(response => {
                     if (!response.ok) {
                         return response.text().then(error => {
+                            alert(error);
                             throw new Error(error);
                         });
                     }

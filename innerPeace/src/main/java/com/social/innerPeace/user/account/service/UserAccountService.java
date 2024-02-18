@@ -45,4 +45,10 @@ public interface UserAccountService {
     HealerDTO modifyProfileImage(String loginedHealer, HealerDTO dto);
 
     HealerDTO modifyProfile(String loginedHealer, HealerDTO dto);
+
+    String findEmail(String loginedHealer);
+
+    boolean modifyPassword(String token, String email, String healerPw);
+
+    String delete(String loginedHealer, HealerDTO dto);
 }

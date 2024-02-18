@@ -123,10 +123,14 @@ public class BoardPostController {
         log.info("call post_like post_no : {}", post_no);
         String healer_nickname = getLoginedHealer(session);
         String like = boardPostService.like(post_no, healer_nickname);
+        int likeCount = boardPostService.likeCount(post_no);
         if (like == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } else {
-            return ResponseEntity.status(HttpStatus.OK).body(like);
+            Map<String, Object> response = new HashMap<>();
+            response.put("like", like);
+            response.put("likeCount", likeCount);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
 }

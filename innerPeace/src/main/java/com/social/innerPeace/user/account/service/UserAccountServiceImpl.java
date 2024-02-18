@@ -1,11 +1,14 @@
 package com.social.innerPeace.user.account.service;
 
 import com.social.innerPeace.board.post.component.FileStore;
+import com.social.innerPeace.entity.ConfirmationToken;
 import com.social.innerPeace.ip_enum.Role;
 import com.social.innerPeace.dto.HealerDTO;
 import com.social.innerPeace.entity.Healer;
 import com.social.innerPeace.repository.HealerRepository;
+import com.social.innerPeace.rest.service.ConfirmationTokenService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,6 +36,9 @@ public class UserAccountServiceImpl implements UserAccountService{
     @Autowired
     private HealerRepository healerRepository;
 
+    @Autowired
+    private ConfirmationTokenService confirmationTokenService;
+
     @Override
     public String register(HealerDTO dto, Role role) {
         if(healerRepository.findById(dto.getHealer_email()).isPresent()){
@@ -55,7 +61,6 @@ public class UserAccountServiceImpl implements UserAccountService{
         Optional<Healer> optionalHealer = healerRepository.findById(email);
         if(optionalHealer.isPresent()){
             Healer healer = optionalHealer.get();
-            healer = healerRepository.save(healer);
             return entityToDto(healer);
         }
         return null;
@@ -123,6 +128,49 @@ public class UserAccountServiceImpl implements UserAccountService{
             healer = healerRepository.save(healer);
 
             return entityToDto(healer);
+        }
+        return null;
+    }
+
+    @Override
+    public String findEmail(String loginedHealer) {
+        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(loginedHealer);
+        if (optionalHealer.isPresent()) {
+            Healer healer = optionalHealer.get();
+            return healer.getHealerEmail();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean modifyPassword(String token, String email, String healerPw) {
+        Optional<Healer> optionalHealer = healerRepository.findById(email);
+        if (optionalHealer.isPresent()) {
+            Healer healer = optionalHealer.get();
+            healer.setHealerPw(passwordEncoder.encode(healerPw));
+            healerRepository.save(healer);
+            ConfirmationToken findConfirmationToken = null;
+            try {
+                findConfirmationToken = confirmationTokenService.findByIdAndExpirationDateAfterAndExpired(token);
+            } catch (BadRequestException e) {
+                throw new RuntimeException(e);
+            }
+            findConfirmationToken.useToken();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String delete(String loginedHealer, HealerDTO dto) {
+        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(loginedHealer);
+        if (optionalHealer.isPresent()) {
+            Healer healer = optionalHealer.get();
+            if(passwordEncoder.matches(dto.getHealer_pw(),healer.getHealerPw())){
+                return healer.getHealerEmail();
+            }else{
+                return "비밀번호";
+            }
         }
         return null;
     }

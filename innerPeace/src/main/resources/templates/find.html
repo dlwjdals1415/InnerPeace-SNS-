@@ -26,9 +26,9 @@
         <section class="bg_f4 w50 col_cc bor_rad10 pad20">
             <span class="bold">로그인에 문제가 있나요?</span>
             <span class="ml20 mr20 mt20 mb20">이메일 주소를 입력하시면 계정에 다시 엑세스할 수 있는 링크를 보내드립니다.</span>
-            <form class="w80 hauto col_cc" th:action="@{/user/find/pwForm}" method="post">
-                <input class="w90 h30p bor_rad10 pad10 mb20" type="text" name="healer_id" id="healer_id" placeholder="이메일"/>
-                <input class="green_btn w90 h40p mb20" type="submit" value="로그인 링크 보내기">
+            <form class="w80 hauto col_cc" th:action="@{/user/find/pwForm}" method="post" id="find_form">
+                <input class="w90 h30p bor_rad10 pad10 mb20" type="text" name="healer_email" id="healer_id" placeholder="이메일"/>
+                <input class="green_btn w90 h40p mb20" type="submit" value="패스워드 찾기">
             </form>
             <span class="text-with-lines">또는</span>
             <a class="regist-link" th:href="@{/user/account/signup}">새 계정 만들기</a>
@@ -39,5 +39,31 @@
     </footer>
 </section>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:inline="javascript">
+    document.querySelector('#find_form').addEventListener('submit', event => {
+        event.preventDefault();
+
+        let formData = new FormData(event.target);
+        let url = event.target.action;
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(error => {
+                        alert(error);
+                        throw new Error(error);
+                    });
+                }
+                return response.text();
+            })
+            .then(data => {
+                alert("비밀번호 찾기 메일이 발송되었습니다.");
+            })
+            .catch(error => console.error('Error:', error));
+    });
+</script>
 </body>
 </html>

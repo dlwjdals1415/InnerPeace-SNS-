@@ -43,15 +43,67 @@ public class ConfirmationTokenService {
                 "\n" +
                 "인증URL: [" + "http://localhost:8080/confirm-email?token="+emailConfirmationToken.getId() +"]\n" +
                 "\n" +
-                "위 인증번호를 홈페이지 또는 앱에서 요구하는 인증번호 입력란에 정확히 입력해 주세요. 이 인증번호는 발급 후 [10분] 동안만 유효합니다.\n" +
-                "\n" +
                 "인증 과정에서 문제가 발생하거나 도움이 필요하시면, 언제든지 [고객지원 센터 연락처 또는 이메일 주소]로 문의해 주세요.\n" +
                 "\n" +
                 "감사합니다.\n" +
                 "\n" +
                 "[Inner Peace] 팀 드림";
-        emailService.sendSimpleMessage(email, subject, text);
+        int result = emailService.sendSimpleMessage(email, subject, text);
+        if(result < 1){
+            return null;
+        }
+        return emailConfirmationToken.getId();
+    }
 
+    public String createEmailModifyPasswordToken(String email){
+
+        Assert.hasText(email,"receiverEmail은 필수 입니다.");
+
+        ConfirmationToken emailConfirmationToken = ConfirmationToken.createEmailConfirmationToken(email);
+        confirmationTokenRepository.save(emailConfirmationToken);
+
+        String subject = "[InnerPeace] 비밀번호 변경 안내";
+        String text = "안녕하세요\n" +
+                "\n" +
+                "[Inner Peace] 비밀번호 변경 URL 안내드립니다..\n" +
+                "\n" +
+                "변경URL: [" + "http://localhost:8080/modify-password?token="+emailConfirmationToken.getId() +"]\n" +
+                "\n" +
+                "변경 과정에서 문제가 발생하거나 도움이 필요하시면, 언제든지 [고객지원 센터 연락처 또는 이메일 주소]로 문의해 주세요.\n" +
+                "\n" +
+                "감사합니다.\n" +
+                "\n" +
+                "[Inner Peace] 팀 드림";
+        int result = emailService.sendSimpleMessage(email, subject, text);
+        if(result < 1){
+            return null;
+        }
+        return emailConfirmationToken.getId();
+    }
+
+    public String createEmailDeleteAccountToken(String email){
+
+        Assert.hasText(email,"receiverEmail은 필수 입니다.");
+
+        ConfirmationToken emailConfirmationToken = ConfirmationToken.createEmailConfirmationToken(email);
+        confirmationTokenRepository.save(emailConfirmationToken);
+
+        String subject = "[InnerPeace] 계정 삭제 안내";
+        String text = "안녕하세요\n" +
+                "\n" +
+                "[Inner Peace] 계정 삭제 안내드립니다..\n" +
+                "\n" +
+                "삭제 확인URL: [" + "http://localhost:8080/delete-account?token="+emailConfirmationToken.getId() +"]\n" +
+                "\n" +
+                "삭제 과정에서 문제가 발생하거나 도움이 필요하시면, 언제든지 [고객지원 센터 연락처 또는 이메일 주소]로 문의해 주세요.\n" +
+                "\n" +
+                "감사합니다.\n" +
+                "\n" +
+                "[Inner Peace] 팀 드림";
+        int result = emailService.sendSimpleMessage(email, subject, text);
+        if(result < 1){
+            return null;
+        }
         return emailConfirmationToken.getId();
     }
 
@@ -64,6 +116,20 @@ public class ConfirmationTokenService {
         Optional<ConfirmationToken> confirmationToken = confirmationTokenRepository.findByIdAndExpirationDateAfterAndExpired(confirmationTokenId, LocalDateTime.now(),false);
         return confirmationToken.orElseThrow(()-> new BadRequestException("Token not found"));
     };
+    public void deleteAccount(String token) {
+        ConfirmationToken findConfirmationToken = null;
+        try {
+            findConfirmationToken = findByIdAndExpirationDateAfterAndExpired(token);
+        } catch (BadRequestException e) {
+            throw new RuntimeException(e);
+        }
+        Optional<Healer> optionalHealer = healerRepository.findById(findConfirmationToken.getEmail());
+        findConfirmationToken.useToken();	// 토큰 만료 로직을 구현해주면 된다. ex) expired 값을 true로 변경
+        if (optionalHealer.isPresent()) {
+            Healer healer = optionalHealer.get();
+            healerRepository.delete(healer);
+        }
+    }
 
     public void confirmEmail(String token) {
         ConfirmationToken findConfirmationToken = null;

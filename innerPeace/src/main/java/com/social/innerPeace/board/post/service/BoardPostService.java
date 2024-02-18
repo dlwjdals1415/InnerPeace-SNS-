@@ -32,6 +32,8 @@ public interface BoardPostService {
 
     int deletePost(PostDTO postDTO,String loginHealer);
 
+    int likeCount(Long postNo);
+
     default Post dtoToEntity(PostDTO dto) {
         Post entity = Post.builder()
                 .postImage(dto.getPost_image())
@@ -52,4 +54,5 @@ public interface BoardPostService {
                 .build();
         return dto;
     }
+
 }

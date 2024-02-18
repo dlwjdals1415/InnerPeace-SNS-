@@ -258,6 +258,11 @@ public class BoardPostServiceImpl implements BoardPostService {
     }
 
     @Override
+    public int likeCount(Long postNo) {
+        return likeRepository.findByPostPostNo(postNo).size();
+    }
+
+    @Override
     public String like(Long postNo, String healerNickname) {
         Optional<Healer> healer = healerRepository.findByHealerNickName(healerNickname);
         if (healer.isPresent()) {
