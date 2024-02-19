@@ -51,7 +51,7 @@
                         <label class="font_s20" for="userinfo" th:text="${dto.healer_nickname}"></label>
                         <th:block th:if="${session.loginedHealer != null}">
                             <th:block th:if="${session.loginedHealer != dto.healer_nickname}">
-                                <button type="button" th:text="${dto.follow_status}"></button>
+                                <button id="follow_btn" type="button" th:text="${dto.follow_status}"></button>
                                 <button type="button">메시지보내기</button>
                             </th:block>
                             <th:block th:unless="${session.loginedHealer != dto.healer_nickname}">
@@ -109,6 +109,27 @@
 <script src="/js/writeMap.js"></script>
 <script src="/js/write.js"></script>
 <script th:inline="javascript">
+    var followButtons = document.querySelectorAll('#follow_btn');
+    followButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            // 해당 팔로우 버튼이 클릭되었을 때 실행할 동작을 여기에 추가합니다.
+            let healer_nickname = document.getElementById('healer_nickname').value;
+            fetch("/user/follow", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: "healer_nickname=" + healer_nickname,
+            })
+                .then(response => response.text())
+                .then(data => {
+                    button.innerText = data;
+                })
+                .catch((error) => {
+                    alert(error);
+                });
+        });
+    });
     var scrollTimeout; // 타이머를 저장할 변수
 
     document.getElementById('postList').addEventListener('scroll', function () {

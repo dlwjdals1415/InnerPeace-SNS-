@@ -31,7 +31,7 @@ public class HealerFollowController {
     public String following(Model model, @PathVariable(name = "healer_nickname") String healer_nickname, HttpSession session) {
         log.info("follow call");
         String loginedHealer = (String) session.getAttribute("loginedHealer");
-        List<FollowDTO> dtoList = healerFollowService.findFollowing(healer_nickname);
+        List<FollowDTO> dtoList = healerFollowService.findFollowing(healer_nickname,loginedHealer);
 
         model.addAttribute("dtoList", dtoList);
         return "following";
@@ -41,25 +41,27 @@ public class HealerFollowController {
     public String follower(Model model, @PathVariable(name = "healer_nickname") String healer_nickname, HttpSession session) {
         log.info("follower call");
         String loginedHealer = (String) session.getAttribute("loginedHealer");
-        List<FollowDTO> dtoList = healerFollowService.findFollower(healer_nickname);
+        List<FollowDTO> dtoList = healerFollowService.findFollower(healer_nickname,loginedHealer);
         model.addAttribute("dtoList", dtoList);
         return "follower";
     }
 
     @PostMapping("/{healer_nickname}/following/scroll")
     @ResponseBody
-    public ResponseEntity<Object> followingScroll(@PathVariable(name = "healer_nickname") String healer_nickname,@ModelAttribute("follow_no") long follow_no) {
+    public ResponseEntity<Object> followingScroll(@PathVariable(name = "healer_nickname") String healer_nickname,@ModelAttribute("follow_no") long follow_no, HttpSession session) {
         log.info("follower scroll call follow_no : {}", follow_no);
-        List<FollowDTO> dtoList = new ArrayList<>();
+        String loginedHealer = (String) session.getAttribute("loginedHealer");
+        List<FollowDTO> dtoList = healerFollowService.findFollowingScroll(healer_nickname,loginedHealer,follow_no);
 
         return ResponseEntity.status(HttpStatus.OK).body(dtoList);
     }
 
     @PostMapping("/{healer_nickname}/follower/scroll")
     @ResponseBody
-    public ResponseEntity<Object> followerScroll(@PathVariable(name = "healer_nickname") String healer_nickname,@ModelAttribute("follow_no") long follow_no) {
+    public ResponseEntity<Object> followerScroll(@PathVariable(name = "healer_nickname") String healer_nickname,@ModelAttribute("follow_no") long follow_no, HttpSession session) {
         log.info("follower scroll call follow_no : {}", follow_no);
-        List<FollowDTO> dtoList = new ArrayList<>();
+        String loginedHealer = (String) session.getAttribute("loginedHealer");
+        List<FollowDTO> dtoList = healerFollowService.findFollowerScroll(healer_nickname,loginedHealer,follow_no);
 
         return ResponseEntity.status(HttpStatus.OK).body(dtoList);
     }

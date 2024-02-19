@@ -44,7 +44,6 @@
                        th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].follow_no : ''}">
                 <input type="hidden" id="healer_nickname"
                        th:value="${dtoList != null && !dtoList.isEmpty() ? dtoList[dtoList.size() - 1].healer_nickname : ''}">
-                <input type="hidden" id="">
                 <section class="ml20 w90 h50p row_cc" th:each="item, status : ${dtoList}">
                     <article class="w20 hauto">
                         <img class="h40p wauto" th:src="${item.healer_profile_image}" alt="">
@@ -54,9 +53,11 @@
                             <span class="healer_id" th:text="${item.healer_nickname}"></span>
                         </a>
                     </article>
-                    <th:block th:if="${session.loginedHealer != null and session.loginedHealer != item.healer_nickname}">
+                    <th:block
+                            th:if="${session.loginedHealer != null and session.loginedHealer != item.healer_nickname}">
                         <article class="w10 hauto row_cc ml20">
-                            <button class="nomal_btn w100 h30p" id="follow_btn" th:text="${item.followstatus}" th:data-nickname="${item.healer_nickname}"></button>
+                            <button class="nomal_btn w100 h30p" id="follow_btn" th:text="${item.followstatus}"
+                                    th:data-nickname="${item.healer_nickname}"></button>
                         </article>
                     </th:block>
                 </section>
@@ -79,56 +80,70 @@
     var followSection = document.getElementById('follow_section');
     var lastFollowNo = document.getElementById('last_follow_no');
     var healerNickname = document.getElementById('healer_nickname');
-
     var square2 = document.querySelector('.square_2');
 
     // 모든 팔로우 버튼을 선택합니다.
     var followButtons = document.querySelectorAll('.nomal_btn');
 
     // 각각의 팔로우 버튼에 대해 클릭 이벤트 리스너를 추가합니다.
-    followButtons.forEach(function(button) {
-        button.addEventListener('click', function() {
+    followButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
             // 해당 팔로우 버튼이 클릭되었을 때 실행할 동작을 여기에 추가합니다.
             let healer_nickname = button.dataset.nickname;
             fetch("/user/follow", {
                 method: "POST",
                 headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: "healer_nickname=" + healer_nickname,
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: "healer_nickname=" + healer_nickname,
             })
-            .then(response => response.text())
-            .then(data => {
-                button.innerText = data;
-            })
-            .catch((error) => {
-                alert(error);
-            });
+                .then(response => response.text())
+                .then(data => {
+                    button.innerText = data;
+                })
+                .catch((error) => {
+                    alert(error);
+                });
         });
     });
 
+    // 전체 코드를 2초 지연시킵니다.
+    var scrollTimeout; // 타이머를 저장할 변수
 
     followSection.addEventListener('scroll', function () {
-        if (followSection.scrollTop + followSection.clientHeight >= followSection.scrollHeight - 30) {
-            followSection.scrollTop = followSection.scrollHeight;
-
-            // 통신 전에 opacity를 1로 설정
-            square2.style.opacity = 1;
-
-            fetch('/user/' + healerNickname.value + '/following/scroll', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'follow_no=' + lastFollowNo.value
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // 통신이 완료되면 opacity를 0으로 설정
-                    square2.style.opacity = 0;
-                    appendDataToPage(data);
-                });
+        // 기존의 타이머를 취소
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
         }
+
+        // 사용자가 스크롤을 멈춘 후 일정 시간(예: 100ms)이 지난 후에 실행될 함수를 설정
+        scrollTimeout = setTimeout(function () {
+            // 스크롤이 하단에 도달했는지 확인
+            if (followSection.scrollTop + followSection.clientHeight >= followSection.scrollHeight - 30) {
+                followSection.scrollTop = followSection.scrollHeight;
+
+                // 통신 전에 opacity를 1로 설정
+                square2.style.opacity = 1;
+
+                // fetch 통신
+                fetch('/user/' + healerNickname.value + '/following/scroll', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'follow_no=' + lastFollowNo.value
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // 통신이 완료되면 opacity를 0으로 설정
+                        square2.style.opacity = 0;
+                        appendDataToPage(data);
+                        if (data.length > 0) {
+                            lastFollowNo.value = data[data.length - 1].follow_no;
+                        }
+                    });
+            }
+        }, 100); // 사용자가 스크롤을 멈춘 후 통신을 지연시키는 시간
     });
 
     function appendDataToPage(data) {
@@ -142,16 +157,16 @@
             article1.className = 'w20 hauto';
             var img = document.createElement('img');
             img.className = 'h40p wauto';
-            img.src = item.follow.healer_profile_image;
+            img.src = item.healer_profile_image;
             article1.appendChild(img);
 
             var article2 = document.createElement('article');
             article2.className = 'w65 hauto col ml20';
             var a = document.createElement('a');
-            a.href = '/user/userpage/' + item.follow.healer_nickname;
+            a.href = '/user/userpage/' + item.healer_nickname;
             var span = document.createElement('span');
             span.className = 'healer_id';
-            span.textContent = item.follow.healer_nickname;
+            span.textContent = item.healer_nickname;
             a.appendChild(span);
             article2.appendChild(a);
 
@@ -165,6 +180,24 @@
                 button.className = 'nomal_btn w100 h30p';
                 button.type = 'button';
                 button.textContent = item.followstatus;
+                button.dataset.nickname = item.healer_nickname; // 팔로우 버튼에 healer_nickname 데이터 속성 추가
+                button.addEventListener('click', function () { // 팔로우 버튼에 클릭 이벤트 리스너 추가
+                    let healer_nickname = button.dataset.nickname;
+                    fetch("/user/follow", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                        body: "healer_nickname=" + healer_nickname,
+                    })
+                        .then(response => response.text())
+                        .then(data => {
+                            button.innerText = data;
+                        })
+                        .catch((error) => {
+                            alert(error);
+                        });
+                });
                 article3.appendChild(button);
                 section.appendChild(article3);
             }

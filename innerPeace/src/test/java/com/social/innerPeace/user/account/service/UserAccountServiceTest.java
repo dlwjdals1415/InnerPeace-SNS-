@@ -19,7 +19,7 @@ public class UserAccountServiceTest {
 
     @Test
     void registTest(){
-        IntStream.rangeClosed(1, 10).forEach(i -> {
+        IntStream.rangeClosed(1, 100).forEach(i -> {
             HealerDTO healerDTO = HealerDTO.builder()
                     .healer_email("user" + i + "@innerpeace.com")
                     .healer_pw("1111")

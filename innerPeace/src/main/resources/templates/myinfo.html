@@ -43,19 +43,19 @@
     <main class="f_g5 main1000 col_cc">
         <section class="w70 hauto col_c0 bor_rad10 box_sha555">
             <h2 class="mb50">내정보 수정</h2>
+            <form class="w100 hauto col_c0" action="/user/account/myinfo/modify" method="post" id="myinfo_modify">
+                <label for="name"><h3>이름</h3></label>
+                <input type="text" id="name" class="w70 h30p bor_rad10" name="healer_name" th:value="${dto.healer_name}">
+                <label for="birth"><h3>생일</h3></label>
+                <input type="date" id="birth" class="w70 h30p bor_rad10" name="healer_birth" th:value="${dto.healer_birth}">
+                <input type="submit" class="w70 h50p mt20 green_btn mb50" value="내 정보 수정">
+            </form>
             <form class="w100 hauto col_cc mb50" id="pwmodify" action="/user/account/pwmodify" method="post">
                 <input type="submit" class="w70 h50p mt20 green_btn" value="비밀번호 변경">
             </form>
             <form class="w100 hauto col_cc" id="accountdel" action="/user/account/delete" method="post">
                 <input class="w70 h30p bor_rad10" type="password" name="healer_pw" placeholder="현재 비밀번호">
                 <input type="submit" class="w70 h50p mt20 green_btn mb50" value="회원탈퇴">
-            </form>
-            <form class="w100 hauto col_c0" action="/user/account/myinfo/modify" method="post" id="myinfo_modify">
-                <label for="name"><h3>이름</h3></label>
-                <input type="text" id="name" class="w50 h30p bor_rad10" name="healer_name" th:value="${dto.healer_name}">
-                <label for="birth"><h3>생일</h3></label>
-                <input type="date" id="birth" class="w50 h30p bor_rad10" name="healer_birth" th:value="${dto.healer_birth}">
-                <input type="submit" class="w50 h50p mt20 green_btn" value="내 정보 수정">
             </form>
         </section>
     </main>

@@ -2,16 +2,12 @@ package com.social.innerPeace.user.follow.service;
 
 import com.social.innerPeace.dto.FollowDTO;
 import com.social.innerPeace.dto.HealerDTO;
-import com.social.innerPeace.dto.PostDTO;
 import com.social.innerPeace.entity.Follow;
 import com.social.innerPeace.entity.Healer;
-import com.social.innerPeace.entity.Post;
 import com.social.innerPeace.repository.FollowRepository;
 import com.social.innerPeace.repository.HealerRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,7 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class HealerFollowServiceImpl implements HealerFollowService{
+public class    HealerFollowServiceImpl implements HealerFollowService{
     @Autowired
     private HealerRepository healerRepository;
     @Autowired
@@ -59,8 +55,9 @@ public class HealerFollowServiceImpl implements HealerFollowService{
     }
 
     @Override
-    public List<FollowDTO> findFollowing(String healerNickname) {
+    public List<FollowDTO> findFollowing(String healerNickname, String loginedHealer) {
         Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(healerNickname);
+        Optional<Healer> optionalLoginedHealer = healerRepository.findByHealerNickName(loginedHealer);
         if (optionalHealer.isPresent()) {
             Healer healer = optionalHealer.get();
             Sort sort = Sort.by(Sort.Direction.DESC, "followNo");
@@ -77,13 +74,19 @@ public class HealerFollowServiceImpl implements HealerFollowService{
                             .healer_profile_image(findProfileImageBase64(follow.getFollower().getHaelerProfileImage()))
                             .build())
                     .collect(Collectors.toList());
-            for(FollowDTO followDTO : followDTOList){
-                Optional<Follow> follow = followList.stream().filter(f -> f.getFollowing().getHealerNickName().equals(healer.getHealerNickName())).findFirst();
-                if (follow.isPresent()) {
-                    followDTO.setFollowstatus("팔로우 취소");
-                } else {
-                    followDTO.setFollowstatus("팔로우");
+            if(optionalLoginedHealer.isPresent()){
+                List<Follow> followerList = healerRepository.findFollowersByHealerEmail(optionalLoginedHealer.get().getHealerEmail());
+                for(Follow follower:followList){
+                    for(FollowDTO followDTO : followDTOList){
+                        Optional<Follow> follow = followerList.stream().filter(f -> f.getFollowing().getHealerNickName().equals(follower.getFollower().getHealerNickName())).findFirst();
+                        if (follow.isPresent()) {
+                            followDTO.setFollowstatus("팔로우 취소");
+                        } else {
+                            followDTO.setFollowstatus("팔로우");
+                        }
+                    }
                 }
+
             }
             return followDTOList;
         }
@@ -92,8 +95,9 @@ public class HealerFollowServiceImpl implements HealerFollowService{
     }
 
     @Override
-    public List<FollowDTO> findFollower(String healerNickname) {
+    public List<FollowDTO> findFollower(String healerNickname, String loginedHealer) {
         Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(healerNickname);
+        Optional<Healer> optionalLoginedHealer = healerRepository.findByHealerNickName(loginedHealer);
         if (optionalHealer.isPresent()) {
             Healer healer = optionalHealer.get();
             Sort sort = Sort.by(Sort.Direction.DESC, "followNo");
@@ -110,13 +114,99 @@ public class HealerFollowServiceImpl implements HealerFollowService{
                             .healer_profile_image(findProfileImageBase64(follow.getFollowing().getHaelerProfileImage()))
                             .build())
                     .collect(Collectors.toList());
-            for(FollowDTO followDTO : followDTOList){
-                Optional<Follow> follow = followList.stream().filter(f -> f.getFollowing().getHealerNickName().equals(healer.getHealerNickName())).findFirst();
-                if (follow.isPresent()) {
-                    followDTO.setFollowstatus("팔로우 취소");
-                } else {
-                    followDTO.setFollowstatus("팔로우");
+            if(optionalLoginedHealer.isPresent()){
+                List<Follow> followerList = healerRepository.findFollowersByHealerEmail(optionalLoginedHealer.get().getHealerEmail());
+                for(Follow follower:followList){
+                    for(FollowDTO followDTO : followDTOList){
+                        Optional<Follow> follow = followerList.stream().filter(f -> f.getFollowing().getHealerNickName().equals(follower.getFollowing().getHealerNickName())).findFirst();
+                        if (follow.isPresent()) {
+                            followDTO.setFollowstatus("팔로우 취소");
+                        } else {
+                            followDTO.setFollowstatus("팔로우");
+                        }
+                    }
                 }
+
+            }
+            return followDTOList;
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<FollowDTO> findFollowingScroll(String healerNickname, String loginedHealer, long followNo) {
+        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(healerNickname);
+        Optional<Healer> optionalLoginedHealer = healerRepository.findByHealerNickName(loginedHealer);
+        if (optionalHealer.isPresent()) {
+            Healer healer = optionalHealer.get();
+            Sort sort = Sort.by(Sort.Direction.DESC, "followNo");
+
+            Pageable pageable = PageRequest.of(0, 36, sort);
+            List<Follow> followList = healerRepository.findByFollowingHealerEmailAndFollowNoLessThanEqual(healer.getHealerEmail(), followNo, pageable);
+
+            // Follow 엔티티를 FollowDTO로 변환
+            List<FollowDTO> followDTOList = followList.stream()
+                    .map(follow -> FollowDTO.builder()
+                            .follow_no(follow.getFollowNo())
+                            .follow(follow.getFollower().getHealerEmail())
+                            .healer_nickname(follow.getFollower().getHealerNickName())
+                            .healer_profile_image(findProfileImageBase64(follow.getFollower().getHaelerProfileImage()))
+                            .build())
+                    .collect(Collectors.toList());
+            if(optionalLoginedHealer.isPresent()){
+                List<Follow> followerList = healerRepository.findFollowersByHealerEmail(optionalLoginedHealer.get().getHealerEmail());
+                for(Follow follower:followList){
+                    for(FollowDTO followDTO : followDTOList){
+                        Optional<Follow> follow = followerList.stream().filter(f -> f.getFollowing().getHealerNickName().equals(follower.getFollower().getHealerNickName())).findFirst();
+                        if (follow.isPresent()) {
+                            followDTO.setFollowstatus("팔로우 취소");
+                        } else {
+                            followDTO.setFollowstatus("팔로우");
+                        }
+                    }
+                }
+
+            }
+            return followDTOList;
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<FollowDTO> findFollowerScroll(String healerNickname, String loginedHealer, long followNo) {
+        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(healerNickname);
+        Optional<Healer> optionalLoginedHealer = healerRepository.findByHealerNickName(loginedHealer);
+        if (optionalHealer.isPresent()) {
+            Healer healer = optionalHealer.get();
+            Sort sort = Sort.by(Sort.Direction.DESC, "followNo");
+
+            Pageable pageable = PageRequest.of(0, 36, sort);
+            List<Follow> followList = healerRepository.findByFollowerHealerEmailAndFollowNoLessThanEqual(healer.getHealerEmail(),followNo ,pageable);
+
+            // Follow 엔티티를 FollowDTO로 변환
+            List<FollowDTO> followDTOList = followList.stream()
+                    .map(follow -> FollowDTO.builder()
+                            .follow_no(follow.getFollowNo())
+                            .follow(follow.getFollowing().getHealerEmail())
+                            .healer_nickname(follow.getFollowing().getHealerNickName())
+                            .healer_profile_image(findProfileImageBase64(follow.getFollowing().getHaelerProfileImage()))
+                            .build())
+                    .collect(Collectors.toList());
+            if(optionalLoginedHealer.isPresent()){
+                List<Follow> followerList = healerRepository.findFollowersByHealerEmail(optionalLoginedHealer.get().getHealerEmail());
+                for(Follow follower:followList){
+                    for(FollowDTO followDTO : followDTOList){
+                        Optional<Follow> follow = followerList.stream().filter(f -> f.getFollowing().getHealerNickName().equals(follower.getFollowing().getHealerNickName())).findFirst();
+                        if (follow.isPresent()) {
+                            followDTO.setFollowstatus("팔로우 취소");
+                        } else {
+                            followDTO.setFollowstatus("팔로우");
+                        }
+                    }
+                }
+
             }
             return followDTOList;
         }

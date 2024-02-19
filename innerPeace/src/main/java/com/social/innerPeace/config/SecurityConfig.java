@@ -1,5 +1,6 @@
 package com.social.innerPeace.config;
 
+import com.social.innerPeace.detail.HealerDetails;
 import com.social.innerPeace.handler.CustomAuthenticationFailureHandler;
 import com.social.innerPeace.provider.CustomAuthenticationProvider;
 import com.social.innerPeace.handler.CustomAuthenticationSuccessHandler;
@@ -51,7 +52,11 @@ public class SecurityConfig {
                         .logoutRequestMatcher(new AntPathRequestMatcher("/user/account/signout"))
                         .logoutSuccessUrl("/board/post/list")
                         .invalidateHttpSession(true)
-                        .permitAll());
+                        .permitAll())
+                .rememberMe(rememberMe -> rememberMe
+                        .key("innerPeace")
+                        .rememberMeParameter("rememberMe")
+                        .tokenValiditySeconds(60 * 60 * 24 * 7));
         return http.build();
     }
 
