@@ -47,7 +47,7 @@ public class UserAccountServiceImpl implements UserAccountService{
             return "duplicated";
         }
         Healer healer = dtoToEntity(dto);
-        if(!dto.getAd_agree().isEmpty()){
+        if(dto.getAd_agree()!=null&&!dto.getAd_agree().isEmpty()){
             healer.setAdAgree(true);
         }
         healer.setHealerNickName(getUUID());

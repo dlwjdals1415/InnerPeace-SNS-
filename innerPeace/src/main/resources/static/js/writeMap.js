@@ -102,7 +102,9 @@ $('#map-search-btn').on('click', function () {
     var infoDiv1 = document.getElementById('address');
     var infoDiv2 = document.getElementById('modify_address');
     infoDiv1.innerHTML = $('#centerAddr').text();
-    infoDiv2.innerHTML = $('#centerAddr').text();
+    if (infoDiv2 !== null) {
+      infoDiv2.innerHTML = $('#centerAddr').text();
+    }
     mapSection.css({"z-index": "0", "opacity": "0"});
   });
 

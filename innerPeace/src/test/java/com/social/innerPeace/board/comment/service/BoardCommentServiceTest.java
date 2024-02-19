@@ -30,7 +30,6 @@ public class BoardCommentServiceTest {
         List<Post> postList = postRepository.findAll();
 
         postList.forEach(post -> {
-            for (int i = 0; i < 10; i++) {
                 healerList.forEach(healer -> {
                     CommentDTO commentDTO = CommentDTO.builder()
                             .post_no(post.getPostNo())
@@ -39,7 +38,6 @@ public class BoardCommentServiceTest {
                             .build();
                     boardCommentService.write(commentDTO);
                 });
-            }
         });
     }
 }

@@ -22,15 +22,15 @@ public class PostRepositoryTest {
     private HealerRepository healerRepository;
 
     @Test
-    void insert(){
+    void insert() {
         List<Healer> healerList = healerRepository.findAll();
-        IntStream.rangeClosed(1, 10).forEach(i -> {
-            healerList.forEach(healer -> {
+        healerList.forEach(healer -> {
+            IntStream.rangeClosed(1, 10).forEach(i -> {
                 Post post = Post.builder()
                         .postContent("test" + i)
-                        .postImage("test" + i+".jpg")
+                        .postImage("test" + i + ".jpg")
                         .healer(healer)
-                        .tags(List.of("#"+healer.getHealerName() + i,"#"+healer.getHealerNickName() + i))
+                        .tags(List.of("#" + healer.getHealerName() + i, "#" + healer.getHealerNickName() + i))
                         .postMapLat(35.8999F)
                         .postMapLng(128.847F)
                         .build();

@@ -1,4 +1,4 @@
-/*
+
 package com.social.innerPeace;
 
 import jakarta.servlet.RequestDispatcher;
@@ -28,5 +28,5 @@ public class InnerPeaceErrorController implements ErrorController {
         return "error";
     }
 }
-*/
+
 

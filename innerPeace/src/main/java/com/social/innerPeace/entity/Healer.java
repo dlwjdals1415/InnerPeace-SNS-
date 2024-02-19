@@ -51,7 +51,8 @@ public class Healer extends BaseEntity{
     @Column(length = 400)
     private String healerStatusmessage;
 
-    private boolean adAgree;
+    @Builder.Default
+    private boolean adAgree = false;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)

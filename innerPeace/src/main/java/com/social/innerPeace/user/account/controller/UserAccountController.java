@@ -38,7 +38,7 @@ public class UserAccountController {
     @PostMapping("/signup")
     @ResponseBody
     public ResponseEntity<Object> register(HealerDTO dto) {
-        log.info("register dto:" + dto);
+        log.info("register");
         String emailRegex = "^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)*(\\.[a-zA-Z]{2,})$";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate birthDate = LocalDate.parse(dto.getHealer_birth(), formatter);
