@@ -2,10 +2,10 @@ package com.social.innerPeace.user.account.service;
 
 import com.social.innerPeace.board.post.component.FileStore;
 import com.social.innerPeace.entity.ConfirmationToken;
+import com.social.innerPeace.entity.Member;
 import com.social.innerPeace.ip_enum.Role;
-import com.social.innerPeace.dto.HealerDTO;
-import com.social.innerPeace.entity.Healer;
-import com.social.innerPeace.repository.HealerRepository;
+import com.social.innerPeace.dto.MemberDTO;
+import com.social.innerPeace.repository.MemberRepository;
 import com.social.innerPeace.rest.service.ConfirmationTokenService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
@@ -36,34 +36,34 @@ public class UserAccountServiceImpl implements UserAccountService{
     FileStore fileStore;
 
     @Autowired
-    private HealerRepository healerRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private ConfirmationTokenService confirmationTokenService;
 
     @Override
-    public String register(HealerDTO dto, Role role) {
-        if(healerRepository.findById(dto.getHealer_email()).isPresent()){
+    public String register(MemberDTO dto, Role role) {
+        if(memberRepository.findById(dto.getEmail()).isPresent()){
             return "duplicated";
         }
-        Healer healer = dtoToEntity(dto);
+        Member member = dtoToEntity(dto);
         if(dto.getAd_agree()!=null&&!dto.getAd_agree().isEmpty()){
-            healer.setAdAgree(true);
+            member.setAdAgree(true);
         }
-        healer.setHealerNickName(getUUID());
-        healer.setHealerPw(passwordEncoder.encode(dto.getHealer_pw()));
-        healer.setRole(role);
-        healer.setHaelerProfileImage("userbaseprofile.jpg");
-        healer = healerRepository.save(healer);
-        return healer.getHealerEmail();
+        member.setNickName(getUUID());
+        member.setPw(passwordEncoder.encode(dto.getPw()));
+        member.setRole(role);
+        member.setProfileImage("userbaseprofile.jpg");
+        member = memberRepository.save(member);
+        return member.getEmail();
     }
 
     @Override
-    public HealerDTO compareByEmail(String email) {
-        Optional<Healer> optionalHealer = healerRepository.findById(email);
+    public MemberDTO compareByEmail(String email) {
+        Optional<Member> optionalHealer = memberRepository.findById(email);
         if(optionalHealer.isPresent()){
-            Healer healer = optionalHealer.get();
-            return entityToDto(healer);
+            Member member = optionalHealer.get();
+            return entityToDto(member);
         }
         return null;
     }
@@ -73,11 +73,11 @@ public class UserAccountServiceImpl implements UserAccountService{
     }
 
     @Override
-    public HealerDTO findHealerProfile(String loginedHealer) {
-        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(loginedHealer);
-        if(optionalHealer.isPresent()){
-            Healer healer = optionalHealer.get();
-            String image = healer.getHaelerProfileImage();
+    public MemberDTO findmemberProfile(String loginedMember) {
+        Optional<Member> optionalmember = memberRepository.findByNickName(loginedMember);
+        if(optionalmember.isPresent()){
+            Member member = optionalmember.get();
+            String image = member.getProfileImage();
             String imagePath = profile_dir + image;
             String base64String = null;
             try {
@@ -86,71 +86,71 @@ public class UserAccountServiceImpl implements UserAccountService{
             } catch (IOException e) {
                 // 예외 처리
             }
-            HealerDTO healerDTO = HealerDTO.builder()
-                    .healer_nickname(healer.getHealerNickName())
-                    .healer_statusmessage(healer.getHealerStatusmessage())
-                    .healer_gender(healer.getHealerGender())
-                    .haeler_profile_image("data:image/png;base64," + base64String)
+            MemberDTO memberDTO = MemberDTO.builder()
+                    .nickName(member.getNickName())
+                    .statusMessage(member.getStatusMessage())
+                    .gender(member.getGender())
+                    .profile_image("data:image/png;base64," + base64String)
                     .build();
-            return healerDTO;
+            return memberDTO;
         }
         return null;
     }
 
     @Override
-    public HealerDTO modifyProfileImage(String loginedHealer, HealerDTO dto) {
-        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(loginedHealer);
-        if(optionalHealer.isPresent()){
-            Healer healer = optionalHealer.get();
+    public MemberDTO modifyProfileImage(String loginedMember, MemberDTO dto) {
+        Optional<Member> optionalmember = memberRepository.findByNickName(loginedMember);
+        if(optionalmember.isPresent()){
+            Member member = optionalmember.get();
             dto = fileStore.profileImage(dto);
-            healer.setHaelerProfileImage(dto.getHaeler_profile_image());
-            healer = healerRepository.save(healer);
+            member.setProfileImage(dto.getProfile_image());
+            member = memberRepository.save(member);
 
-            return entityToDto(healer);
+            return entityToDto(member);
         }
         return null;
     }
 
     @Override
-    public HealerDTO modifyProfile(String loginedHealer, HealerDTO dto) {
-        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(loginedHealer);
-        if(optionalHealer.isPresent()) {
-            Healer healer = optionalHealer.get();
-            if (!dto.getHealer_nickname().equals(loginedHealer)) {
+    public MemberDTO modifyProfile(String loginedMember, MemberDTO dto) {
+        Optional<Member> optionalmember = memberRepository.findByNickName(loginedMember);
+        if(optionalmember.isPresent()) {
+            Member member = optionalmember.get();
+            if (!dto.getNickName().equals(loginedMember)) {
                 // 새로운 닉네임이 이미 존재하는지 확인
-                Optional<Healer> existingHealer = healerRepository.findByHealerNickName(dto.getHealer_nickname());
-                if (existingHealer.isPresent()) {
-                    healer.setHealerNickName(healer.getHealerNickName());
+                Optional<Member> existingmember = memberRepository.findByNickName(dto.getNickName());
+                if (existingmember.isPresent()) {
+                    member.setNickName(member.getNickName());
                 }else{
-                    healer.setHealerNickName(dto.getHealer_nickname());
+                    member.setNickName(dto.getNickName());
                 }
             }
-            healer.setHealerStatusmessage(dto.getHealer_statusmessage());
-            healer.setHealerGender(dto.getHealer_gender());
-            healer = healerRepository.save(healer);
+            member.setStatusMessage(dto.getStatusMessage());
+            member.setGender(dto.getGender());
+            member = memberRepository.save(member);
 
-            return entityToDto(healer);
+            return entityToDto(member);
         }
         return null;
     }
 
     @Override
-    public String findEmail(String loginedHealer) {
-        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(loginedHealer);
-        if (optionalHealer.isPresent()) {
-            Healer healer = optionalHealer.get();
-            return healer.getHealerEmail();
+    public String findEmail(String loginedMember) {
+        Optional<Member> optionalmember = memberRepository.findByNickName(loginedMember);
+        if (optionalmember.isPresent()) {
+            Member member = optionalmember.get();
+            return member.getEmail();
         }
         return null;
     }
 
     @Override
-    public boolean modifyPassword(String token, String email, String healerPw) {
-        Optional<Healer> optionalHealer = healerRepository.findById(email);
-        if (optionalHealer.isPresent()) {
-            Healer healer = optionalHealer.get();
-            healer.setHealerPw(passwordEncoder.encode(healerPw));
-            healerRepository.save(healer);
+    public boolean modifyPassword(String token, String email, String memberPw) {
+        Optional<Member> optionalmember = memberRepository.findById(email);
+        if (optionalmember.isPresent()) {
+            Member member = optionalmember.get();
+            member.setPw(passwordEncoder.encode(memberPw));
+            memberRepository.save(member);
             ConfirmationToken findConfirmationToken = null;
             try {
                 findConfirmationToken = confirmationTokenService.findByIdAndExpirationDateAfterAndExpired(token);
@@ -164,12 +164,12 @@ public class UserAccountServiceImpl implements UserAccountService{
     }
 
     @Override
-    public String delete(String loginedHealer, HealerDTO dto) {
-        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(loginedHealer);
-        if (optionalHealer.isPresent()) {
-            Healer healer = optionalHealer.get();
-            if(passwordEncoder.matches(dto.getHealer_pw(),healer.getHealerPw())){
-                return healer.getHealerEmail();
+    public String delete(String loginedMember, MemberDTO dto) {
+        Optional<Member> optionalmember = memberRepository.findByNickName(loginedMember);
+        if (optionalmember.isPresent()) {
+            Member member = optionalmember.get();
+            if(passwordEncoder.matches(dto.getPw(), member.getPw())){
+                return member.getEmail();
             }else{
                 return "비밀번호";
             }
@@ -178,40 +178,40 @@ public class UserAccountServiceImpl implements UserAccountService{
     }
 
     @Override
-    public HealerDTO findHealerInfo(String loginedHealer) {
-        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(loginedHealer);
-        if(optionalHealer.isPresent()){
-            Healer healer = optionalHealer.get();
-            HealerDTO healerDTO = HealerDTO.builder()
-                    .healer_name(healer.getHealerName())
-                    .healer_birth(healer.getHealerBitrh().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+    public MemberDTO findmemberInfo(String loginedMember) {
+        Optional<Member> optionalmember = memberRepository.findByNickName(loginedMember);
+        if(optionalmember.isPresent()){
+            Member member = optionalmember.get();
+            MemberDTO memberDTO = MemberDTO.builder()
+                    .name(member.getName())
+                    .birth(member.getBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                     .build();
-            return healerDTO;
+            return memberDTO;
         }
         return null;
     }
 
     @Override
-    public HealerDTO modifyMyinfo(String loginedHealer, HealerDTO healerDTO) {
-        Optional<Healer> optionalHealer = healerRepository.findByHealerNickName(loginedHealer);
-        if (optionalHealer.isPresent() && healerDTO != null) {
-            Healer healer = optionalHealer.get();
+    public MemberDTO modifyMyinfo(String loginedMember, MemberDTO memberDTO) {
+        Optional<Member> optionalmember = memberRepository.findByNickName(loginedMember);
+        if (optionalmember.isPresent() && memberDTO != null) {
+            Member member = optionalmember.get();
 
-            if (healerDTO.getHealer_name() != null) {
-                healer.setHealerName(healerDTO.getHealer_name());
+            if (memberDTO.getName() != null) {
+                member.setName(memberDTO.getName());
             }
 
-            if (healerDTO.getHealer_birth() != null) {
-                healer.setHealerBitrh(LocalDate.parse(healerDTO.getHealer_birth()));
+            if (memberDTO.getBirth() != null) {
+                member.setBirth(LocalDate.parse(memberDTO.getBirth()));
             }
 
-            healer = healerRepository.save(healer);
+            member = memberRepository.save(member);
 
-            if (healer != null) {
-                return HealerDTO.builder()
-                        .healer_nickname(healer.getHealerNickName())
-                        .healer_name(healer.getHealerName())
-                        .healer_birth(String.valueOf(healer.getHealerBitrh()))
+            if (member != null) {
+                return MemberDTO.builder()
+                        .nickName(member.getNickName())
+                        .name(member.getName())
+                        .birth(String.valueOf(member.getBirth()))
                         .build();
             }
         }

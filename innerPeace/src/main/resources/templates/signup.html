@@ -33,20 +33,20 @@
             </article>
             <article class="w100 hauto col_c0 mb20">
                 <form class="w100 h100 col_c0" th:action="@{/user/account/signup}" method="post" id="registForm">
-                    <input class="w80 h30p mt10 text_input pad10" type="email" name="healer_email" id="healer_email"
+                    <input class="w80 h30p mt10 text_input pad10" type="email" name="email" id="email"
                            placeholder="이메일" required>
-                    <input class="w80 h30p mt10 text_input pad10" type="password" name="healer_pw" id="healer_pw"
+                    <input class="w80 h30p mt10 text_input pad10" type="password" name="pw" id="pw"
                            placeholder="비밀번호(특수문자,숫자,영어를 포함하는 12자이상)"
                            required>
                     <input class="w80 h30p mt10 text_input pad10" type="password" name="password_confirm"
                            id="password_confirm"
                            placeholder="비밀번호 확인" required>
-                    <input class="w80 h30p mt10 text_input pad10" type="text" name="healer_name" id="healer_name"
+                    <input class="w80 h30p mt10 text_input pad10" type="text" name="name" id="name"
                            placeholder="이름" required>
-                    <input class="w80 h30p mt10 text_input pad10" type="text" name="healer_phone" id="healer_phone"
+                    <input class="w80 h30p mt10 text_input pad10" type="text" name="phone" id="phone"
                            placeholder="전화번호(-를 제외하고 11자리)" required>
                     <div class="birthinfo">생년월일</div>
-                    <input class="w80 h30p mt10 text_input pad10" type="date" name="healer_birth" id="healer_birth"
+                    <input class="w80 h30p mt10 text_input pad10" type="date" name="birth" id="birth"
                            required>
                     <article class="w80 h20p row_c0 mb10 mt10">
                         <input class="checkbox_style" id="checkbox_all" name="checkbox_all" type="checkbox">
@@ -102,7 +102,7 @@
             // Prevent the form from submitting normally
             event.preventDefault();
 
-            var password = document.getElementById('healer_pw').value;
+            var password = document.getElementById('pw').value;
             var passwordConfirm = document.getElementById('password_confirm').value;
 
             if (password !== passwordConfirm) {

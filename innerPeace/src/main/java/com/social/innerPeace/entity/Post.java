@@ -2,11 +2,9 @@ package com.social.innerPeace.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Getter
@@ -34,8 +32,8 @@ public class Post extends BaseEntity{
     private List<String> tags;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "healerEmail")
-    private Healer healer;
+    @JoinColumn(name = "email")
+    private Member member;
 
     @Builder.Default
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)

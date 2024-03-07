@@ -1,9 +1,7 @@
 package com.social.innerPeace.provider;
 
-import com.social.innerPeace.detail.HealerDetails;
+import com.social.innerPeace.detail.MemberDetails;
 import com.social.innerPeace.detail.service.UserService;
-import com.social.innerPeace.entity.Healer;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,9 +12,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Component
@@ -32,9 +27,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 
 
-        HealerDetails healerDetails = (HealerDetails) userService.loadUserByUsername(userEmail);
+        MemberDetails memberDetails = (MemberDetails) userService.loadUserByUsername(userEmail);
 
-        String dbPassword = healerDetails.getPassword();
+        String dbPassword = memberDetails.getPassword();
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -42,15 +37,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("아이디 또는 비밀번호가 일치하지 않습니다");
         }
 
-        if(!healerDetails.isEnabled()){
+        if(!memberDetails.isEnabled()){
             throw new BadCredentialsException("이메일 인증을 완료해주세요");
         }
 
-        if(!healerDetails.isAccountNonLocked()){
+        if(!memberDetails.isAccountNonLocked()){
             throw new BadCredentialsException("계정이 잠겼습니다. 관리자에게 문의해주세요");
         }
 
-        return new UsernamePasswordAuthenticationToken(healerDetails,null,healerDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(memberDetails,null, memberDetails.getAuthorities());
     }
 
     @Override

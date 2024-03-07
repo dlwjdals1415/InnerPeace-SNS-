@@ -1,13 +1,11 @@
 package com.social.innerPeace.board.comment.service;
 
-import com.social.innerPeace.dto.CommentListDTO;
-import com.social.innerPeace.dto.PostDTO;
 import com.social.innerPeace.dto.CommentDTO;
 import com.social.innerPeace.entity.Comment;
-import com.social.innerPeace.entity.Healer;
+import com.social.innerPeace.entity.Member;
 import com.social.innerPeace.entity.Post;
 import com.social.innerPeace.repository.CommentRepository;
-import com.social.innerPeace.repository.HealerRepository;
+import com.social.innerPeace.repository.MemberRepository;
 import com.social.innerPeace.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +28,7 @@ public class BoardCommentServiceImpl implements BoardCommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-    private final HealerRepository healerRepository;
+    private final MemberRepository memberRepository;
 
     private final Map<String, String> imageCache = new HashMap<>();
 
@@ -43,8 +38,8 @@ public class BoardCommentServiceImpl implements BoardCommentService {
             Post post = optionalPost.get();
             Comment comment = dtoToEntity(commentDTO);
             comment.setPost(post);
-            Optional<Healer> healer = healerRepository.findByHealerNickName(commentDTO.getNickName());
-            healer.ifPresent(comment::setHealer);
+            Optional<Member> healer = memberRepository.findByNickName(commentDTO.getNickName());
+            healer.ifPresent(comment::setMember);
             return commentRepository.save(comment).getCommentNo();
         } else {
             return null;
@@ -54,7 +49,7 @@ public class BoardCommentServiceImpl implements BoardCommentService {
     @Override
     public Long modify(CommentDTO commentDTO) {
         Optional<Comment> optionalComment = commentRepository.findById(commentDTO.getComment_no());
-        if(!commentDTO.getNickName().equals(optionalComment.get().getHealer().getHealerNickName())) {
+        if(!commentDTO.getNickName().equals(optionalComment.get().getMember().getNickName())) {
             return 0L;
         }
         Comment comment = optionalComment.get();
@@ -66,7 +61,7 @@ public class BoardCommentServiceImpl implements BoardCommentService {
     @Override
     public Long delete(CommentDTO commentDTO) {
         Optional<Comment> optionalComment = commentRepository.findById(commentDTO.getComment_no());
-        if(!commentDTO.getNickName().equals(optionalComment.get().getHealer().getHealerNickName())) {
+        if(!commentDTO.getNickName().equals(optionalComment.get().getMember().getNickName())) {
             return 0L;
         }
         commentRepository.deleteById(commentDTO.getComment_no());
@@ -97,14 +92,14 @@ public class BoardCommentServiceImpl implements BoardCommentService {
             List<CommentDTO> commentDTOList = toList(commentList);
             try {
                 for (CommentDTO commentDTO : commentDTOList) {
-                    String profileImagePath = profile_dir + commentDTO.getHealer_profile_image();
+                    String profileImagePath = profile_dir + commentDTO.getProfile_image();
                     String base64String = imageCache.get(profileImagePath);
                     if (base64String == null) {
                         byte[] fileBytes = readBytesFromFile(profileImagePath);
                         base64String = encodeBytesToBase64(fileBytes);
                         imageCache.put(profileImagePath, base64String);
                     }
-                    commentDTO.setHealer_profile_image("data:image/png;base64," + base64String);
+                    commentDTO.setProfile_image("data:image/png;base64," + base64String);
                 }
 
             } catch (IOException e) {

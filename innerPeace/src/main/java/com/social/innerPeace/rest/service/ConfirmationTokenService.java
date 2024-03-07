@@ -1,11 +1,10 @@
 package com.social.innerPeace.rest.service;
 
 import com.mysema.commons.lang.Assert;
-import com.social.innerPeace.dto.HealerDTO;
 import com.social.innerPeace.entity.ConfirmationToken;
-import com.social.innerPeace.entity.Healer;
+import com.social.innerPeace.entity.Member;
 import com.social.innerPeace.repository.ConfirmationTokenRepository;
-import com.social.innerPeace.repository.HealerRepository;
+import com.social.innerPeace.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,7 +18,7 @@ import java.util.Optional;
 @Service
 public class ConfirmationTokenService {
     private final ConfirmationTokenRepository confirmationTokenRepository;
-    private final HealerRepository healerRepository;
+    private final MemberRepository memberRepository;
     private final EmailService emailService;
     /**
      * 이메일 인증 토큰 생성
@@ -32,9 +31,9 @@ public class ConfirmationTokenService {
         ConfirmationToken emailConfirmationToken = ConfirmationToken.createEmailConfirmationToken(email);
         confirmationTokenRepository.save(emailConfirmationToken);
 
-        Healer healer = healerRepository.findById(email).get();
-        healer.setEmailVerified(false);
-        healerRepository.save(healer);
+        Member member = memberRepository.findById(email).get();
+        member.setEmailVerified(false);
+        memberRepository.save(member);
 
         String subject = "[InnerPeace] 인증번호 안내";
         String text = "안녕하세요\n" +
@@ -123,11 +122,11 @@ public class ConfirmationTokenService {
         } catch (BadRequestException e) {
             throw new RuntimeException(e);
         }
-        Optional<Healer> optionalHealer = healerRepository.findById(findConfirmationToken.getEmail());
+        Optional<Member> optionalHealer = memberRepository.findById(findConfirmationToken.getEmail());
         findConfirmationToken.useToken();	// 토큰 만료 로직을 구현해주면 된다. ex) expired 값을 true로 변경
         if (optionalHealer.isPresent()) {
-            Healer healer = optionalHealer.get();
-            healerRepository.delete(healer);
+            Member member = optionalHealer.get();
+            memberRepository.delete(member);
         }
     }
 
@@ -138,11 +137,11 @@ public class ConfirmationTokenService {
         } catch (BadRequestException e) {
             throw new RuntimeException(e);
         }
-        Optional<Healer> optionalHealer = healerRepository.findById(findConfirmationToken.getEmail());
+        Optional<Member> optionalHealer = memberRepository.findById(findConfirmationToken.getEmail());
         findConfirmationToken.useToken();	// 토큰 만료 로직을 구현해주면 된다. ex) expired 값을 true로 변경
-        Healer healer = optionalHealer.get();
-        healer.setEmailVerified(true);
-        healerRepository.save(healer);// 유저의 이메일 인증 값 변경 로직을 구현해주면 된다. ex) emailVerified 값을 true로 변경
+        Member member = optionalHealer.get();
+        member.setEmailVerified(true);
+        memberRepository.save(member);// 유저의 이메일 인증 값 변경 로직을 구현해주면 된다. ex) emailVerified 값을 true로 변경
     }
 
     @Scheduled(cron = "0 0 * * * *") // 매시간마다 실행

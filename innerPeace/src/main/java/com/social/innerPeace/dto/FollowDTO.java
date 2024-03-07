@@ -1,6 +1,5 @@
 package com.social.innerPeace.dto;
 
-import com.social.innerPeace.entity.Healer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FollowDTO {
     private String follow;
-    private String followstatus;
+    private String followStatus;
     private Long follow_no;
-    private String healer_nickname;
-    private String healer_profile_image;
+    private String nickName;
+    private String profile_image;
 }

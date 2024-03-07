@@ -1,7 +1,7 @@
 package com.social.innerPeace.board.post.component;
 
 
-import com.social.innerPeace.dto.HealerDTO;
+import com.social.innerPeace.dto.MemberDTO;
 import com.social.innerPeace.dto.PostDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -44,9 +44,9 @@ public class FileStore {
         return postDTO;
     }
 
-    public HealerDTO profileImage(HealerDTO healerDTO){
+    public MemberDTO profileImage(MemberDTO memberDTO){
         // DTO에서 Base64로 인코딩된 프로필 이미지 가져오기
-        String base64EncodedImage = healerDTO.getHaeler_profile_image();
+        String base64EncodedImage = memberDTO.getProfile_image();
 
         // UUID 생성
         String uuid = UUID.randomUUID().toString();
@@ -67,9 +67,9 @@ public class FileStore {
         }
 
         // DTO에 파일 이름 저장
-        healerDTO.setHaeler_profile_image(filename);
+        memberDTO.setProfile_image(filename);
 
-        return healerDTO;
+        return memberDTO;
     }
 
 

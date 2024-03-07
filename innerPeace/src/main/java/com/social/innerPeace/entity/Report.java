@@ -17,7 +17,7 @@ public class Report extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "healerEmail")
-    private Healer healer;
+    private Member member;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "postNo")

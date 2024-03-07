@@ -1,15 +1,12 @@
 package com.social.innerPeace.board.comment.service;
 
 import com.social.innerPeace.dto.CommentDTO;
-import com.social.innerPeace.dto.CommentListDTO;
 import com.social.innerPeace.entity.Comment;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
@@ -35,8 +32,8 @@ public interface BoardCommentService {
                 .comment_no(entity.getCommentNo())
                 .comment_content(entity.getCommentContent())
                 .comment_regday(LocalDateTime.from(entity.getReg_date()))
-                .nickName(entity.getHealer().getHealerNickName())
-                .healer_profile_image(entity.getHealer().getHaelerProfileImage())
+                .nickName(entity.getMember().getNickName())
+                .profile_image(entity.getMember().getProfileImage())
                 .build();
         return dto;
     }

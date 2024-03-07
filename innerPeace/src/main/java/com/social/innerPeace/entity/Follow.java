@@ -20,10 +20,10 @@ public class Follow extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower")
-    private Healer follower;
+    private Member follower;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "following")
-    private Healer following;
+    private Member following;
 
 }

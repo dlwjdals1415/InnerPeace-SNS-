@@ -22,11 +22,11 @@
     <label class="po_ab w100 h100 z_i0 postmenu_label" for="postmenu"></label>
     <input type="checkbox" class="checkbox" id="report">
     <section class="w10 hauto bor_rad20 bg_f4 z_i5 col_cc">
-        <th:block th:if="${session.loginedHealer != null}">
-            <th:block th:if="${dto.healer_nickname != session.loginedHealer}">
+        <th:block th:if="${session.loginedMember != null}">
+            <th:block th:if="${dto.nickName != session.loginedMember}">
                 <label for="report" class="e0_btn w80 h40p">신고</label>
             </th:block>
-            <th:block th:unless="${dto.healer_nickname != session.loginedHealer}">
+            <th:block th:unless="${dto.nickName != session.loginedMember}">
                 <label for="modify" class="e0_btn w80 h40p">수정</label>
                 <button id="post_delete" type="button" class="e0_btn w80 h40p" th:onclick="del([[${dto.post_no}]])">삭제
                 </button>
@@ -95,7 +95,7 @@
                     <input type="hidden" id="modify_post_tags_hidden" name="post_tags" th:value="${tagString}">
                     <input type="hidden" id="modify_post_content_hidden" name="post_content"
                            th:value="${dto.post_content}">
-                    <input type="hidden" name="post_writer" th:value="${session.loginedHealer}">
+                    <input type="hidden" name="post_writer" th:value="${session.loginedMember}">
                     <input type="hidden" id="post_map_lat" name="post_map_lat" th:value="${dto.post_map_lat}">
                     <input type="hidden" id="post_map_lng" name="post_map_lng" th:value="${dto.post_map_lng}">
                     <input class="dis_none" type="file" id="modify_file_input" name="post_image_file" accept="image/*">
@@ -121,36 +121,36 @@
         </article>
     </section>
 </section>
-<th:block th:if="${session.loginedHealer != null}">
+<th:block th:if="${session.loginedMember != null}">
     <section th:replace="~{fragment/write::write}"></section>
 </th:block>
-<th:block th:if="${session.loginedHealer != null}">
-    <section th:replace="~{fragment/sidebar::healer_sidebar}"></section>
+<th:block th:if="${session.loginedMember != null}">
+    <section th:replace="~{fragment/sidebar::member_sidebar}"></section>
 </th:block>
-<th:block th:unless="${session.loginedHealer != null}">
+<th:block th:unless="${session.loginedMember != null}">
     <section th:replace="~{fragment/sidebar::user_sidebar}"></section>
 </th:block>
 <article th:replace="~{fragment/searchbar::searchbar}">
 </article>
-<th:block th:if="${session.loginedHealer != null}">
+<th:block th:if="${session.loginedMember != null}">
     <section class="map-section" th:replace="~{fragment/writeMap::map-section}"></section>
 </th:block>
 <section class="w100 h100 po_fi z_i0 col_cc op bg_008" th:fragment="map-section" id="detailMap">
     <label class="po_ab w100 h100 z_i0" for="detail_map"></label>
     <div class="w50 h50" id="de_map"></div>
 </section>
-<th:block th:if="${session.loginedHealer != null}">
-    <article th:replace="~{fragment/menu::healer_menu}"></article>
+<th:block th:if="${session.loginedMember != null}">
+    <article th:replace="~{fragment/menu::member_menu}"></article>
 </th:block>
-<th:block th:unless="${session.loginedHealer != null}">
+<th:block th:unless="${session.loginedMember != null}">
     <article th:replace="~{fragment/menu::user_menu}"></article>
 </th:block>
 <section class="po_ab w100 h100 bg_f4 row z_i1">
     <input type="hidden" id="post_no" th:value="${dto.post_no}"/>
     <input type="hidden" id="map_lng" th:value="${dto.post_map_lng}">
     <input type="hidden" id="map_lat" th:value="${dto.post_map_lat}">
-    <input type="hidden" id="loginedHealer" th:value="${session.loginedHealer}">
-    <input type="hidden" id="healer_nickname" th:value="${dto.healer_nickname}">
+    <input type="hidden" id="loginedMember" th:value="${session.loginedMember}">
+    <input type="hidden" id="nickName" th:value="${dto.nickName}">
     <header class="f_g1 bg_f4">
     </header>
     <main class="bg_f4 f_g6 col_cc gap20">
@@ -161,21 +161,21 @@
             <section class="w30 h90 col bg_e0 box_sha555 bor_rad10 gap10">
                 <section class="w100 h10 row_c0">
                     <article class="row_c0 w90">
-                        <img class="ml10 mr10 w30p hauto" th:src="${dto.healer_profile_image}" alt="profile">
+                        <img class="ml10 mr10 w30p hauto" th:src="${dto.profile_image}" alt="profile">
                         <div class="col">
-                            <a th:href="@{/user/userpage/{healer_nickname}(healer_nickname=${dto.healer_nickname})}">
-                                <span class="ml10 mr10 font_s15 text_hover" th:text="${dto.healer_nickname}">닉네임</span>
+                            <a th:href="@{/user/userpage/{nickName}(nickName=${dto.nickName})}">
+                                <span class="ml10 mr10 font_s15 text_hover" th:text="${dto.nickName}">닉네임</span>
                             </a>
                             <label for="detail_map" class="text_hover ml10 mr10" id="de_map_address"></label>
                         </div>
                         <th:block
-                                th:if="${session.loginedHealer != null and dto.healer_nickname != session.loginedHealer}">
-                            <button class="ml10 mr10 h80 gray_btn" id="follow_btn" th:text="${dto.followstat}">
+                                th:if="${session.loginedMember != null and dto.nickName != session.loginedMember}">
+                            <button class="ml10 mr10 h80 gray_btn" id="follow_btn" th:text="${dto.followStatus}">
                             </button>
                         </th:block>
                     </article>
                     <article class="row_c0 w10 text_hover">
-                        <th:block th:if="${session.loginedHealer != null}">
+                        <th:block th:if="${session.loginedMember != null}">
                             <label class="hauto font_s30 bor_none" for="postmenu">···</label>
                         </th:block>
                     </article>
@@ -184,12 +184,12 @@
                     <section>
                         <section class="w100 pad10 row">
                             <article class="w5">
-                                <img class="w30p hauto" th:src="${dto.healer_profile_image}" alt="프로필">
+                                <img class="w30p hauto" th:src="${dto.profile_image}" alt="프로필">
                             </article>
                             <article class="w95 hauto ml20 mr20 col">
                                 <span>
-                                    <a th:href="@{/user/userpage/{healerNickName}(healerNickName=${dto.healer_nickname})}">
-                                        <span class="text_hover bold" th:text="${dto.healer_nickname}"></span>
+                                    <a th:href="@{/user/userpage/{nickName}(nickName=${dto.nickName})}">
+                                        <span class="text_hover bold" th:text="${dto.nickName}"></span>
                                     </a>
                                     <span th:text="'  ' + ${dto.post_content}"></span>
                                 </span>
@@ -212,11 +212,11 @@
                             <section class="w95" id="comment_content">
                                 <section class="w100 pad10 row" th:each="item, status : ${comment}">
                                     <article class="w5">
-                                        <img class="w30p hauto" th:src="${item.healer_profile_image}" alt="프로필">
+                                        <img class="w30p hauto" th:src="${item.profile_image}" alt="프로필">
                                     </article>
                                     <article class="w80 hauto ml20 mr20 col">
                                         <span>
-                                            <a th:href="@{/user/userpage/{healer_id}(healer_id=${item.nickName})}">
+                                            <a th:href="@{/user/userpage/{id}(id=${item.nickName})}">
                                                 <span class="text_hover" th:text="${item.nickName}"></span>
                                             </a>
                                             <span th:text="'  ' + ${item.comment_content}"></span>
@@ -227,7 +227,7 @@
                                         </article>
                                     </article>
                                     <article class="w10 hauto">
-                                        <th:block th:if="${session.loginedHealer != null}">
+                                        <th:block th:if="${session.loginedMember != null}">
                                             <input class="bor_none bg_e0 text_hover font_s20" type="button" value="···"
                                                    th:onclick="comment_menu([[${item.comment_no}]],[[${item.comment_content}]],[[${item.nickName}]])">
                                         </th:block>
@@ -243,7 +243,7 @@
                 <section class="w100 h20 ">
                     <article class="w100 h70 col">
                         <th:block
-                                th:if="${session.loginedHealer != null and dto.healer_nickname != session.loginedHealer}">
+                                th:if="${session.loginedMember != null and dto.nickName != session.loginedMember}">
                             <article class="h40 w100 row_c0">
                                 <button class="ml10 w100p h40p bor_rad20 e0_btn" id="like_btn"
                                         th:text="${dto.likeStatus}">
@@ -257,7 +257,7 @@
                             <span th:text="${#temporals.format(dto.post_regday, 'yyyy/MM/dd HH:mm')}"></span>
                         </article>
                     </article>
-                    <th:block th:if="${session.loginedHealer != null}">
+                    <th:block th:if="${session.loginedMember != null}">
                         <article class="w100 h30 row_c0">
                             <textarea class="comment_area" id="comment_area" placeholder="댓글입력"></textarea>
                             <button class="w20 h50 green_btn" id="comment_submit">게시</button>
@@ -393,17 +393,17 @@
             });
     }
 
-    function comment_menu(comment_no, comment_content, healer_id) {
+    function comment_menu(comment_no, comment_content, id) {
         $('#commentmenu-container').css({'z-index': '20', 'opacity': '1'});
         $('#commentmenu_comment_no').val(comment_no);
         $('#commentmenu_comment_content').val(comment_content);
-        const loginedHealer = $('#loginedHealer').val();
+        const loginedMember = $('#loginedMember').val();
 
         var buttonsContainer = $('#comment_menu_button');
         buttonsContainer.empty(); // 기존 내용을 비웁니다.
 
-        // healer_id가 session.loginedHealer와 같은지 확인
-        if (healer_id === loginedHealer) {
+        // id가 session.loginedMember와 같은지 확인
+        if (id === loginedMember) {
             // 수정 및 삭제 버튼 추가
             buttonsContainer.append('<button class="e0_btn w80 h40p" id="comment_modify">수정</button>');
             buttonsContainer.append('<button class="e0_btn w80 h40p" id="comment_delete">삭제</button>');
@@ -516,13 +516,13 @@
     });
 
     followBtn.addEventListener('click', function () {
-        let healer_nickname = document.getElementById('healer_nickname').value;
+        let nickName = document.getElementById('nickName').value;
         fetch("/user/follow", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: "healer_nickname=" + healer_nickname,
+            body: "nickName=" + nickName,
         })
             .then(response => response.text())
             .then(data => {

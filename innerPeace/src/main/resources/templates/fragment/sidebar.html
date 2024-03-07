@@ -8,7 +8,7 @@
 </head>
 
 <body>
-<section class="sidebar po_fi h100 w10 bg_e0 z_i3 col box_sha555" th:fragment="healer_sidebar">
+<section class="sidebar po_fi h100 w10 bg_e0 z_i3 col box_sha555" th:fragment="member_sidebar">
     <article class="f_g1 row_cc">
         <a th:href="@{/}">
             <p class="logo">InnerPeace</p>
@@ -36,7 +36,7 @@
             </label>
         </article>
         <article class="w100 h100p">
-            <a th:href="@{/user/userpage/{healer_nickname}(healer_nickname=${session.loginedHealer})}">
+            <a th:href="@{/user/userpage/{healer_nickname}(healer_nickname=${session.loginedMember})}">
                 <button class="e0_btn w100 h100 font_s20" type="button">마이페이지</button>
             </a>
         </article>

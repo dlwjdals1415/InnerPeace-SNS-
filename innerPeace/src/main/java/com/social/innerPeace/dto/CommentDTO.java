@@ -17,7 +17,7 @@ public class CommentDTO {
     private String comment_content;
     private Long post_no;
     private String nickName;
-    private String healer_profile_image;
+    private String profile_image;
     private LocalDateTime comment_regday;
 
 }
