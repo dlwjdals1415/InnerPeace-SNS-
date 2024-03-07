@@ -1,8 +1,8 @@
 package com.social.innerPeace.detail.service;
 
-import com.social.innerPeace.detail.HealerDetails;
-import com.social.innerPeace.entity.Healer;
-import com.social.innerPeace.repository.HealerRepository;
+import com.social.innerPeace.detail.MemberDetails;
+import com.social.innerPeace.entity.Member;
+import com.social.innerPeace.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,14 +17,14 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
 
     @Autowired
-    HealerRepository healerRepository;
+    MemberRepository memberRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Healer> healer = healerRepository.findById(username);
+        Optional<Member> healer = memberRepository.findById(username);
         if(healer.isEmpty()){
             throw new UsernameNotFoundException(username);
         }
-        return new HealerDetails(healer.get());
+        return new MemberDetails(healer.get());
     }
 }

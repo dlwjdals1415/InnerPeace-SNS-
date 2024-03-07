@@ -1,8 +1,7 @@
 package com.social.innerPeace.user.find.controller;
 
-import com.social.innerPeace.dto.HealerDTO;
+import com.social.innerPeace.dto.MemberDTO;
 import com.social.innerPeace.rest.service.ConfirmationTokenService;
-import com.social.innerPeace.user.account.controller.UserAccountController;
 import com.social.innerPeace.user.account.service.UserAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +31,9 @@ public class UserFIndController {
 
     @PostMapping("/find/pwForm")
     @ResponseBody
-    public ResponseEntity<Object> findPwForm(HealerDTO healerDTO){
+    public ResponseEntity<Object> findPwForm(MemberDTO memberDTO){
         log.info("findPwForm");
-        String email = userAccountService.compareByEmail(healerDTO.getHealer_email()).getHealer_email();
+        String email = userAccountService.compareByEmail(memberDTO.getEmail()).getEmail();
         if (email == null){
             return ResponseEntity.status(400).body("가입된 이메일이 아닙니다.");
         }else {

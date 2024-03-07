@@ -1,9 +1,7 @@
 package com.social.innerPeace.repository;
 
-import com.social.innerPeace.dto.HealerDTO;
-import com.social.innerPeace.entity.Healer;
+import com.social.innerPeace.entity.Member;
 import com.social.innerPeace.entity.Post;
-import com.social.innerPeace.ip_enum.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +17,18 @@ public class PostRepositoryTest {
     @Autowired
     private PostRepository postRepository;
     @Autowired
-    private HealerRepository healerRepository;
+    private MemberRepository memberRepository;
 
     @Test
     void insert() {
-        List<Healer> healerList = healerRepository.findAll();
-        healerList.forEach(healer -> {
+        List<Member> memberList = memberRepository.findAll();
+        memberList.forEach(healer -> {
             IntStream.rangeClosed(1, 10).forEach(i -> {
                 Post post = Post.builder()
                         .postContent("test" + i)
                         .postImage("test" + i + ".jpg")
-                        .healer(healer)
-                        .tags(List.of("#" + healer.getHealerName() + i, "#" + healer.getHealerNickName() + i))
+                        .member(healer)
+                        .tags(List.of("#" + healer.getName() + i, "#" + healer.getNickName() + i))
                         .postMapLat(35.8999F)
                         .postMapLng(128.847F)
                         .build();

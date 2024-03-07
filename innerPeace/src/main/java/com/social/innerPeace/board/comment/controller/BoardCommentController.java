@@ -25,14 +25,14 @@ public class BoardCommentController {
     private final BoardCommentService boardCommentService;
 
     private String getLoginedHealer(HttpSession session) {
-        return (String) session.getAttribute("loginedHealer");
+        return (String) session.getAttribute("loginedMember");
     }
 
     private String generateHtmlContent(CommentDTO comment, String healer) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         String htmlContent = "<section class=\"w100 pad10 row\">"
                 + "<article class=\"w5\">"
-                + "<img class=\"w30p hauto\" src=\"" + comment.getHealer_profile_image() +"\" alt=\"프로필\">"
+                + "<img class=\"w30p hauto\" src=\"" + comment.getProfile_image() +"\" alt=\"프로필\">"
                 + "</article>"
                 + "<article class=\"w80 hauto ml20 mr20 col\">"
                 + "<span>"

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FollowRepository extends JpaRepository<Follow,Long> {
-    Optional<Follow> findByFollowerHealerEmailAndFollowingHealerEmail(String followerHealerEmail, String healerHealerEmail);
+    Optional<Follow> findByFollowerEmailAndFollowingEmail(String followerHealerEmail, String healerHealerEmail);
 
-    List<Follow> findByFollowerHealerEmail(String followerHealerEmail);
+    List<Follow> findByFollowerEmail(String followerHealerEmail);
 }

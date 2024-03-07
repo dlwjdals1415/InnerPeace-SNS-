@@ -22,15 +22,15 @@ public interface BoardPostService {
 
     List<PostDTO> searchScrollList(Long postNo, String search);
 
-    List<PostDTO> listByHealerNickname(String healerNickname);
+    List<PostDTO> listBymemberNickname(String memberNickname);
 
-    PostDTO detail(Long postNo, String healerNickName);
+    PostDTO detail(Long postNo, String memberNickName);
 
-    PostDTO modify(PostDTO dto, String loginHealer);
+    PostDTO modify(PostDTO dto, String loginmember);
 
-    String like(Long postNo, String healerNickname);
+    String like(Long postNo, String memberNickname);
 
-    int deletePost(PostDTO postDTO,String loginHealer);
+    int deletePost(PostDTO postDTO,String loginmember);
 
     int likeCount(Long postNo);
 

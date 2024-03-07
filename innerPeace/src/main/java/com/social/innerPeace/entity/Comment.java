@@ -2,9 +2,6 @@ package com.social.innerPeace.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +27,7 @@ public class Comment extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "healerNickname")
-    private Healer healer;
+    private Member member;
 
     @Builder.Default
     @OneToMany(mappedBy = "comment",cascade = CascadeType.ALL)

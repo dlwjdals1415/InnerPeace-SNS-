@@ -20,6 +20,6 @@ public class Post_Like extends BaseEntity{
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "healerNickName")
-    private Healer healer;
+    @JoinColumn(name = "nickName")
+    private Member member;
 }

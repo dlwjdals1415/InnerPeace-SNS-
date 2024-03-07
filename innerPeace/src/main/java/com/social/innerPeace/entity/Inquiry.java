@@ -23,7 +23,7 @@ public class Inquiry extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "healerEmail")
-    private Healer healer;
+    private Member member;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "answerNo",referencedColumnName = "answerNo")

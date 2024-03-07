@@ -1,34 +1,34 @@
 package com.social.innerPeace.user.account.service;
 
+import com.social.innerPeace.entity.Member;
 import com.social.innerPeace.ip_enum.Role;
-import com.social.innerPeace.dto.HealerDTO;
-import com.social.innerPeace.entity.Healer;
+import com.social.innerPeace.dto.MemberDTO;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public interface UserAccountService {
-    String register(HealerDTO dto, Role role);
+    String register(MemberDTO dto, Role role);
 
-    default Healer dtoToEntity(HealerDTO dto){
-        Healer entity = Healer.builder()
-                .healerEmail(dto.getHealer_email())
-                .healerName(dto.getHealer_name())
-                .healerPw(dto.getHealer_pw())
-                .healerBitrh(convertStringToLocalDate(dto.getHealer_birth()))
-                .healerPhone(dto.getHealer_phone())
+    default Member dtoToEntity(MemberDTO dto){
+        Member entity = Member.builder()
+                .email(dto.getEmail())
+                .name(dto.getName())
+                .pw(dto.getPw())
+                .birth(convertStringToLocalDate(dto.getBirth()))
+                .phone(dto.getPhone())
                 .build();
         return entity;
     }
 
-    default HealerDTO entityToDto(Healer entity){
-        HealerDTO dto = HealerDTO.builder()
-                .healer_email(entity.getHealerEmail())
-                .healer_name(entity.getHealerName())
-                .healer_pw(entity.getHealerPw())
-                .healer_birth(entity.getHealerBitrh().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                .healer_nickname(entity.getHealerNickName())
-                .healer_phone(entity.getHealerPhone())
+    default MemberDTO entityToDto(Member entity){
+        MemberDTO dto = MemberDTO.builder()
+                .email(entity.getEmail())
+                .name(entity.getName())
+                .pw(entity.getPw())
+                .birth(entity.getBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .nickName(entity.getNickName())
+                .phone(entity.getPhone())
                 .build();
         return dto;
     }
@@ -38,21 +38,21 @@ public interface UserAccountService {
         return LocalDate.parse(dateString, formatter);
     }
 
-    HealerDTO compareByEmail(String email);
+    MemberDTO compareByEmail(String email);
 
-    HealerDTO findHealerProfile(String loginedHealer);
+    MemberDTO findmemberProfile(String loginedMember);
 
-    HealerDTO modifyProfileImage(String loginedHealer, HealerDTO dto);
+    MemberDTO modifyProfileImage(String loginedMember, MemberDTO dto);
 
-    HealerDTO modifyProfile(String loginedHealer, HealerDTO dto);
+    MemberDTO modifyProfile(String loginedMember, MemberDTO dto);
 
-    String findEmail(String loginedHealer);
+    String findEmail(String loginedMember);
 
-    boolean modifyPassword(String token, String email, String healerPw);
+    boolean modifyPassword(String token, String email, String memberPw);
 
-    String delete(String loginedHealer, HealerDTO dto);
+    String delete(String loginedMember, MemberDTO dto);
 
-    HealerDTO modifyMyinfo(String loginedHealer, HealerDTO healerDTO);
+    MemberDTO modifyMyinfo(String loginedMember, MemberDTO memberDTO);
 
-    HealerDTO findHealerInfo(String loginedHealer);
+    MemberDTO findmemberInfo(String loginedMember);
 }

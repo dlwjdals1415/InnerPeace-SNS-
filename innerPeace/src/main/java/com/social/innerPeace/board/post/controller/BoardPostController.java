@@ -30,12 +30,12 @@ public class BoardPostController {
     @Autowired
     private BoardCommentService boardCommentService;
 
-    private String getLoginedHealer(HttpSession session) {
-        return (String) session.getAttribute("loginedHealer");
+    private String getLoginedmember(HttpSession session) {
+        return (String) session.getAttribute("loginedMember");
     }
 
-    private void addPostAndCommentToModel(Model model, Long postNo, String healerNickname) {
-        PostDTO dto = boardPostService.detail(postNo, healerNickname);
+    private void addPostAndCommentToModel(Model model, Long postNo, String memberNickname) {
+        PostDTO dto = boardPostService.detail(postNo, memberNickname);
         List<CommentDTO> comment = boardCommentService.findAll(postNo);
         model.addAttribute("dto", dto);
         model.addAttribute("comment", comment);
@@ -68,8 +68,8 @@ public class BoardPostController {
     @GetMapping("board/post/detail/{post_no}")
     public String postdetail(Model model, @PathVariable("post_no") Long postNo, HttpSession session) {
         log.info("call boarddetail");
-        String healer_nickname = getLoginedHealer(session);
-        addPostAndCommentToModel(model, postNo, healer_nickname);
+        String member_nickname = getLoginedmember(session);
+        addPostAndCommentToModel(model, postNo, member_nickname);
         return "postdetail";
     }
 
@@ -82,8 +82,8 @@ public class BoardPostController {
     @PostMapping("/board/post/modify")
     @ResponseBody
     public ResponseEntity<Object> postModify(PostDTO dto, HttpSession session) {
-        String loginHealer = getLoginedHealer(session);
-        PostDTO postDTO = boardPostService.modify(dto, loginHealer);
+        String loginmember = getLoginedmember(session);
+        PostDTO postDTO = boardPostService.modify(dto, loginmember);
         if(postDTO == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정에 실패하였습니다");
         }
@@ -95,8 +95,8 @@ public class BoardPostController {
     @PostMapping("/board/post/delete")
     @ResponseBody
     public ResponseEntity<Object> postDelete(@RequestBody PostDTO postDTO, HttpSession session){
-        String loginHealer = getLoginedHealer(session);
-        int result = boardPostService.deletePost(postDTO,loginHealer);
+        String loginmember = getLoginedmember(session);
+        int result = boardPostService.deletePost(postDTO,loginmember);
         HashMap<Object,Object> res = new HashMap<>();
         res.put("result",result);
         if(result>0){
@@ -120,8 +120,8 @@ public class BoardPostController {
     @ResponseBody
     public ResponseEntity<Object> post_like(@RequestParam("post_no") Long post_no, HttpSession session) {
         log.info("call post_like post_no : {}", post_no);
-        String healer_nickname = getLoginedHealer(session);
-        String like = boardPostService.like(post_no, healer_nickname);
+        String member_nickname = getLoginedmember(session);
+        String like = boardPostService.like(post_no, member_nickname);
         int likeCount = boardPostService.likeCount(post_no);
         if (like == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

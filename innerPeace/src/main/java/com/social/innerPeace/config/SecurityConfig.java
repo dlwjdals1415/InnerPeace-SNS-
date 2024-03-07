@@ -1,6 +1,5 @@
 package com.social.innerPeace.config;
 
-import com.social.innerPeace.detail.HealerDetails;
 import com.social.innerPeace.handler.CustomAuthenticationFailureHandler;
 import com.social.innerPeace.provider.CustomAuthenticationProvider;
 import com.social.innerPeace.handler.CustomAuthenticationSuccessHandler;
@@ -43,8 +42,8 @@ public class SecurityConfig {
                                 .anyRequest().permitAll())
                 .formLogin(login -> login
                         .loginPage("/user/account/signin")
-                        .usernameParameter("healer_id")
-                        .passwordParameter("healer_pw")
+                        .usernameParameter("email")
+                        .passwordParameter("pw")
                         .loginProcessingUrl("/user/account/signin")
                         .successHandler(new CustomAuthenticationSuccessHandler())
                         .failureHandler(new CustomAuthenticationFailureHandler()))

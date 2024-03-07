@@ -1,6 +1,5 @@
 package com.social.innerPeace.entity;
 
-import com.social.innerPeace.entity.Healer;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
